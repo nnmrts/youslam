@@ -309,13 +309,14 @@ const versioning = () => {
 	return "patch";
 };
 
-gulp.task("commit:build", () => (
-	gulp.src("./dist/**/*.*", {
+gulp.task("commit:build", () =>
+	gulp.src("./dist/**/*.*").pipe(git.add()).pipe(git.commit("Build: generated dist files", {
 		cwd: rootDir
-	}).pipe(git.commit("Build: generated dist files", {
-		cwd: rootDir
-	}))
-));
+	})));
+
+// gulp.task("commit-changes", () => gulp.src(".")
+// 	.pipe(git.add())
+// 	.pipe(git.commit("[Prerelease] Bumped version number")));
 
 gulp.task("docs", () => gulp.src(["README.md", "./src/**/*.js"], {
 		read: false
@@ -445,8 +446,7 @@ const tagVersion = function(newOptions) {
 	return map(modifyContents);
 };
 
-gulp.task("tag-and-push", done => gulp.src("./", {
-
+gulp.task("tag-and-push", cb => gulp.src("./", {
 		cwd: rootDir
 	})
 	.pipe(tagVersion({
@@ -458,16 +458,32 @@ gulp.task("tag-and-push", done => gulp.src("./", {
 			"origin", branch, {
 				args: "--tags",
 				cwd: rootDir
-			}, done
+			}, cb
 		);
 	}));
 
-gulp.task("npm-publish", (done) => {
-	childProcess.spawn("npm", ["publish", rootDir], {
-		stdio: "inherit",
-		shell: true
-	}).on("close", done);
+gulp.task("tag", (cb) => {
+	tag = `v${currVersion()}`;
+
+	const message = tag;
+
+	git.tag(
+		tag, message, {
+			signed: "true",
+			cwd: rootDir
+		}, (err) => {
+			if (err) {
+				return cb(err);
+			}
+			return cb();
+		}
+	);
 });
+
+gulp.task("npm-publish", done => childProcess.spawn("npm", ["publish", rootDir], {
+	stdio: "inherit",
+	shell: true
+}).on("close", done));
 
 gulp.task("github", (cb) => {
 	const GitHubAuth = JSON.parse(fs.readFileSync(`${rootDir}.githubauth`));
@@ -505,7 +521,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"build", "commit:build", "bump", "tag-and-push", "npm-publish", "github"
+	"build", "commit:build", "bump", "tag"
 ));
 
 let cleanSignal;

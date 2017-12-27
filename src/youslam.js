@@ -5,7 +5,8 @@ import IT from "./countries/it.js";
 const youslam = {
 	AT,
 	DE,
-	IT
+	IT,
+	yay: 3
 };
 
 Object.keys(youslam).forEach((country) => {

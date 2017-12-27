@@ -1,18 +1,18 @@
 {
-  "name": "youslam",
-  "description": "",
-  "main": "src/youslam.js",
-  "authors": [
-    "Nano Miratus <nanomiratus@gmail.com>"
-  ],
-  "license": "Unlicense",
-  "homepage": "",
-  "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
-  ],
-  "version": "0.8.0"
+	"name": "youslam",
+	"description": "",
+	"main": "src/youslam.js",
+	"authors": [
+		"Nano Miratus <nanomiratus@gmail.com>"
+	],
+	"license": "Unlicense",
+	"homepage": "",
+	"ignore": [
+		"**/.*",
+		"node_modules",
+		"bower_components",
+		"test",
+		"tests"
+	],
+	"version": "0.2.0"
 }

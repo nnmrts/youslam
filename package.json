@@ -1,6 +1,6 @@
 {
 	"name": "youslam",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "",
 	"main": "dist/youslam.js",
 	"browser": "dist/browser/youslam.js",
@@ -20,6 +20,7 @@
 		"chokidar": "^1.7.0",
 		"csscomb": "^4.2.0",
 		"del": "^3.0.0",
+		"docdash": "^0.4.0",
 		"eslint": "^4.8.0",
 		"eslint-config-airbnb-base": "^12.0.2",
 		"eslint-plugin-import": "^2.7.0",
@@ -46,6 +47,7 @@
 		"gulp-sourcemaps": "^2.6.1",
 		"gulp-total-task-time": "^0.1.0",
 		"gulp-util": "^3.0.8",
+		"jsdoc-babel": "^0.3.0",
 		"jshint-stylish": "^1.0.0",
 		"karma": "^1.7.1",
 		"live-server": "^1.2.0",

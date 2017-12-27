@@ -1,6 +1,6 @@
 {
 	"name": "youslam",
-	"version": "0.1.11",
+	"version": "0.1.12",
 	"description": "",
 	"main": "dist/youslam.js",
 	"browser": "dist/browser/youslam.js",

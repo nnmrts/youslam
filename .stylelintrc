@@ -1,0 +1,18 @@
+{
+	"extends": "stylelint-config-recommended-scss",
+	"plugins": [
+		"stylelint-order"
+	],
+	"rules": {
+		"order/order": [
+			"dollar-variables",
+			"declarations",
+			"at-rules"
+		]
+	},
+	"fix": true,
+
+	"test": {
+
+	}
+}

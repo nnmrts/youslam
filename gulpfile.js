@@ -311,11 +311,7 @@ const versioning = () => {
 };
 
 gulp.task("commit:build", () => (
-	gulp.src("./dist/**/*.js", {
-		cwd: rootDir
-	}).pipe(git.commit("Build: generated dist files", {
-		cwd: rootDir
-	}))
+	gulp.src("./dist/**/*.js").pipe(git.commit("Build: generated dist files"))
 ));
 
 gulp.task("docs", () => {

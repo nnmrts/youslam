@@ -84,7 +84,6 @@ gulp.task("rollup:browser", () => (
 			json({
 				preferConst: true
 			})
-
 		]
 	})
 	.pipe(source("youslam.js"))
@@ -311,18 +310,21 @@ const versioning = () => {
 };
 
 gulp.task("commit:build", () => (
-	gulp.src("./dist/**/*.js").pipe(git.commit("Build: generated dist files"))
+	gulp.src("./dist/**/*.*", {
+		cwd: rootDir
+	}).pipe(git.commit("Build: generated dist files", {
+		cwd: rootDir
+	}))
 ));
 
-gulp.task("docs", () => {
-	gulp.src(["README.md", "./src/**/*.js"], {
-			read: false
-		})
-		.pipe(jsdoc(jsdocConfig));
-});
+gulp.task("docs", () => gulp.src(["README.md", "./src/**/*.js"], {
+		read: false
+	})
+	.pipe(jsdoc(jsdocConfig)));
 
 gulp.task("commit:docs", () => (
 	gulp.src("./docs/**", {
+
 		cwd: rootDir
 	}).pipe(git.commit("Build: generated docs files", {
 		cwd: rootDir
@@ -337,7 +339,7 @@ gulp.task("bump", (cb) => {
 		cwd: rootDir
 	});
 
-	const versionsToBump = _.map(["package.json", "bower.json", "manifest.json"], fileName => rootDir + fileName);
+	const versionsToBump = _.map(["package.json", "bower.json"], fileName => rootDir + fileName);
 
 	gulp.src(versionsToBump, {
 			cwd: rootDir
@@ -351,7 +353,7 @@ gulp.task("bump", (cb) => {
 
 	const commitMessage = `Build: Bumps version to v${newVersion}`;
 
-	gulp.src("./*.json", {
+	return gulp.src("./*.json", {
 		cwd: rootDir
 	}).pipe(git.commit(commitMessage, {
 		cwd: rootDir
@@ -443,23 +445,22 @@ const tagVersion = function(newOptions) {
 	return map(modifyContents);
 };
 
-gulp.task("tag-and-push", (done) => {
-	gulp.src("./", {
-			cwd: rootDir
-		})
-		.pipe(tagVersion({
-			version: currVersion(),
-			cwd: rootDir
-		}))
-		.on("end", () => {
-			git.push(
-				"origin", branch, {
-					args: "--tags",
-					cwd: rootDir
-				}, done
-			);
-		});
-});
+gulp.task("tag-and-push", done => gulp.src("./", {
+
+		cwd: rootDir
+	})
+	.pipe(tagVersion({
+		version: currVersion(),
+		cwd: rootDir
+	}))
+	.on("end", () => {
+		git.push(
+			"origin", branch, {
+				args: "--tags",
+				cwd: rootDir
+			}, done
+		);
+	}));
 
 gulp.task("npm-publish", (done) => {
 	childProcess.spawn("npm", ["publish", rootDir], {
@@ -504,7 +505,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"build", "commit:build", "docs", "commit:docs", "bump", "tag-and-push", "npm-publish", "github"
+	"build", "commit:build", "bump", "tag-and-push", "npm-publish", "github"
 ));
 
 let cleanSignal;

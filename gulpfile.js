@@ -108,24 +108,24 @@ gulp.task("rollup:main", async() => {
 	})
 });
 
-gulp.task("rollup:module", async() => {
-	const bundle = await rollup.rollup({
-		input: `${paths.src}/youslam.js`,
-		plugins: [
-			resolve(),
-			commonjs(),
-			json({
-				preferConst: true
-			})
-		]
-	});
+// gulp.task("rollup:module", async() => {
+// 	const bundle = await rollup.rollup({
+// 		input: `${paths.src}/youslam.js`,
+// 		plugins: [
+// 			resolve(),
+// 			commonjs(),
+// 			json({
+// 				preferConst: true
+// 			})
+// 		]
+// 	});
 
-	await bundle.write({
-		file: pkg.module,
-		format: "es",
-		name: pkg.name
-	})
-});
+// 	await bundle.write({
+// 		file: pkg.module,
+// 		format: "es",
+// 		name: pkg.name
+// 	})
+// });
 
 gulp.task("babel", () => gulp.src(pkg.browser)
 	.pipe(babel({

@@ -5,8 +5,10 @@
 	"main": "dist/youslam.js",
 	"browser": "dist/browser/youslam.js",
 	"module": "dist/module/youslam.js",
+	"jsnext:main": "src/youslam.js",
 	"files": [
-		"dist/youslam.js"
+		"dist/youslam.js",
+		"src/**/*.js"
 	],
 	"directories": {
 		"doc": "docs"

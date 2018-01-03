@@ -149,8 +149,8 @@ gulp.task("minify:js", () =>
 		}))
 		.pipe(gulp.dest(pkg.browser.replace("/youslam.js", ""))));
 
-gulp.task("build:js", gulp.series(gulp.parallel(gulp.series("rollup:browser", "babel", "minify:js"), "rollup:main", "rollup:module")));
-gulp.task("dev:build:js", gulp.parallel(gulp.series("rollup:browser", "babel"), "rollup:main", "rollup:module"));
+gulp.task("build:js", gulp.series(gulp.parallel(gulp.series("rollup:browser", "babel", "minify:js"), "rollup:main")));
+gulp.task("dev:build:js", gulp.parallel(gulp.series("rollup:browser", "babel"), "rollup:main"));
 
 gulp.task("sass", () => gulp.src(`${paths.src}/main.scss`)
 	.pipe(sourcemaps.init({

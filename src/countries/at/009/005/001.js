@@ -6,7 +6,8 @@ const $3_001 = {
 	FRE,
 	POW,
 	ROT,
-	name: "Margareten"
+	name: "Margareten",
+	zip: 1050
 };
 
 export default $3_001;

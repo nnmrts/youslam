@@ -10,7 +10,8 @@ const $3_001 = {
 	STI,
 	TEX,
 	U20,
-	name: "Ottakring"
+	name: "Ottakring",
+	zip: 1160
 };
 
 export default $3_001;

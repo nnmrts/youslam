@@ -10,7 +10,8 @@ const $3_001 = {
 	BOC,
 	POP,
 	SIN,
-	name: "Neubau"
+	name: "Neubau",
+	zip: 1070
 };
 
 export default $3_001;

@@ -2,18 +2,17 @@
 
 const gulp = require("gulp");
 
-// const server = require("gulp-server-livereload");
+
 const taskTime = require("gulp-total-task-time");
 const del = require("del");
 const eslint = require("gulp-eslint");
-// const replace = require("gulp-replace");
-const rollup = require("rollup-stream");
+const rollup = require("rollup");
 const resolve = require("rollup-plugin-node-resolve");
 const commonjs = require("rollup-plugin-commonjs");
 const json = require("rollup-plugin-json");
 const source = require("vinyl-source-stream");
 const babel = require("gulp-babel");
-const minify = require("gulp-minify");
+const uglify = require("gulp-uglify");
 const sourcemaps = require("gulp-sourcemaps");
 const sass = require("gulp-sass");
 const rename = require("gulp-rename");
@@ -72,12 +71,9 @@ gulp.task("prepare:js", gulp.series("lint"));
 
 gulp.task("prepare", gulp.series("clean", "prepare:js"));
 
-gulp.task("rollup:browser", () => (
-	rollup({
+gulp.task("rollup:browser", async() => {
+	const bundle = await rollup.rollup({
 		input: `${paths.src}/youslam.js`,
-		name: pkg.name,
-		format: "iife",
-		sourcemap: "inline",
 		plugins: [
 			resolve(),
 			commonjs(),
@@ -85,40 +81,51 @@ gulp.task("rollup:browser", () => (
 				preferConst: true
 			})
 		]
-	})
-	.pipe(source("youslam.js"))
-	.pipe(gulp.dest(pkg.browser.replace("/youslam.js", "")))
-));
+	});
 
-gulp.task("rollup:main", () => (
-	rollup({
-		input: `${paths.src}/youslam.js`,
+	await bundle.write({
+		file: pkg.browser,
+		format: "iife",
 		name: pkg.name,
+		sourcemap: "inline"
+	});
+});
+
+gulp.task("rollup:main", async() => {
+	const bundle = await rollup.rollup({
+		input: `${paths.src}/youslam.js`,
+		plugins: [
+			json({
+				preferConst: true
+			})
+		]
+	});
+
+	await bundle.write({
+		file: pkg.main,
 		format: "cjs",
-		plugins: [
-			json({
-				preferConst: true
-			})
-		]
+		name: pkg.name
 	})
-	.pipe(source("youslam.js"))
-	.pipe(gulp.dest(pkg.main.replace("/youslam.js", "")))
-));
+});
 
-gulp.task("rollup:module", () => (
-	rollup({
+gulp.task("rollup:module", async() => {
+	const bundle = await rollup.rollup({
 		input: `${paths.src}/youslam.js`,
-		name: pkg.name,
-		format: "es",
 		plugins: [
+			resolve(),
+			commonjs(),
 			json({
 				preferConst: true
 			})
 		]
+	});
+
+	await bundle.write({
+		file: pkg.module,
+		format: "es",
+		name: pkg.name
 	})
-	.pipe(source("youslam.js"))
-	.pipe(gulp.dest(pkg.module.replace("/youslam.js", "")))
-));
+});
 
 gulp.task("babel", () => gulp.src(pkg.browser)
 	.pipe(babel({
@@ -136,18 +143,13 @@ gulp.task("babel", () => gulp.src(pkg.browser)
 	.pipe(gulp.dest(pkg.browser.replace("/youslam.js", ""))));
 
 gulp.task("minify:js", () =>
-	gulp.src(`${paths.dist}/youslam.js`)
-	.pipe(minify({
-		ext: {
-			min: ".js"
-		},
-		noSource: true,
-		mangle: false
-	}))
-	.pipe(gulp.dest(paths.dist)));
+	gulp.src(pkg.browser)
+		.pipe(uglify({
+			warnings: true
+		}))
+		.pipe(gulp.dest(pkg.browser.replace("/youslam.js", ""))));
 
-gulp.task("build:js", gulp.series(gulp.parallel(gulp.series("rollup:browser", "babel"), "rollup:main", "rollup:module"), "minify:js"));
-
+gulp.task("build:js", gulp.series(gulp.parallel(gulp.series("rollup:browser", "babel", "minify:js"), "rollup:main", "rollup:module")));
 gulp.task("dev:build:js", gulp.parallel(gulp.series("rollup:browser", "babel"), "rollup:main", "rollup:module"));
 
 gulp.task("sass", () => gulp.src(`${paths.src}/main.scss`)
@@ -319,8 +321,8 @@ gulp.task("commit:build", () =>
 // 	.pipe(git.commit("[Prerelease] Bumped version number")));
 
 gulp.task("docs", () => gulp.src(["README.md", "./src/**/*.js"], {
-		read: false
-	})
+	read: false
+})
 	.pipe(jsdoc(jsdocConfig)));
 
 gulp.task("commit:docs", () => (
@@ -342,37 +344,33 @@ gulp.task("bump", (cb) => {
 
 	const versionsToBump = _.map(["package.json", "bower.json"], fileName => rootDir + fileName);
 
+	const commitMessage = `Build: Bumps version to v${newVersion}`;
+
 	gulp.src(versionsToBump, {
-			cwd: rootDir
-		})
+		cwd: rootDir
+	})
 		.pipe(jeditor({
 			version: newVersion
 		}))
 		.pipe(gulp.dest("./", {
 			cwd: rootDir
-		}));
+		}))
+		.pipe(git.commit(commitMessage, {
+			cwd: rootDir
+		})).on("end", () => {
+			git.push(
+				"origin", branch, {
 
-	const commitMessage = `Build: Bumps version to v${newVersion}`;
+					cwd: rootDir
+				}, (err) => {
+					if (err) {
+						return cb(err);
+					}
 
-	return gulp.src("./*.json", {
-		cwd: rootDir
-	}).pipe(git.commit(commitMessage, {
-		cwd: rootDir
-	})).on("end", () => {
-		git.push(
-			"origin", branch, {
-
-				cwd: rootDir
-			}, (err) => {
-				if (err) {
-					gutil.log(err);
+					return cb();
 				}
-				else {
-					cb();
-				}
-			}
-		);
-	});
+			);
+		});
 });
 
 let tag;
@@ -447,8 +445,8 @@ const tagVersion = function(newOptions) {
 };
 
 gulp.task("tag-and-push", cb => gulp.src("./", {
-		cwd: rootDir
-	})
+	cwd: rootDir
+})
 	.pipe(tagVersion({
 		version: currVersion(),
 		cwd: rootDir
@@ -480,9 +478,17 @@ gulp.task("tag", (cb) => {
 	);
 });
 
-gulp.task("npm-publish", done => childProcess.spawn("npm", ["publish", rootDir], {
-	stdio: "inherit",
-	shell: true
+gulp.task("push", (cb) => {
+	git.push(
+		"origin", branch, {
+			args: "--tags",
+			cwd: rootDir
+		}, cb
+	);
+});
+
+gulp.task("npm-publish", done => childProcess.spawn("npm", ["publish"], {
+	stdio: "inherit"
 }).on("close", done));
 
 gulp.task("github", (cb) => {
@@ -521,7 +527,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"build", "commit:build", "bump", "tag"
+	"build", "bump", "tag", "push", "npm-publish"
 ));
 
 let cleanSignal;

@@ -6,7 +6,8 @@ const $3_004 = {
 	BES,
 	PHI,
 	TAG,
-	name: "Baden"
+	name: "Baden",
+	zip: 2500
 };
 
 export default $3_004;

@@ -6,7 +6,8 @@ const $3_001 = {
 	CUP,
 	IMW,
 	LIB,
-	name: "Innere Stadt"
+	name: "Innere Stadt",
+	zip: 1010
 };
 
 export default $3_001;

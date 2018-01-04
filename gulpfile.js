@@ -325,27 +325,25 @@ gulp.task("commit:build", cb =>
 // 	.pipe(git.add())
 // 	.pipe(git.commit("[Prerelease] Bumped version number")));
 
-gulp.task("docs", cb =>
+gulp.task("docs", () =>
 	gulp.src(["README.md", "./src/**/*.js"], {
 		read: false
 	})
-		.pipe(jsdoc(jsdocConfig, cb)));
+		.pipe(jsdoc(jsdocConfig, gulp.series("commit:docs"))));
 
 gulp.task("commit:docs", cb =>
 	gulp.src("./docs/**", {
 		cwd: rootDir
-	}).pipe(git.add()).on("end", () => {
-		git.commit("Build: generated docs files", {
-			args: "-s -S",
-			cwd: rootDir
-		}, (err) => {
-			if (err) {
-				return cb(err);
-			}
+	}).pipe(git.add()).pipe(git.commit("Build: generated docs files", {
+		args: "-s -S",
+		cwd: rootDir
+	}, (err) => {
+		if (err) {
+			return cb(err);
+		}
 
-			return cb();
-		});
-	}));
+		return cb();
+	})));
 
 gulp.task("bump", (cb) => {
 	const newVersion = semver.inc(currVersion(), versioning(), preid());
@@ -453,7 +451,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"build", "commit:build", "docs", "commit:docs", "bump", "tag", "push", "npm-publish"
+	"build", "commit:build", "bump", "tag", "push", "npm-publish"
 ));
 
 let cleanSignal;

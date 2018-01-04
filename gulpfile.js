@@ -105,7 +105,7 @@ gulp.task("rollup:main", async() => {
 		file: pkg.main,
 		format: "cjs",
 		name: pkg.name
-	})
+	});
 });
 
 // gulp.task("rollup:module", async() => {
@@ -311,10 +311,18 @@ const versioning = () => {
 	return "patch";
 };
 
-gulp.task("commit:build", () =>
-	gulp.src("./dist/**/*.*").pipe(git.add()).pipe(git.commit("Build: generated dist files", {
-		cwd: rootDir
-	})));
+gulp.task("commit:build", cb =>
+	gulp.src("./dist/**/*.*").pipe(git.add()).on("end", () => {
+		git.commit("Build: generated dist files", {
+			cwd: rootDir
+		}, (err) => {
+			if (err) {
+				return cb(err);
+			}
+
+			return cb();
+		});
+	}));
 
 // gulp.task("commit-changes", () => gulp.src(".")
 // 	.pipe(git.add())
@@ -325,13 +333,20 @@ gulp.task("docs", () => gulp.src(["README.md", "./src/**/*.js"], {
 })
 	.pipe(jsdoc(jsdocConfig)));
 
-gulp.task("commit:docs", () => (
+gulp.task("commit:docs", cb => (
 	gulp.src("./docs/**", {
+		cwd: rootDir
+	}).pipe(git.add()).on("end", () => {
+		git.commit("Build: generated dist files", {
+			cwd: rootDir
+		}, (err) => {
+			if (err) {
+				return cb(err);
+			}
 
-		cwd: rootDir
-	}).pipe(git.commit("Build: generated docs files", {
-		cwd: rootDir
-	}))
+			return cb();
+		});
+	})
 ));
 
 gulp.task("bump", (cb) => {
@@ -527,7 +542,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"build", "bump", "tag", "push", "npm-publish"
+	"build", gulp.parallel("commit:build", gulp.series("docs", "commit:docs")), "bump", "tag", "push", "npm-publish"
 ));
 
 let cleanSignal;

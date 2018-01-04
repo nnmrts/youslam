@@ -309,34 +309,43 @@ const versioning = () => {
 	return "patch";
 };
 
-gulp.task("commit:build", async(cb) => {
-	const addedFiles = await gulp.src("./dist/**/*.*").pipe(git.add());
-
-	await addedFiles.pipe(git.commit("Build: generated dist files", {
+gulp.task("commit:build", cb =>
+	gulp.src("./dist/**/*.*").pipe(git.add()).pipe(git.commit("Build: generated dist files", {
 		args: "-s -S",
 		cwd: rootDir
-	}, () => cb()));
-});
+	}, (err) => {
+		if (err) {
+			return cb(err);
+		}
+
+		return cb();
+	})));
 
 // gulp.task("commit-changes", () => gulp.src(".")
 // 	.pipe(git.add())
 // 	.pipe(git.commit("[Prerelease] Bumped version number")));
 
-gulp.task("docs", (cb) => {
+gulp.task("docs", cb =>
 	gulp.src(["README.md", "./src/**/*.js"], {
 		read: false
 	})
-		.pipe(jsdoc(jsdocConfig, cb));
-});
+		.pipe(jsdoc(jsdocConfig, cb)));
 
-gulp.task("commit:docs", async(cb) => {
-	const addedFiles = await gulp.src("./docs/**").pipe(git.add());
-
-	await addedFiles.pipe(git.commit("Build: generated docs files", {
-		args: "-s -S",
+gulp.task("commit:docs", cb =>
+	gulp.src("./docs/**", {
 		cwd: rootDir
-	}, () => cb()));
-});
+	}).pipe(git.add()).on("end", () => {
+		git.commit("Build: generated docs files", {
+			args: "-s -S",
+			cwd: rootDir
+		}, (err) => {
+			if (err) {
+				return cb(err);
+			}
+
+			return cb();
+		});
+	}));
 
 gulp.task("bump", (cb) => {
 	const newVersion = semver.inc(currVersion(), versioning(), preid());

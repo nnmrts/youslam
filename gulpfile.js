@@ -310,18 +310,16 @@ const versioning = () => {
 };
 
 gulp.task("commit:build", (cb) => {
-	gulp.src("./dist/**/*.*").pipe(git.add()).on("end", () => {
-		git.commit("Build: generated dist files", {
-			args: "-s -S",
-			cwd: rootDir
-		}, (err) => {
-			if (err) {
-				return cb(err);
-			}
+	gulp.src("./dist/**/*.*").pipe(git.add()).pipe(git.commit("Build: generated dist files", {
+		args: "-s -S",
+		cwd: rootDir
+	}, (err) => {
+		if (err) {
+			return cb(err);
+		}
 
-			return cb();
-		});
-	});
+		return cb();
+	}));
 });
 
 // gulp.task("commit-changes", () => gulp.src(".")
@@ -458,7 +456,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"build", gulp.parallel("commit:build", "docs"), "commit:docs", "bump", "tag", "push", "npm-publish"
+	"build", "commit:build", "docs", "commit:docs", "bump", "tag", "push", "npm-publish"
 ));
 
 let cleanSignal;

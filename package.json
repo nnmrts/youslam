@@ -43,6 +43,7 @@
 		"gulp-total-task-time": "^0.1.0",
 		"gulp-uglify": "^3.0.0",
 		"gulp-util": "^3.0.8",
+		"jsdoc-babel": "^0.3.0",
 		"live-server": "^1.2.0",
 		"map-stream": "0.0.7",
 		"node-cleanup": "^2.1.2",

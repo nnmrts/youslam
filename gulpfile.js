@@ -327,10 +327,10 @@ gulp.task("commit:build", cb =>
 // 	.pipe(git.add())
 // 	.pipe(git.commit("[Prerelease] Bumped version number")));
 
-gulp.task("docs", () => gulp.src(["README.md", "./src/**/*.js"], {
+gulp.task("docs", cb => gulp.src(["README.md", "./src/**/*.js"], {
 	read: false
 })
-	.pipe(jsdoc(jsdocConfig)));
+	.pipe(jsdoc(jsdocConfig, cb)));
 
 gulp.task("commit:docs", cb => (
 	gulp.src("./docs/**", {

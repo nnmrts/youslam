@@ -309,13 +309,13 @@ const versioning = () => {
 	return "patch";
 };
 
-gulp.task("commit:build", async() => {
+gulp.task("commit:build", async(cb) => {
 	const addedFiles = await gulp.src("./dist/**/*.*").pipe(git.add());
 
 	await addedFiles.pipe(git.commit("Build: generated dist files", {
 		args: "-s -S",
 		cwd: rootDir
-	}));
+	}, () => cb()));
 });
 
 // gulp.task("commit-changes", () => gulp.src(".")
@@ -329,15 +329,13 @@ gulp.task("docs", (cb) => {
 		.pipe(jsdoc(jsdocConfig, cb));
 });
 
-gulp.task("commit:docs", async() => {
-	const addedFiles = await gulp.src("./docs/**", {
-		cwd: rootDir
-	}).pipe(git.add());
+gulp.task("commit:docs", async(cb) => {
+	const addedFiles = await gulp.src("./docs/**").pipe(git.add());
 
 	await addedFiles.pipe(git.commit("Build: generated docs files", {
 		args: "-s -S",
 		cwd: rootDir
-	}));
+	}, () => cb()));
 });
 
 gulp.task("bump", (cb) => {

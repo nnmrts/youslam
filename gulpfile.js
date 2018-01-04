@@ -309,16 +309,12 @@ const versioning = () => {
 	return "patch";
 };
 
-gulp.task("commit:build", (cb) => {
-	gulp.src("./dist/**/*.*").pipe(git.add()).pipe(git.commit("Build: generated dist files", {
+gulp.task("commit:build", async() => {
+	const addedFiles = await gulp.src("./dist/**/*.*").pipe(git.add());
+
+	await addedFiles.pipe(git.commit("Build: generated dist files", {
 		args: "-s -S",
 		cwd: rootDir
-	}, (err) => {
-		if (err) {
-			return cb(err);
-		}
-
-		return cb();
 	}));
 });
 

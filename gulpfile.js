@@ -329,21 +329,15 @@ gulp.task("docs", (cb) => {
 		.pipe(jsdoc(jsdocConfig, cb));
 });
 
-gulp.task("commit:docs", (cb) => {
-	gulp.src("./docs/**", {
+gulp.task("commit:docs", async() => {
+	const addedFiles = await gulp.src("./docs/**", {
 		cwd: rootDir
-	}).pipe(git.add()).on("end", () => {
-		git.commit("Build: generated docs files", {
-			args: "-s -S",
-			cwd: rootDir
-		}, (err) => {
-			if (err) {
-				return cb(err);
-			}
+	}).pipe(git.add());
 
-			return cb();
-		});
-	});
+	await addedFiles.pipe(git.commit("Build: generated docs files", {
+		args: "-s -S",
+		cwd: rootDir
+	}));
 });
 
 gulp.task("bump", (cb) => {

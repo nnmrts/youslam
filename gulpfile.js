@@ -10,7 +10,6 @@ const rollup = require("rollup");
 const resolve = require("rollup-plugin-node-resolve");
 const commonjs = require("rollup-plugin-commonjs");
 const json = require("rollup-plugin-json");
-const source = require("vinyl-source-stream");
 const babel = require("gulp-babel");
 const uglify = require("gulp-uglify");
 const sourcemaps = require("gulp-sourcemaps");

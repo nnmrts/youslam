@@ -309,7 +309,7 @@ const versioning = () => {
 	return "patch";
 };
 
-gulp.task("commit:build", cb =>
+gulp.task("commit:build", (cb) => {
 	gulp.src("./dist/**/*.*").pipe(git.add()).on("end", () => {
 		git.commit("Build: generated dist files", {
 			args: "-s -S",
@@ -321,18 +321,21 @@ gulp.task("commit:build", cb =>
 
 			return cb();
 		});
-	}));
+	});
+});
 
 // gulp.task("commit-changes", () => gulp.src(".")
 // 	.pipe(git.add())
 // 	.pipe(git.commit("[Prerelease] Bumped version number")));
 
-gulp.task("docs", cb => gulp.src(["README.md", "./src/**/*.js"], {
-	read: false
-})
-	.pipe(jsdoc(jsdocConfig, cb)));
+gulp.task("docs", (cb) => {
+	gulp.src(["README.md", "./src/**/*.js"], {
+		read: false
+	})
+		.pipe(jsdoc(jsdocConfig, cb));
+});
 
-gulp.task("commit:docs", cb => (
+gulp.task("commit:docs", (cb) => {
 	gulp.src("./docs/**", {
 		cwd: rootDir
 	}).pipe(git.add()).on("end", () => {
@@ -346,8 +349,8 @@ gulp.task("commit:docs", cb => (
 
 			return cb();
 		});
-	})
-));
+	});
+});
 
 gulp.task("bump", (cb) => {
 	const newVersion = semver.inc(currVersion(), versioning(), preid());

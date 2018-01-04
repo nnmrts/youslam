@@ -21,9 +21,9 @@ Object.keys(youslam).forEach((country) => {
 
 						youslam[country][level1][level2][level3][key].location = assign(youslam[country][level1][level2][level3][key].location, {
 							country,
-							level1: level1.name,
-							level2: level2.name,
-							level3: level3.name,
+							level1: youslam[country][level1].name,
+							level2: youslam[country][level1][level2].name,
+							level3: youslam[country][level1][level2][level3].name,
 							zip: youslam[country][level1][level2][level3].zip
 						});
 					}

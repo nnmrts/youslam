@@ -31,7 +31,6 @@ const jsdocConfig = require("./.jsdoc.json");
 const semver = require("semver");
 const _ = require("lodash");
 const jeditor = require("gulp-json-editor");
-const map = require("map-stream");
 const childProcess = require("child_process");
 const GitHub = require("github-api");
 
@@ -313,6 +312,7 @@ const versioning = () => {
 gulp.task("commit:build", cb =>
 	gulp.src("./dist/**/*.*").pipe(git.add()).on("end", () => {
 		git.commit("Build: generated dist files", {
+			args: "-s -S",
 			cwd: rootDir
 		}, (err) => {
 			if (err) {
@@ -336,7 +336,8 @@ gulp.task("commit:docs", cb => (
 	gulp.src("./docs/**", {
 		cwd: rootDir
 	}).pipe(git.add()).on("end", () => {
-		git.commit("Build: generated dist files", {
+		git.commit("Build: generated docs files", {
+			args: "-s -S",
 			cwd: rootDir
 		}, (err) => {
 			if (err) {
@@ -387,95 +388,8 @@ gulp.task("bump", (cb) => {
 		});
 });
 
-let tag;
-
-const tagVersion = function(newOptions) {
-	let opts = newOptions;
-
-	if (!newOptions) {
-		opts = {};
-	}
-
-	if (!opts.key) {
-		opts.key = "version";
-	}
-
-	if (typeof opts.prefix === "undefined") {
-		opts.prefix = "v";
-	}
-	if (typeof opts.push === "undefined") {
-		opts.push = true;
-	}
-
-	/**
-	 *
-	 *
-	 * @param {any} file file to modify
-	 * @param {any} cb callback
-	 */
-	function modifyContents(file, cb) {
-		let version = opts.version;
-		if (!opts.version) {
-			if (file.isNull()) {
-				cb(null, file);
-			}
-			if (file.isStream()) {
-				cb(new Error("gulp-tag-version: streams not supported"));
-			}
-
-			const jsonFile = JSON.parse(file.contents.toString());
-			version = jsonFile[opts.key];
-		}
-		tag = opts.prefix + version;
-
-		const message = tag;
-
-		gutil.log(`Tagging as: ${gutil.colors.cyan(tag)}`);
-		git.tag(
-			tag, message, {
-				signed: "true",
-				cwd: opts.cwd
-			}, (err) => {
-				if (err) {
-					throw err;
-				}
-
-				git.tag(
-					tag, "", {
-						args: " -v",
-						cwd: opts.cwd
-					}, (innerErr) => {
-						if (innerErr) {
-							throw innerErr;
-						}
-						cb();
-					}
-				);
-			}
-		);
-	}
-
-	return map(modifyContents);
-};
-
-gulp.task("tag-and-push", cb => gulp.src("./", {
-	cwd: rootDir
-})
-	.pipe(tagVersion({
-		version: currVersion(),
-		cwd: rootDir
-	}))
-	.on("end", () => {
-		git.push(
-			"origin", branch, {
-				args: "--tags",
-				cwd: rootDir
-			}, cb
-		);
-	}));
-
 gulp.task("tag", (cb) => {
-	tag = `v${currVersion()}`;
+	const tag = `v${currVersion()}`;
 
 	const message = tag;
 
@@ -541,7 +455,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"build", gulp.parallel("commit:build", gulp.series("docs", "commit:docs")), "bump", "tag", "push", "npm-publish"
+	"build", gulp.parallel("commit:build", "docs"), "commit:docs", "bump", "tag", "push", "npm-publish"
 ));
 
 let cleanSignal;

@@ -5,6 +5,17 @@ const POP = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	dates: {
+		2018: {
+			01: {
+				10: "default"
+			},
+			04: {
+				10: "default",
+				29: "default"
+			}
+		}
 	}
 };
 

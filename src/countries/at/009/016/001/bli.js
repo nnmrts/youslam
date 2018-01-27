@@ -1,10 +1,10 @@
 const BLI = {
 	dates: {
 		2018: {
-			"02": {
-				"02": "default"
+			02: {
+				02: "default"
 			},
-			"05": {
+			05: {
 				21: "default"
 			}
 		}
@@ -18,6 +18,22 @@ const BLI = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	dates: {
+		2018: {
+			02: {
+				02: "default"
+			},
+			05: {
+				21: "default"
+			},
+			09: {
+				29: "default"
+			},
+			11: {
+				24: "default"
+			}
+		}
 	}
 };
 

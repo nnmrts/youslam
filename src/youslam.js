@@ -3,6 +3,7 @@ import assign from "lodash/assign";
 import AT from "./countries/at.js";
 import DE from "./countries/de.js";
 import IT from "./countries/it.js";
+import utils from "./utils.js";
 
 const youslam = {
 	AT,
@@ -31,6 +32,10 @@ Object.keys(youslam).forEach((country) => {
 			});
 		});
 	});
+});
+
+Object.keys(utils).forEach((util) => {
+	youslam[util] = utils[util];
 });
 
 export default youslam;

@@ -8,6 +8,19 @@ const BIL = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	dates: {
+		2018: {
+			01: {
+				18: "default"
+			},
+			03: {
+				23: "default"
+			},
+			05: {
+				17: "default"
+			}
+		}
 	}
 };
 

@@ -15,25 +15,25 @@ const POW = {
 			12: {
 				19: "default"
 			},
-			01: {
+			1: {
 				17: "default"
 			},
-			02: {
+			2: {
 				21: "default"
 			},
-			03: {
+			3: {
 				21: "default"
 			},
-			04: {
+			4: {
 				18: "default"
 			},
-			05: {
+			5: {
 				16: "default"
 			},
-			06: {
+			6: {
 				20: "default"
 			},
-			09: {
+			9: {
 				19: "default"
 			}
 		}

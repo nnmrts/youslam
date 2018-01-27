@@ -18,22 +18,22 @@ const FRE = {
 			12: {
 				13: "default"
 			},
-			01: {
+			1: {
 				25: "default"
 			},
-			02: {
+			2: {
 				15: "default"
 			},
-			03: {
+			3: {
 				29: "default"
 			},
-			04: {
+			4: {
 				26: "default"
 			},
-			05: {
+			5: {
 				24: "default"
 			},
-			09: {
+			9: {
 				27: "default"
 			}
 		}

@@ -18,22 +18,22 @@ const SIN = {
 			12: {
 				12: "default"
 			},
-			01: {
+			1: {
 				24: "default"
 			},
-			02: {
+			2: {
 				14: "default"
 			},
-			03: {
+			3: {
 				28: "default"
 			},
-			04: {
+			4: {
 				25: "default"
 			},
-			05: {
+			5: {
 				23: "default"
 			},
-			09: {
+			9: {
 				26: "default"
 			},
 			10: {

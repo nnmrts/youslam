@@ -8,10 +8,10 @@ const POP = {
 	},
 	dates: {
 		2018: {
-			01: {
+			1: {
 				10: "default"
 			},
-			04: {
+			4: {
 				10: "default",
 				29: "default"
 			}

@@ -11,13 +11,13 @@ const BIL = {
 	},
 	dates: {
 		2018: {
-			01: {
+			1: {
 				18: "default"
 			},
-			03: {
+			3: {
 				23: "default"
 			},
-			05: {
+			5: {
 				17: "default"
 			}
 		}

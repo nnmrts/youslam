@@ -9,15 +9,6 @@ const SIN = {
 			}
 		},
 		2018: {
-			10: {
-				24: "default"
-			},
-			11: {
-				28: "default"
-			},
-			12: {
-				12: "default"
-			},
 			1: {
 				24: "default"
 			},
@@ -38,6 +29,12 @@ const SIN = {
 			},
 			10: {
 				24: "default"
+			},
+			11: {
+				28: "default"
+			},
+			12: {
+				12: "default"
 			}
 		}
 	},

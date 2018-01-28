@@ -2,7 +2,7 @@ const DON = {
 	dates: {
 		2017: {
 			12: {
-				01: "default"
+				1: "default"
 			}
 		}
 	},

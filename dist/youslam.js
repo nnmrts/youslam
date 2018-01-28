@@ -3,6 +3,8 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var assign = _interopDefault(require('lodash/assign'));
+var moment = _interopDefault(require('moment'));
+var padStart = _interopDefault(require('lodash/padStart'));
 
 const MUE = {
 	dates: {
@@ -205,7 +207,7 @@ const LIT = {
 const TAG = {
 	dates: {
 		2018: {
-			"01": {
+			1: {
 				18: {
 					time: "20:00:00"
 				}
@@ -244,7 +246,7 @@ const BES = {
 const PHI = {
 	dates: {
 		2018: {
-			"02": {
+			2: {
 				22: {
 					time: "20:15:00"
 				}
@@ -271,7 +273,7 @@ const PHI = {
 const TAG$2 = {
 	dates: {
 		2018: {
-			"01": {
+			1: {
 				25: {
 					time: "20:00:00"
 				}
@@ -294,7 +296,7 @@ const WOR$2 = {
 	dates: {
 		2017: {
 			12: {
-				"09": {
+				9: {
 					time: "19:30:00"
 				}
 			}
@@ -374,7 +376,7 @@ const DON = {
 	dates: {
 		2017: {
 			12: {
-				"01": "default"
+				1: "default"
 			}
 		}
 	},
@@ -1385,7 +1387,7 @@ const STU = {
 			}
 		},
 		2018: {
-			"01": {
+			1: {
 				23: {
 					time: "19:00:00"
 				}
@@ -1438,22 +1440,22 @@ const FRE$2 = {
 			12: {
 				13: "default"
 			},
-			"01": {
+			1: {
 				25: "default"
 			},
-			"02": {
+			2: {
 				15: "default"
 			},
-			"03": {
+			3: {
 				29: "default"
 			},
-			"04": {
+			4: {
 				26: "default"
 			},
-			"05": {
+			5: {
 				24: "default"
 			},
-			"09": {
+			9: {
 				27: "default"
 			}
 		}
@@ -1488,25 +1490,25 @@ const POW = {
 			12: {
 				19: "default"
 			},
-			"01": {
+			1: {
 				17: "default"
 			},
-			"02": {
+			2: {
 				21: "default"
 			},
-			"03": {
+			3: {
 				21: "default"
 			},
-			"04": {
+			4: {
 				18: "default"
 			},
-			"05": {
+			5: {
 				16: "default"
 			},
-			"06": {
+			6: {
 				20: "default"
 			},
-			"09": {
+			9: {
 				19: "default"
 			}
 		}
@@ -1580,22 +1582,22 @@ const TAG$6 = {
 			}
 		},
 		2018: {
-			"01": {
+			1: {
 				21: {
 					time: "19:00:00"
 				}
 			},
-			"02": {
+			2: {
 				18: {
 					time: "19:00:00"
 				}
 			},
-			"03": {
+			3: {
 				25: {
 					time: "19:00:00"
 				}
 			},
-			"04": {
+			4: {
 				22: {
 					time: "19:00:00"
 				}
@@ -1627,32 +1629,32 @@ const B00 = {
 			}
 		},
 		2018: {
-			"01": {
+			1: {
 				12: {
 					time: "20:00:00"
 				}
 			},
-			"02": {
+			2: {
 				16: {
 					time: "20:00:00"
 				}
 			},
-			"03": {
+			3: {
 				16: {
 					time: "20:00:00"
 				}
 			},
-			"04": {
+			4: {
 				20: {
 					time: "20:00:00"
 				}
 			},
-			"05": {
+			5: {
 				25: {
 					time: "20:00:00"
 				}
 			},
-			"06": {
+			6: {
 				15: {
 					time: "20:00:00"
 				}
@@ -1685,6 +1687,19 @@ const BIL = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	dates: {
+		2018: {
+			1: {
+				18: "default"
+			},
+			3: {
+				23: "default"
+			},
+			5: {
+				17: "default"
+			}
+		}
 	}
 };
 
@@ -1712,6 +1727,17 @@ const POP = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	dates: {
+		2018: {
+			1: {
+				10: "default"
+			},
+			4: {
+				10: "default",
+				29: "default"
+			}
+		}
 	}
 };
 
@@ -1726,6 +1752,24 @@ const SIN = {
 			}
 		},
 		2018: {
+			1: {
+				24: "default"
+			},
+			2: {
+				14: "default"
+			},
+			3: {
+				28: "default"
+			},
+			4: {
+				25: "default"
+			},
+			5: {
+				23: "default"
+			},
+			9: {
+				26: "default"
+			},
 			10: {
 				24: "default"
 			},
@@ -1734,24 +1778,6 @@ const SIN = {
 			},
 			12: {
 				12: "default"
-			},
-			"01": {
-				24: "default"
-			},
-			"02": {
-				14: "default"
-			},
-			"03": {
-				28: "default"
-			},
-			"04": {
-				25: "default"
-			},
-			"05": {
-				23: "default"
-			},
-			"09": {
-				26: "default"
 			}
 		}
 	},
@@ -1831,7 +1857,7 @@ const SIN$2 = {
 	dates: {
 		2017: {
 			12: {
-				"08": {
+				8: {
 					time: "20:00:00"
 				}
 			}
@@ -1884,16 +1910,6 @@ const $2_015 = {
 };
 
 const BLI = {
-	dates: {
-		2018: {
-			"02": {
-				"02": "default"
-			},
-			"05": {
-				21: "default"
-			}
-		}
-	},
 	name: "Blitzdichtgewitter Poetry Jazz Slam",
 	description: "Poetry Slam und Jazz. Zwei Kunstformen kunstvoll vereint\nDie beste Melange für Liebende von Sprache und Musik: Ein Jazztrio untermalt die Texte vier geladener Künstlerinnen und Künstler.Zwischen Tagträumen und Nachtleben, Sprachbildern und Lautmalerei entsteht eine neue Begegnung mit Slam, wie sie allein Musik erzeugen kann.\n\nModeration: Yasmo\n\nBauer Schläger Wurf Berger:\n(Ralph Mothwurf – Gitarre, Andreas Lindenbauer – Bassklarinette / Altsaxophon, Reinhard Hörschläger – Percussion)",
 	location: {
@@ -1903,6 +1919,22 @@ const BLI = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	dates: {
+		2018: {
+			2: {
+				2: "default"
+			},
+			5: {
+				21: "default"
+			},
+			9: {
+				29: "default"
+			},
+			11: {
+				24: "default"
+			}
+		}
 	}
 };
 
@@ -2086,6 +2118,40 @@ const IT = {
 	"001": $1_001$2
 };
 
+const getDates = (slam, amount = 3, from = moment(), to = moment().add(100, "y")) => {
+	if (from.isSameOrBefore(to)) {
+		if (slam.dates) {
+			dateArray = [];
+
+			Object.keys(slam.dates).forEach((year) => {
+				Object.keys(slam.dates[year]).forEach((month) => {
+					Object.keys(slam.dates[year][month]).forEach((day) => {
+						const date = moment(`${year}-${padStart(month, 2, 0)}-${padStart(day, 2, 0)}`);
+
+						if (date.isSameOrAfter(from) && date.isBefore(to)) {
+							dateArray.push(date.format("YYYY-MM-DD"));
+						}
+					});
+				});
+			});
+
+			dateArray.splice(amount);
+
+			return dateArray;
+		}
+		else {
+			throw new Error("[youslam[getDates]]: given slam has no dates");
+		}
+	}
+	else {
+		throw new Error("[youslam[getDates]]: invalid timespan, \"from\" is after \"to\"");
+	}
+};
+
+const utils = {
+	getDates
+};
+
 const youslam = {
 	AT,
 	DE,
@@ -2113,6 +2179,10 @@ Object.keys(youslam).forEach((country) => {
 			});
 		});
 	});
+});
+
+Object.keys(utils).forEach((util) => {
+	youslam[util] = utils[util];
 });
 
 module.exports = youslam;

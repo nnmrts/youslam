@@ -8,7 +8,7 @@ import padStart from "lodash/padStart";
  * @param {number} [amount=3] maximum amount of dates
  * @param {moment} [from=moment()] moment
  * @param {moment} [to=moment().add(100, "y")] moment
- * @returns {array} array of dates
+ * @returns {array} array of date strings
  */
 const getDates = (
 	slam, amount = 3, from = moment(), to = moment().add(100, "y")

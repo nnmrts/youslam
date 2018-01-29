@@ -1,10 +1,21 @@
 import moment from "moment";
 import padStart from "lodash/padStart";
 
-const getDates = (slam, amount = 3, from = moment(), to = moment().add(100, "y")) => {
+/**
+ * @name getDates
+ *
+ * @param {youslam.slam} slam youslam slam object
+ * @param {number} [amount=3] maximum amount of dates
+ * @param {moment} [from=moment()] moment
+ * @param {moment} [to=moment().add(100, "y")] moment
+ * @returns {array} array of dates
+ */
+const getDates = (
+	slam, amount = 3, from = moment(), to = moment().add(100, "y")
+) => {
 	if (from.isSameOrBefore(to)) {
 		if (slam.dates) {
-			dateArray = [];
+			const dateArray = [];
 
 			Object.keys(slam.dates).forEach((year) => {
 				Object.keys(slam.dates[year]).forEach((month) => {
@@ -22,13 +33,12 @@ const getDates = (slam, amount = 3, from = moment(), to = moment().add(100, "y")
 
 			return dateArray;
 		}
-		else {
-			throw new Error("[youslam[getDates]]: given slam has no dates");
-		}
+
+		throw new Error("[youslam[getDates]]: given slam has no dates");
 	}
 	else {
 		throw new Error("[youslam[getDates]]: invalid timespan, \"from\" is after \"to\"");
 	}
-}
+};
 
 export default getDates;

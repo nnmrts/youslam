@@ -13,7 +13,9 @@ const SIN = {
 				24: "default"
 			},
 			2: {
-				14: "default"
+				14: {
+					fbEvent: 1820455944918203
+				}
 			},
 			3: {
 				28: "default"
@@ -48,6 +50,9 @@ const SIN = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	tickets: {
+		ntry: "sinnundseife"
 	}
 };
 

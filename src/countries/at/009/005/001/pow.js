@@ -19,7 +19,9 @@ const POW = {
 				17: "default"
 			},
 			2: {
-				21: "default"
+				21: {
+					fbEvent: 316594195520229
+				}
 			},
 			3: {
 				21: "default"
@@ -48,6 +50,9 @@ const POW = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	tickets: {
+		ntry: "powerpointkaraoke"
 	}
 };
 

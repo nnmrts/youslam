@@ -6,6 +6,13 @@ const WOR = {
 					time: "19:30:00"
 				}
 			}
+		},
+		2018: {
+			3: {
+				3: {
+					fbEvent: 2018855465025112
+				}
+			}
 		}
 	},
 	name: "Wortschmiede Poetry Slam",

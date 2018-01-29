@@ -12,10 +12,14 @@ const BLI = {
 	dates: {
 		2018: {
 			2: {
-				2: "default"
+				2: {
+					fbEvent: 151955185456724
+				}
 			},
 			5: {
-				21: "default"
+				21: {
+					fbEvent: 868449226659611
+				}
 			},
 			9: {
 				29: "default"
@@ -24,6 +28,9 @@ const BLI = {
 				24: "default"
 			}
 		}
+	},
+	tickets: {
+		ntry: "blitzdichtgewitter"
 	}
 };
 

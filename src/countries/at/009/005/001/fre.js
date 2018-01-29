@@ -22,7 +22,9 @@ const FRE = {
 				25: "default"
 			},
 			2: {
-				15: "default"
+				15: {
+					fbEvent: 195652907681836
+				}
 			},
 			3: {
 				29: "default"
@@ -48,6 +50,9 @@ const FRE = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	tickets: {
+		ntry: "poetryslam"
 	}
 };
 

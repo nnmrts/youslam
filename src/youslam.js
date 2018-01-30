@@ -5,37 +5,29 @@ import DE from "./countries/de.js";
 import IT from "./countries/it.js";
 import utils from "./utils.js";
 
+
 const youslam = {
 	AT,
 	DE,
-	IT
+	IT,
+	utils
 };
 
-Object.keys(youslam).forEach((country) => {
-	Object.keys(youslam[country]).forEach((level1) => {
-		Object.keys(youslam[country][level1]).forEach((level2) => {
-			Object.keys(youslam[country][level1][level2]).forEach((level3) => {
-				Object.keys(youslam[country][level1][level2][level3]).forEach((key) => {
-					if (key.match(/[A-Z0-9]{3}/) && key.match(/[A-Z0-9]{3}/).index === 0) {
-						youslam[country][level1][level2][level3][key].id = country + level1 + level2 + level3 + key;
-						youslam[country][level1][level2][level3][key].shortId = `${country}-${parseInt(level1, 10)}-${parseInt(level2, 10)}-${parseInt(level3, 10)}-${key}`;
+youslam.allSlams((
+	country, level1, level2, level3, slam, actualSlam
+) => {
+	actualSlam.id = country + level1 + level2 + level3 + slam;
+	actualSlam.shortId = `${country}-${parseInt(level1, 10)}-${parseInt(level2, 10)}-${parseInt(level3, 10)}-${slam}`;
 
-						youslam[country][level1][level2][level3][key].location = assign(youslam[country][level1][level2][level3][key].location, {
-							country,
-							level1: youslam[country][level1].name,
-							level2: youslam[country][level1][level2].name,
-							level3: youslam[country][level1][level2][level3].name,
-							zip: youslam[country][level1][level2][level3].zip
-						});
-					}
-				});
-			});
-		});
+	actualSlam.location = assign(actualSlam.location, {
+		country,
+		level1: youslam[country][level1].name,
+		level2: youslam[country][level1][level2].name,
+		level3: youslam[country][level1][level2][level3].name,
+		zip: youslam[country][level1][level2][level3].zip
 	});
-});
 
-Object.keys(utils).forEach((util) => {
-	youslam[util] = utils[util];
+	youslam[country][level1][level2][level3][slam] = actualSlam;
 });
 
 export default youslam;

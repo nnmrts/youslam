@@ -46,6 +46,4 @@ class YS {
 	}
 }
 
-export { YS };
-
-export default new YS();
+export default YS;

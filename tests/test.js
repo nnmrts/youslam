@@ -1,5 +1,7 @@
 import test from "ava";
-import ys from "../src/youslam.js";
+import YS from "../src/youslam.js";
+
+const ys = YS();
 
 test("ids", (t) => {
 	ys.allSlams((

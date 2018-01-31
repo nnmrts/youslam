@@ -11,7 +11,7 @@ import padStart from "lodash/padStart";
  * @returns {array} array of date strings
  */
 const getDates = (
-	slam, amount = 3, from = moment(), to = moment().add(100, "y")
+	slam, amount = -1, from = moment(), to = moment().add(100, "y")
 ) => {
 	if (from.isSameOrBefore(to)) {
 		if (slam.dates) {

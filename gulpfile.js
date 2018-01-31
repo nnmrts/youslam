@@ -2,7 +2,6 @@
 
 const gulp = require("gulp");
 
-
 const taskTime = require("gulp-total-task-time");
 const del = require("del");
 const eslint = require("gulp-eslint");
@@ -55,8 +54,6 @@ gulp.task("clean:tmp", () =>
 	del(`${paths.tmp}/**`));
 
 gulp.task("clean", gulp.parallel("clean:dist", "clean:tmp"));
-
-// gulp.task("src-tmp", () => gulp.src(`${paths.src}/**/*`).pipe(gulp.dest(paths.tmp)));
 
 gulp.task("lint", () => gulp.src(`${paths.src}/scripts/**/*.js`)
 	.pipe(eslint({
@@ -130,10 +127,7 @@ gulp.task("babel", () => gulp.src(pkg.browser)
 		compact: false,
 		plugins: [
 			[
-				"angularjs-annotate",
-				{
-					/* explicitOnly: true */
-				}
+				"angularjs-annotate"
 			]
 		]
 
@@ -157,13 +151,16 @@ gulp.task("sass", () => gulp.src(`${paths.src}/main.scss`)
 	.pipe(sass({
 		outputStyle: "expanded",
 		precision: 10,
-		includePaths: ["./", "node_modules"]
+		includePaths: [
+			"./",
+			"node_modules"
+		]
 	}).on("error", sass.logError))
 	.pipe(sourcemaps.mapSources(sourcePath => `../src/${sourcePath}`))
 
 	.pipe(sourcemaps.write(".", {
 		charset: "utf-8",
-		mapFile: function(mapFilePath) {
+		mapFile(mapFilePath) {
 			return mapFilePath.replace("main", "youslam");
 		}
 	}))
@@ -182,7 +179,9 @@ gulp.task("autoprefixer", () => gulp.src(`${paths.tmp}/youslam.css`)
 		loadMaps: true
 	}))
 	.pipe(autoprefixer({
-		browsers: ["> 0.1%"],
+		browsers: [
+			"> 0.1%"
+		],
 		cascade: false
 	}))
 	.pipe(sourcemaps.write(".", {
@@ -326,7 +325,10 @@ gulp.task("commit:build", cb =>
 // 	.pipe(git.commit("[Prerelease] Bumped version number")));
 
 gulp.task("docs", () =>
-	gulp.src(["README.md", "./src/**/*.js"], {
+	gulp.src([
+		"README.md",
+		"./src/**/*.js"
+	], {
 		read: false
 	})
 		.pipe(jsdoc(jsdocConfig, gulp.series("commit:docs"))));
@@ -353,7 +355,10 @@ gulp.task("bump", (cb) => {
 		cwd: rootDir
 	});
 
-	const versionsToBump = _.map(["package.json", "bower.json"], fileName => rootDir + fileName);
+	const versionsToBump = _.map([
+		"package.json",
+		"bower.json"
+	], fileName => rootDir + fileName);
 
 	const commitMessage = `Build: Bumps version to v${newVersion}`;
 
@@ -368,7 +373,8 @@ gulp.task("bump", (cb) => {
 		}))
 		.pipe(git.commit(commitMessage, {
 			cwd: rootDir
-		})).on("end", () => {
+		}))
+		.on("end", () => {
 			git.push(
 				"origin", branch, {
 
@@ -411,7 +417,9 @@ gulp.task("push", (cb) => {
 	);
 });
 
-gulp.task("npm-publish", done => childProcess.spawn("npm", ["publish"], {
+gulp.task("npm-publish", done => childProcess.spawn("npm", [
+	"publish"
+], {
 	stdio: "inherit"
 }).on("close", done));
 

@@ -8,8 +8,7 @@ const FAN = {
 			}
 		}
 	},
-	name: "fan of slam",
-	shortId: "AT-3-16-55-FAN"
+	name: "fan of slam"
 };
 
 export default FAN;

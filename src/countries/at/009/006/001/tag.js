@@ -35,8 +35,7 @@ const TAG = {
 			}
 		}
 	},
-	name: "TAGebuch Slam",
-	shortId: "AT-9-6-1-TAG"
+	name: "TAGebuch Slam"
 };
 
 export default TAG;

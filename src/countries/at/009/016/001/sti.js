@@ -1,6 +1,5 @@
 const STI = {
-	name: "Stille Post Slam",
-	shortId: "AT-9-16-1-STI"
+	name: "Stille Post Slam"
 };
 
 export default STI;

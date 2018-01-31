@@ -8,8 +8,7 @@ const TEX = {
 			}
 		}
 	},
-	name: "textstrom Poetry Slam",
-	shortId: "AT-9-16-1-TEX"
+	name: "textstrom Poetry Slam"
 };
 
 export default TEX;

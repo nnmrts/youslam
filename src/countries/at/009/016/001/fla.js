@@ -1,6 +1,5 @@
 const FLA = {
-	name: "Flawless Poetry Slam",
-	shortId: "AT-9-16-1-FLA"
+	name: "Flawless Poetry Slam"
 };
 
 export default FLA;

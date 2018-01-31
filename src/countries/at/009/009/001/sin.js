@@ -8,8 +8,7 @@ const SIN = {
 			}
 		}
 	},
-	name: "Sing, Song & Sound-Slam",
-	shortId: "AT-9-9-1-SIN"
+	name: "Sing, Song & Sound-Slam"
 };
 
 export default SIN;

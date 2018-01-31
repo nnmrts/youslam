@@ -8,8 +8,7 @@ const TAG = {
 			}
 		}
 	},
-	name: "Tagebuch Slam",
-	shortId: "AT-3-6-4-TAG"
+	name: "Tagebuch Slam"
 };
 
 export default TAG;

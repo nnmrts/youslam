@@ -8,8 +8,7 @@ const STU = {
 			}
 		}
 	},
-	name: "STUMMGABEL Comedy Slam",
-	shortId: "AT-9-9-1-STU"
+	name: "STUMMGABEL Comedy Slam"
 };
 
 export default STU;

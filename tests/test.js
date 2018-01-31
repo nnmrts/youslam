@@ -16,8 +16,6 @@ test("ids", (t) => {
 
 test("sift", (t) => {
 	t.is(ys.sift("AT").allLevel1s().length, 9);
-
-	// console.log(ys.sift("AT001").allSlams());
 });
 
 test("getUpcoming", (t) => {
@@ -25,4 +23,11 @@ test("getUpcoming", (t) => {
 	t.is(ys.getUpcoming([
 		"AT-1"
 	]).length, 1);
+});
+
+test("is", (t) => {
+	t.true(ys.isId("AT001001001ABC"));
+	t.false(ys.isId("AT00100A001ABC"));
+	t.true(ys.isShortId("AT-1-1-1-ABC"));
+	t.false(ys.isShortId("AT-1-A-1-ABC"));
 });

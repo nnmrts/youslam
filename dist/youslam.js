@@ -5,6 +5,10 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var assign = _interopDefault(require('lodash/assign'));
 var moment = _interopDefault(require('moment'));
 var padStart = _interopDefault(require('lodash/padStart'));
+var sample = _interopDefault(require('lodash/sample'));
+var compact = _interopDefault(require('lodash/compact'));
+var flatten = _interopDefault(require('lodash/flatten'));
+var split = _interopDefault(require('lodash/split'));
 
 const MUE = {
 	dates: {
@@ -214,8 +218,7 @@ const TAG = {
 			}
 		}
 	},
-	name: "Tagebuch Slam",
-	shortId: "AT-3-2-1-TAG"
+	name: "Tagebuch Slam"
 };
 
 const $3_001$4 = {
@@ -280,8 +283,7 @@ const TAG$2 = {
 			}
 		}
 	},
-	name: "Tagebuch Slam",
-	shortId: "AT-3-6-4-TAG"
+	name: "Tagebuch Slam"
 };
 
 const $3_004 = {
@@ -298,6 +300,13 @@ const WOR$2 = {
 			12: {
 				9: {
 					time: "19:30:00"
+				}
+			}
+		},
+		2018: {
+			3: {
+				3: {
+					fbEvent: 2018855465025112
 				}
 			}
 		}
@@ -358,8 +367,7 @@ const FAN = {
 			}
 		}
 	},
-	name: "fan of slam",
-	shortId: "AT-3-16-55-FAN"
+	name: "fan of slam"
 };
 
 const $3_055 = {
@@ -1344,7 +1352,6 @@ const CUP = {
 
 const IMW = {
 	name: "Slam im Wasserglas",
-	shortId: "AT-9-1-1-IMW"
 };
 
 const LIB = {
@@ -1444,7 +1451,9 @@ const FRE$2 = {
 				25: "default"
 			},
 			2: {
-				15: "default"
+				15: {
+					fbEvent: 195652907681836
+				}
 			},
 			3: {
 				29: "default"
@@ -1470,6 +1479,9 @@ const FRE$2 = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	tickets: {
+		ntry: "poetryslam"
 	}
 };
 
@@ -1494,7 +1506,9 @@ const POW = {
 				17: "default"
 			},
 			2: {
-				21: "default"
+				21: {
+					fbEvent: 316594195520229
+				}
 			},
 			3: {
 				21: "default"
@@ -1523,6 +1537,9 @@ const POW = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	tickets: {
+		ntry: "powerpointkaraoke"
 	}
 };
 
@@ -1604,8 +1621,7 @@ const TAG$6 = {
 			}
 		}
 	},
-	name: "TAGebuch Slam",
-	shortId: "AT-9-6-1-TAG"
+	name: "TAGebuch Slam"
 };
 
 const $3_001$24 = {
@@ -1756,7 +1772,9 @@ const SIN = {
 				24: "default"
 			},
 			2: {
-				14: "default"
+				14: {
+					fbEvent: 1820455944918203
+				}
 			},
 			3: {
 				28: "default"
@@ -1791,6 +1809,9 @@ const SIN = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	tickets: {
+		ntry: "sinnundseife"
 	}
 };
 
@@ -1863,8 +1884,7 @@ const SIN$2 = {
 			}
 		}
 	},
-	name: "Sing, Song & Sound-Slam",
-	shortId: "AT-9-9-1-SIN"
+	name: "Sing, Song & Sound-Slam"
 };
 
 const STU$2 = {
@@ -1877,8 +1897,7 @@ const STU$2 = {
 			}
 		}
 	},
-	name: "STUMMGABEL Comedy Slam",
-	shortId: "AT-9-9-1-STU"
+	name: "STUMMGABEL Comedy Slam"
 };
 
 const $3_001$30 = {
@@ -1894,8 +1913,7 @@ const $2_009$2 = {
 };
 
 const WOS = {
-	name: "Wos host gsogt? Poetry Slam",
-	shortId: "AT-9-15-1-WOS"
+	name: "Wos host gsogt? Poetry Slam"
 };
 
 const $3_001$32 = {
@@ -1923,10 +1941,14 @@ const BLI = {
 	dates: {
 		2018: {
 			2: {
-				2: "default"
+				2: {
+					fbEvent: 151955185456724
+				}
 			},
 			5: {
-				21: "default"
+				21: {
+					fbEvent: 868449226659611
+				}
 			},
 			9: {
 				29: "default"
@@ -1935,17 +1957,18 @@ const BLI = {
 				24: "default"
 			}
 		}
+	},
+	tickets: {
+		ntry: "blitzdichtgewitter"
 	}
 };
 
 const FLA = {
-	name: "Flawless Poetry Slam",
-	shortId: "AT-9-16-1-FLA"
+	name: "Flawless Poetry Slam"
 };
 
 const STI = {
-	name: "Stille Post Slam",
-	shortId: "AT-9-16-1-STI"
+	name: "Stille Post Slam"
 };
 
 const TEX = {
@@ -1958,8 +1981,7 @@ const TEX = {
 			}
 		}
 	},
-	name: "textstrom Poetry Slam",
-	shortId: "AT-9-16-1-TEX"
+	name: "textstrom Poetry Slam"
 };
 
 const U20$4 = {
@@ -2118,6 +2140,140 @@ const IT = {
 	"001": $1_001$2
 };
 
+const countries = {
+	AT,
+	DE,
+	IT
+};
+
+/**
+ * @name allCountries
+ *
+ * @param {function} [iterator=()=>{}]
+ * iterator to call on every country
+ */
+const allCountries = function(iterator = () => { }) {
+	const allCountriesToReturn = [];
+
+	Object.keys(this).forEach((country) => {
+		if (country.length === 2) {
+			allCountriesToReturn.push(this[country]);
+
+			iterator(country, this[country]);
+		}
+	});
+
+	return allCountriesToReturn;
+};
+
+/**
+ * @name allLevel1s
+ *
+ * @param {function} [iterator=()=>{}]
+ * iterator to call on every level1
+ */
+const allLevel1s = function(iterator = () => { }) {
+	const allLevel1sToReturn = [];
+
+	this.allCountries((country, actualCountry) => {
+		Object.keys(actualCountry).forEach((level1) => {
+			if (level1.length === 3) {
+				allLevel1sToReturn.push(actualCountry[level1]);
+
+				iterator(country, level1, actualCountry[level1]);
+			}
+		});
+	});
+
+	return allLevel1sToReturn;
+};
+
+/**
+ * @name allLevel2s
+ *
+ * @param {function} [iterator=()=>{}]
+ * iterator to call on every level2
+ */
+const allLevel2s = function(iterator = () => {}) {
+	const allLevel2sToReturn = [];
+
+	this.allLevel1s((country, level1, actualLevel1) => {
+		Object.keys(actualLevel1).forEach((level2) => {
+			if (level2.length === 3) {
+				allLevel2sToReturn.push(actualLevel1[level2]);
+
+				iterator(
+					country, level1, level2, actualLevel1[level2]
+				);
+			}
+		});
+	});
+
+	return allLevel2sToReturn;
+};
+
+/**
+ * @name allLevel3s
+ *
+ * @param {function} [iterator=()=>{}]
+ * iterator to call on every level3
+ */
+const allLevel3s = function(iterator = () => {}) {
+	const allLevel3sToReturn = [];
+
+	this.allLevel2s((
+		country, level1, level2, actualLevel2
+	) => {
+		Object.keys(actualLevel2).forEach((level3) => {
+			if (level3.length === 3) {
+				allLevel3sToReturn.push(actualLevel2[level3]);
+
+				iterator(
+					country, level1, level2, level3, actualLevel2[level3]
+				);
+			}
+		});
+	});
+
+	return allLevel3sToReturn;
+};
+
+/**
+ * @name allSlams
+ *
+ * @param {function} [iterator=()=>{}]
+ * iterator to call on every slam
+ */
+const allSlams = function(iterator = () => {}) {
+	const allSlamsToReturn = [];
+
+	this.allLevel3s((
+		country, level1, level2, level3, actualLevel3
+	) => {
+		Object.keys(actualLevel3).forEach((slam) => {
+			if (slam.match(/[A-Z0-9]{3}/) && slam.match(/[A-Z0-9]{3}/).index === 0) {
+				allSlamsToReturn.push(actualLevel3[slam]);
+
+				iterator(
+					country, level1, level2, level3, slam, actualLevel3[slam]
+				);
+			}
+		});
+	});
+
+	return allSlamsToReturn;
+};
+
+const allIds = function() {
+	const ids = [];
+
+	this.allSlams().forEach((slam) => {
+		ids.push(slam.id);
+	});
+
+	return ids;
+};
+
 /**
  * @name getDates
  *
@@ -2125,10 +2281,10 @@ const IT = {
  * @param {number} [amount=3] maximum amount of dates
  * @param {moment} [from=moment()] moment
  * @param {moment} [to=moment().add(100, "y")] moment
- * @returns {array} array of dates
+ * @returns {array} array of date strings
  */
 const getDates = (
-	slam, amount = 3, from = moment(), to = moment().add(100, "y")
+	slam, amount = -1, from = moment(), to = moment().add(100, "y")
 ) => {
 	if (from.isSameOrBefore(to)) {
 		if (slam.dates) {
@@ -2158,41 +2314,339 @@ const getDates = (
 	}
 };
 
-const utils = {
-	getDates
-};
+/**
+ * @name getSlam
+ *
+ * @param {string} [idOrName]
+ * string that's either an id or name of a slam
+ *
+ * if ommited, a random slam is picked
+ * @returns {object}
+ * slam or random slam if no string is given
+ */
+const getSlam = function(idOrName) {
+	let foundSlam = {};
 
-const youslam = {
-	AT,
-	DE,
-	IT
-};
+	if (typeof idOrName === "string") {
+		if (this.isId(idOrName) || this.isShortId(idOrName)) {
+			const unzippedId = this.unzipId(idOrName);
 
-Object.keys(youslam).forEach((country) => {
-	Object.keys(youslam[country]).forEach((level1) => {
-		Object.keys(youslam[country][level1]).forEach((level2) => {
-			Object.keys(youslam[country][level1][level2]).forEach((level3) => {
-				Object.keys(youslam[country][level1][level2][level3]).forEach((key) => {
-					if (key.match(/[A-Z0-9]{3}/) && key.match(/[A-Z0-9]{3}/).index === 0) {
-						youslam[country][level1][level2][level3][key].id = country + level1 + level2 + level3 + key;
-						youslam[country][level1][level2][level3][key].shortId = `${country}-${parseInt(level1, 10)}-${parseInt(level2, 10)}-${parseInt(level3, 10)}-${key}`;
-
-						youslam[country][level1][level2][level3][key].location = assign(youslam[country][level1][level2][level3][key].location, {
-							country,
-							level1: youslam[country][level1].name,
-							level2: youslam[country][level1][level2].name,
-							level3: youslam[country][level1][level2][level3].name,
-							zip: youslam[country][level1][level2][level3].zip
-						});
-					}
-				});
+			foundSlam = this[unzippedId.country][unzippedId.level1][unzippedId.level2][unzippedId.level3][unzippedId.slam];
+		}
+		else {
+			this.allSlams().forEach((slam) => {
+				if (slam.name === idOrName || slam.shortName === idOrName) {
+					foundSlam = slam;
+				}
 			});
+		}
+	}
+	else if (typeof idOrName === "undefined") {
+		foundSlam = sample(sample(sample(sample(sample(this)))));
+	}
+
+	return foundSlam;
+};
+
+/**
+ * @name getSlams
+ *
+ * @param {array} [idsOrNames]
+ * array of slam ids or names
+ * @returns {array}
+ * array of found slams
+ */
+const getSlams = function(idsOrNames = []) {
+	const foundSlams = [];
+
+	idsOrNames.forEach((idOrName) => {
+		foundSlams.push(this.getSlam(idOrName));
+	});
+
+	return compact(foundSlams);
+};
+
+getSlams();
+
+var getSlams$1 = getSlams();
+
+/**
+ * @name getUpcoming
+ *
+ * @param {array|string} [filter=this.allIds()]
+ * filter object
+ * @param {number} [amount=3]
+ * maximum amount of dates
+ * @param {moment} [from=moment()]
+ * moment
+ * @param {moment} [to=moment().add(100, "y")]
+ * moment
+ * @returns {array}
+ * array of id-date objects
+ */
+const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(), to = moment().add(100, "y")) {
+	const slamsToSearch = [];
+
+	flatten([
+		filter
+	]).forEach((path) => {
+		if (this.isId(path) || this.isShortId(path)) {
+			slamsToSearch.push(this.getSlam(path));
+		}
+		else if (this.isPath(path) || this.isShortPath(path)) {
+			this.sift(path).allSlams().forEach((slam) => {
+				slamsToSearch.push(slam);
+			});
+		}
+	});
+
+	const upcoming = [];
+
+	slamsToSearch.forEach((slam) => {
+		upcoming.push({
+			date: this.getDates(slam, amount, from, to),
+			id: slam.id
 		});
 	});
-});
 
-Object.keys(utils).forEach((util) => {
-	youslam[util] = utils[util];
-});
+	flatten(upcoming).sort((dateA, dateB) => {
+		if (moment(dateA.date).isBefore(moment(dateB.date))) {
+			return -1;
+		}
+		if (moment(dateA.date).isAfter(moment(dateB.date))) {
+			return 1;
+		}
 
-module.exports = youslam;
+		return 0;
+	});
+
+
+	return upcoming;
+};
+
+/**
+ * @name isId
+ *
+ * @param {any} string
+ * string to be tested
+ * @returns {boolean}
+ * true if string is id
+ */
+const isId = string => (/^[A-Z]{2}\d{9}[A-Z\d]{3}$/).test(string);
+
+/**
+ * @name isShortId
+ *
+ * @param {any} string
+ * string to be tested
+ * @returns {boolean}
+ * true if string is short id
+ */
+const isShortId = string => (/^[A-Z]{2}-\d{1,3}-\d{1,3}-\d{1,3}-[A-Z\d]{3}$/).test(string);
+
+/**
+ * @name isPath
+ *
+ * @param {any} string
+ * string to be tested
+ * @returns {boolean}
+ * true if string is id
+ */
+const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}$/).test(string);
+
+/**
+ * @name isShortPath
+ *
+ * @param {any} string
+ * string to be tested
+ * @returns {boolean}
+ * true if string is short id
+ */
+const isShortPath = string => (/^[A-Z]{2}(-\d{1,3}){0,3}$/).test(string);
+
+const sift = function(path) {
+	const unzippedPath = this.unzipPath(path);
+	const siftedObject = this;
+
+	siftedObject.allCountries((country) => {
+		if (country !== unzippedPath.country) {
+			delete this[country];
+		}
+	});
+
+	if (unzippedPath.level1) {
+		siftedObject.allLevel1s((country, level1) => {
+			if (level1 !== unzippedPath.level1) {
+				delete this[country][level1];
+			}
+		});
+		if (unzippedPath.level2) {
+			siftedObject.allLevel2s((country, level1, level2) => {
+				if (level2 !== unzippedPath.level2) {
+					delete this[country][level1][level2];
+				}
+			});
+
+			if (unzippedPath.level3) {
+				siftedObject.allLevel3s((country, level1, level2, level3) => {
+					if (level3 !== unzippedPath.level3) {
+						delete this[country][level1][level2][level3];
+					}
+				});
+			}
+		}
+	}
+
+	return siftedObject;
+};
+
+const unzipId = function(id) {
+	let country;
+	let level1;
+	let level2;
+	let level3;
+	let slam;
+
+	if (this.isId(id)) {
+		country = id.slice(0, 2);
+		level1 = id.slice(2, 5);
+		level2 = id.slice(5, 8);
+		level3 = id.slice(8, 11);
+		slam = id.slice(11, 14);
+	}
+	else if (this.isShortId(id)) {
+		country = split(id, "-")[0];
+		level1 = padStart(split(id, "-")[1], 3, 0);
+		level2 = padStart(split(id, "-")[2], 3, 0);
+		level3 = padStart(split(id, "-")[3], 3, 0);
+		slam = padStart(split(id, "-")[4], 3, 0);
+	}
+
+	return {
+		country,
+		level1,
+		level2,
+		level3,
+		slam,
+	};
+};
+
+const unzipPath = function(path) {
+	let country;
+	let level1;
+	let level2;
+	let level3;
+
+	if (this.isPath(path)) {
+		country = path.slice(0, 2);
+
+		if (path.length >= 5) {
+			level1 = path.slice(2, 5);
+		}
+		if (path.length >= 8) {
+			level2 = path.slice(5, 8);
+		}
+		if (path.length >= 11) {
+			level3 = path.slice(8, 11);
+		}
+	}
+	else if (this.isShortPath(path)) {
+		country = split(path, "-")[0];
+
+		if (split(path, "-").length >= 2) {
+			level1 = padStart(split(path, "-")[1], 3, 0);
+		}
+		if (split(path, "-").length >= 3) {
+			level2 = padStart(split(path, "-")[2], 3, 0);
+		}
+		if (split(path, "-").length >= 4) {
+			level3 = padStart(split(path, "-")[3], 3, 0);
+		}
+	}
+
+	const unzippedPath = {
+		country
+	};
+
+	if (level1) {
+		unzippedPath.level1 = level1;
+	}
+	if (level1) {
+		unzippedPath.level2 = level2;
+	}
+	if (level1) {
+		unzippedPath.level3 = level3;
+	}
+
+	return unzippedPath;
+};
+
+const utils = {
+	allCountries,
+	allLevel1s,
+	allLevel2s,
+	allLevel3s,
+	allSlams,
+
+	allIds,
+
+	getDates,
+	getSlam,
+	getSlams: getSlams$1,
+	getUpcoming,
+
+	isId,
+	isShortId,
+	isPath,
+	isShortPath,
+
+	sift,
+
+	unzipId,
+	unzipPath
+};
+
+/**
+ * @name YS
+ *
+ * @class YS
+ */
+class YS {
+	/**
+	 * Creates an instance of YS.
+	 * @memberof YS
+	 * @param {object} [filter={path="/"}]
+	 * filter object
+	 */
+	constructor({
+		path = "/",
+		ids
+	} = {}) {
+		Object.keys(countries).forEach((country) => {
+			this[country] = countries[country];
+		});
+
+		Object.keys(utils).forEach((util) => {
+			this[util] = utils[util];
+		});
+
+		this.allSlams((
+			country, level1, level2, level3, slam, actualSlam
+		) => {
+			actualSlam.id = country + level1 + level2 + level3 + slam;
+			actualSlam.shortId = `${country}-${parseInt(level1, 10)}-${parseInt(level2, 10)}-${parseInt(level3, 10)}-${slam}`;
+
+			actualSlam.location = assign(actualSlam.location, {
+				country,
+				level1: this[country][level1].name,
+				level2: this[country][level1][level2].name,
+				level3: this[country][level1][level2][level3].name,
+				zip: this[country][level1][level2][level3].zip
+			});
+
+			this[country][level1][level2][level3][slam] = actualSlam;
+		});
+	}
+}
+
+module.exports = YS;

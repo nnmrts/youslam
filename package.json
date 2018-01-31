@@ -18,9 +18,11 @@
 		"moment": "^2.20.1"
 	},
 	"devDependencies": {
+		"ava": "^0.25.0",
 		"babel-core": "^6.26.0",
 		"babel-plugin-angularjs-annotate": "^0.8.2",
 		"babel-preset-env": "^1.6.1",
+		"babel-register": "^6.26.0",
 		"child_process": "^1.0.2",
 		"del": "^3.0.0",
 		"docdash": "^0.4.0",
@@ -59,7 +61,15 @@
 		"yargs": "^10.0.3"
 	},
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "ava --verbose"
+	},
+	"ava": {
+		"files": [
+			"tests/*.js"
+		],
+		"require": [
+			"babel-register"
+		]
 	},
 	"repository": {
 		"type": "git",

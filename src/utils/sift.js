@@ -1,35 +1,33 @@
+import pick from "lodash/pick";
+
+import countries from "../countries.js";
+import utils from "../utils.js";
+
 const sift = function(path) {
 	const unzippedPath = this.unzipPath(path);
-	const siftedObject = this;
 
-	siftedObject.allCountries((country) => {
-		if (country !== unzippedPath.country) {
-			delete this[country];
-		}
-	});
+	let dottedPath = unzippedPath.country;
 
 	if (unzippedPath.level1) {
-		siftedObject.allLevel1s((country, level1) => {
-			if (level1 !== unzippedPath.level1) {
-				delete this[country][level1];
-			}
-		});
+		dottedPath += `.${unzippedPath.level1}`;
 		if (unzippedPath.level2) {
-			siftedObject.allLevel2s((country, level1, level2) => {
-				if (level2 !== unzippedPath.level2) {
-					delete this[country][level1][level2];
-				}
-			});
+			dottedPath += `.${unzippedPath.level2}`;
 
 			if (unzippedPath.level3) {
-				siftedObject.allLevel3s((country, level1, level2, level3) => {
-					if (level3 !== unzippedPath.level3) {
-						delete this[country][level1][level2][level3];
-					}
-				});
+				dottedPath += `.${unzippedPath.level3}`;
+
+				if (unzippedPath.slam) {
+					dottedPath += `.${unzippedPath.slam}`;
+				}
 			}
 		}
 	}
+
+	const siftedObject = pick(countries, dottedPath);
+
+	Object.keys(utils).forEach((util) => {
+		siftedObject[util] = utils[util];
+	});
 
 	return siftedObject;
 };

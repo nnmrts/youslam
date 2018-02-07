@@ -5,7 +5,7 @@ import flatten from "lodash/flatten";
  * @name getUpcoming
  *
  * @param {array|string} [filter=this.allIds()]
- * filter object
+ * array of ids or paths or string
  * @param {number} [amount=3]
  * maximum amount of dates
  * @param {moment} [from=moment()]
@@ -13,7 +13,7 @@ import flatten from "lodash/flatten";
  * @param {moment} [to=moment().add(100, "y")]
  * moment
  * @returns {array}
- * array of id-date objects
+ * array of date-slam objects
  */
 const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(), to = moment().add(100, "y")) {
 	const slamsToSearch = [];
@@ -36,7 +36,7 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 	slamsToSearch.forEach((slam) => {
 		upcoming.push({
 			date: this.getDates(slam, amount, from, to),
-			id: slam.id
+			slam
 		});
 	});
 

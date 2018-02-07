@@ -1,4 +1,8 @@
 import assign from "lodash/assign";
+import flatten from "lodash/flatten";
+import has from "lodash/has";
+import join from "lodash/join";
+import includes from "lodash/includes";
 
 import countries from "./countries.js";
 import utils from "./utils.js";
@@ -8,24 +12,64 @@ import utils from "./utils.js";
  *
  * @class YS
  */
-class YS {
+const YS = class {
 	/**
 	 * Creates an instance of YS.
 	 * @memberof YS
-	 * @param {object} [filter={path="/"}]
-	 * filter object
+	 * @param {array|string} [filter=this.allIds()]
+	 * array of ids or paths or string
 	 */
-	constructor({
-		path = "/",
-		ids
-	} = {}) {
-		Object.keys(countries).forEach((country) => {
-			this[country] = countries[country];
-		});
+	constructor(filter) {
+		if (typeof filter === "undefined") {
+			Object.keys(countries).forEach((country) => {
+				this[country] = countries[country];
+			});
+		}
+		else {
+			const joinedCountries = (`$${join(flatten([
+				filter
+			]), "$")}`);
 
-		Object.keys(utils).forEach((util) => {
-			this[util] = utils[util];
-		});
+			const regex = new RegExp("$[A-Z]{2}(.*?)$", "g");
+			const filteredCountries = [];
+			let match = regex.exec(joinedCountries);
+
+			if ((joinedCountries.match(/\$/g) || []).length === 1) {
+				filteredCountries.push(this.unzipPath(joinedCountries.replace(/\$/g, "")).country);
+			}
+			else {
+				while (match) {
+					filteredCountries.push(match[0].replace(/\$/g, ""));
+
+					match = regex.exec(joinedCountries);
+				}
+			}
+
+			Object.keys(countries).forEach((country) => {
+				if (includes(filteredCountries, country)) {
+					this[country] = countries[country];
+				}
+			});
+
+			let siftedYs = {};
+
+			flatten([
+				filter
+			]).forEach((path) => {
+				if (this.isPath(path) || this.isShortPath(path)) {
+					siftedYs = assign(siftedYs, this.sift(path));
+				}
+			});
+
+			Object.keys(this).forEach((key) => {
+				if (has(siftedYs, key)) {
+					this[key] = siftedYs[key];
+				}
+				else {
+					delete this[key];
+				}
+			});
+		}
 
 		this.allSlams((
 			country, level1, level2, level3, slam, actualSlam
@@ -44,6 +88,10 @@ class YS {
 			this[country][level1][level2][level3][slam] = actualSlam;
 		});
 	}
-}
+};
+
+Object.keys(utils).forEach((util) => {
+	YS.prototype[util] = utils[util];
+});
 
 export default YS;

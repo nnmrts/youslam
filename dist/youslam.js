@@ -3,11 +3,15 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var assign = _interopDefault(require('lodash/assign'));
+var flatten = _interopDefault(require('lodash/flatten'));
+var has = _interopDefault(require('lodash/has'));
+var join = _interopDefault(require('lodash/join'));
+var includes = _interopDefault(require('lodash/includes'));
 var moment = _interopDefault(require('moment'));
 var padStart = _interopDefault(require('lodash/padStart'));
 var sample = _interopDefault(require('lodash/sample'));
 var compact = _interopDefault(require('lodash/compact'));
-var flatten = _interopDefault(require('lodash/flatten'));
+var pick = _interopDefault(require('lodash/pick'));
 var split = _interopDefault(require('lodash/split'));
 
 const MUE = {
@@ -2151,6 +2155,8 @@ const countries = {
  *
  * @param {function} [iterator=()=>{}]
  * iterator to call on every country
+ * @returns {array}
+ * array of all country objects
  */
 const allCountries = function(iterator = () => { }) {
 	const allCountriesToReturn = [];
@@ -2374,7 +2380,7 @@ var getSlams$1 = getSlams();
  * @name getUpcoming
  *
  * @param {array|string} [filter=this.allIds()]
- * filter object
+ * array of ids or paths or string
  * @param {number} [amount=3]
  * maximum amount of dates
  * @param {moment} [from=moment()]
@@ -2382,7 +2388,7 @@ var getSlams$1 = getSlams();
  * @param {moment} [to=moment().add(100, "y")]
  * moment
  * @returns {array}
- * array of id-date objects
+ * array of date-slam objects
  */
 const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(), to = moment().add(100, "y")) {
 	const slamsToSearch = [];
@@ -2405,7 +2411,7 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 	slamsToSearch.forEach((slam) => {
 		upcoming.push({
 			date: this.getDates(slam, amount, from, to),
-			id: slam.id
+			slam
 		});
 	});
 
@@ -2452,7 +2458,7 @@ const isShortId = string => (/^[A-Z]{2}-\d{1,3}-\d{1,3}-\d{1,3}-[A-Z\d]{3}$/).te
  * @returns {boolean}
  * true if string is id
  */
-const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}$/).test(string);
+const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}([A-Z]{3})?$/).test(string);
 
 /**
  * @name isShortPath
@@ -2462,40 +2468,33 @@ const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}$/).test(string);
  * @returns {boolean}
  * true if string is short id
  */
-const isShortPath = string => (/^[A-Z]{2}(-\d{1,3}){0,3}$/).test(string);
+const isShortPath = string => (/^[A-Z]{2}(-\d{1,3}){0,3}(-[A-Z]{3})?$/).test(string);
 
 const sift = function(path) {
 	const unzippedPath = this.unzipPath(path);
-	const siftedObject = this;
 
-	siftedObject.allCountries((country) => {
-		if (country !== unzippedPath.country) {
-			delete this[country];
-		}
-	});
+	let dottedPath = unzippedPath.country;
 
 	if (unzippedPath.level1) {
-		siftedObject.allLevel1s((country, level1) => {
-			if (level1 !== unzippedPath.level1) {
-				delete this[country][level1];
-			}
-		});
+		dottedPath += `.${unzippedPath.level1}`;
 		if (unzippedPath.level2) {
-			siftedObject.allLevel2s((country, level1, level2) => {
-				if (level2 !== unzippedPath.level2) {
-					delete this[country][level1][level2];
-				}
-			});
+			dottedPath += `.${unzippedPath.level2}`;
 
 			if (unzippedPath.level3) {
-				siftedObject.allLevel3s((country, level1, level2, level3) => {
-					if (level3 !== unzippedPath.level3) {
-						delete this[country][level1][level2][level3];
-					}
-				});
+				dottedPath += `.${unzippedPath.level3}`;
+
+				if (unzippedPath.slam) {
+					dottedPath += `.${unzippedPath.slam}`;
+				}
 			}
 		}
 	}
+
+	const siftedObject = pick(countries, dottedPath);
+
+	Object.keys(utils).forEach((util) => {
+		siftedObject[util] = utils[util];
+	});
 
 	return siftedObject;
 };
@@ -2536,6 +2535,7 @@ const unzipPath = function(path) {
 	let level1;
 	let level2;
 	let level3;
+	let slam;
 
 	if (this.isPath(path)) {
 		country = path.slice(0, 2);
@@ -2548,6 +2548,9 @@ const unzipPath = function(path) {
 		}
 		if (path.length >= 11) {
 			level3 = path.slice(8, 11);
+		}
+		if (path.length >= 14) {
+			slam = path.slice(14, 17);
 		}
 	}
 	else if (this.isShortPath(path)) {
@@ -2562,6 +2565,10 @@ const unzipPath = function(path) {
 		if (split(path, "-").length >= 4) {
 			level3 = padStart(split(path, "-")[3], 3, 0);
 		}
+
+		if (split(path, "-").length >= 5) {
+			slam = split(path, "-")[4];
+		}
 	}
 
 	const unzippedPath = {
@@ -2571,11 +2578,14 @@ const unzipPath = function(path) {
 	if (level1) {
 		unzippedPath.level1 = level1;
 	}
-	if (level1) {
+	if (level2) {
 		unzippedPath.level2 = level2;
 	}
-	if (level1) {
+	if (level3) {
 		unzippedPath.level3 = level3;
+	}
+	if (slam) {
+		unzippedPath.slam = slam;
 	}
 
 	return unzippedPath;
@@ -2611,24 +2621,64 @@ const utils = {
  *
  * @class YS
  */
-class YS {
+const YS = class {
 	/**
 	 * Creates an instance of YS.
 	 * @memberof YS
-	 * @param {object} [filter={path="/"}]
-	 * filter object
+	 * @param {array|string} [filter=this.allIds()]
+	 * array of ids or paths or string
 	 */
-	constructor({
-		path = "/",
-		ids
-	} = {}) {
-		Object.keys(countries).forEach((country) => {
-			this[country] = countries[country];
-		});
+	constructor(filter) {
+		if (typeof filter === "undefined") {
+			Object.keys(countries).forEach((country) => {
+				this[country] = countries[country];
+			});
+		}
+		else {
+			const joinedCountries = (`$${join(flatten([
+				filter
+			]), "$")}`);
 
-		Object.keys(utils).forEach((util) => {
-			this[util] = utils[util];
-		});
+			const regex = new RegExp("$[A-Z]{2}(.*?)$", "g");
+			const filteredCountries = [];
+			let match = regex.exec(joinedCountries);
+
+			if ((joinedCountries.match(/\$/g) || []).length === 1) {
+				filteredCountries.push(this.unzipPath(joinedCountries.replace(/\$/g, "")).country);
+			}
+			else {
+				while (match) {
+					filteredCountries.push(match[0].replace(/\$/g, ""));
+
+					match = regex.exec(joinedCountries);
+				}
+			}
+
+			Object.keys(countries).forEach((country) => {
+				if (includes(filteredCountries, country)) {
+					this[country] = countries[country];
+				}
+			});
+
+			let siftedYs = {};
+
+			flatten([
+				filter
+			]).forEach((path) => {
+				if (this.isPath(path) || this.isShortPath(path)) {
+					siftedYs = assign(siftedYs, this.sift(path));
+				}
+			});
+
+			Object.keys(this).forEach((key) => {
+				if (has(siftedYs, key)) {
+					this[key] = siftedYs[key];
+				}
+				else {
+					delete this[key];
+				}
+			});
+		}
 
 		this.allSlams((
 			country, level1, level2, level3, slam, actualSlam
@@ -2647,6 +2697,10 @@ class YS {
 			this[country][level1][level2][level3][slam] = actualSlam;
 		});
 	}
-}
+};
+
+Object.keys(utils).forEach((util) => {
+	YS.prototype[util] = utils[util];
+});
 
 module.exports = YS;

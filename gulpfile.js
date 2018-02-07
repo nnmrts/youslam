@@ -32,6 +32,7 @@ const _ = require("lodash");
 const jeditor = require("gulp-json-editor");
 const childProcess = require("child_process");
 const GitHub = require("github-api");
+const ava = require("gulp-ava");
 
 const pkg = require("./package.json");
 // const bower = require("./bower.json");
@@ -124,13 +125,7 @@ gulp.task("rollup:main", async() => {
 
 gulp.task("babel", () => gulp.src(pkg.browser)
 	.pipe(babel({
-		compact: false,
-		plugins: [
-			[
-				"angularjs-annotate"
-			]
-		]
-
+		compact: false
 	}))
 	.pipe(gulp.dest(pkg.browser.replace("/youslam.js", ""))));
 
@@ -461,6 +456,17 @@ gulp.task("github", (cb) => {
 gulp.task("release", gulp.series(
 	"build", "commit:build", "bump", "tag", "push", "npm-publish"
 ));
+
+gulp.task("ava", () =>
+	gulp.src("./tests/test.js")
+		.pipe(ava({
+			verbose: true
+		})));
+
+gulp.task("test", gulp.series(
+	"prepare", "rollup:main", "ava"
+));
+
 
 let cleanSignal;
 

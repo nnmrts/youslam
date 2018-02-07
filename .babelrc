@@ -10,10 +10,5 @@
 				}
 			}
 		]
-	],
-	"plugins": [
-		[
-			"angularjs-annotate"
-		]
 	]
 }

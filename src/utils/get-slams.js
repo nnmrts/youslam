@@ -18,6 +18,4 @@ const getSlams = function(idsOrNames = []) {
 	return compact(foundSlams);
 };
 
-getSlams();
-
-export default getSlams();
+export default getSlams;

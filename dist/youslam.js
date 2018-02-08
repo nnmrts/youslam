@@ -3,14 +3,11 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var assign = _interopDefault(require('lodash/assign'));
-var flatten = _interopDefault(require('lodash/flatten'));
-var has = _interopDefault(require('lodash/has'));
-var join = _interopDefault(require('lodash/join'));
-var includes = _interopDefault(require('lodash/includes'));
 var moment = _interopDefault(require('moment'));
 var padStart = _interopDefault(require('lodash/padStart'));
 var sample = _interopDefault(require('lodash/sample'));
 var compact = _interopDefault(require('lodash/compact'));
+var flatten = _interopDefault(require('lodash/flatten'));
 var pick = _interopDefault(require('lodash/pick'));
 var split = _interopDefault(require('lodash/split'));
 
@@ -2470,27 +2467,31 @@ const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}([A-Z]{3})?$/).test(string);
  */
 const isShortPath = string => (/^[A-Z]{2}(-\d{1,3}){0,3}(-[A-Z]{3})?$/).test(string);
 
-const sift = function(path) {
-	const unzippedPath = this.unzipPath(path);
+const sift = function(filter) {
+	const dottedPaths = [];
 
-	let dottedPath = unzippedPath.country;
+	flatten([
+		filter
+	]).forEach((path) => {
+		const unzippedPath = this.unzipPath(path);
 
-	if (unzippedPath.level1) {
-		dottedPath += `.${unzippedPath.level1}`;
-		if (unzippedPath.level2) {
-			dottedPath += `.${unzippedPath.level2}`;
+		let dottedPath = "";
 
-			if (unzippedPath.level3) {
-				dottedPath += `.${unzippedPath.level3}`;
-
-				if (unzippedPath.slam) {
-					dottedPath += `.${unzippedPath.slam}`;
-				}
+		Object.keys(unzippedPath).sort().forEach((level) => {
+			if (level === "country") {
+				dottedPath = unzippedPath.country;
 			}
-		}
-	}
+			else {
+				dottedPaths.push(`${dottedPath}.name`);
 
-	const siftedObject = pick(countries, dottedPath);
+				dottedPath += `.${unzippedPath[level]}`;
+			}
+		});
+
+		dottedPaths.push(dottedPath);
+	});
+
+	const siftedObject = pick(countries, dottedPaths);
 
 	Object.keys(utils).forEach((util) => {
 		siftedObject[util] = utils[util];
@@ -2635,48 +2636,10 @@ const YS = class {
 			});
 		}
 		else {
-			const joinedCountries = (`$${join(flatten([
-				filter
-			]), "$")}`);
+			const siftedYs = this.sift(filter);
 
-			const regex = new RegExp("$[A-Z]{2}(.*?)$", "g");
-			const filteredCountries = [];
-			let match = regex.exec(joinedCountries);
-
-			if ((joinedCountries.match(/\$/g) || []).length === 1) {
-				filteredCountries.push(this.unzipPath(joinedCountries.replace(/\$/g, "")).country);
-			}
-			else {
-				while (match) {
-					filteredCountries.push(match[0].replace(/\$/g, ""));
-
-					match = regex.exec(joinedCountries);
-				}
-			}
-
-			Object.keys(countries).forEach((country) => {
-				if (includes(filteredCountries, country)) {
-					this[country] = countries[country];
-				}
-			});
-
-			let siftedYs = {};
-
-			flatten([
-				filter
-			]).forEach((path) => {
-				if (this.isPath(path) || this.isShortPath(path)) {
-					siftedYs = assign(siftedYs, this.sift(path));
-				}
-			});
-
-			Object.keys(this).forEach((key) => {
-				if (has(siftedYs, key)) {
-					this[key] = siftedYs[key];
-				}
-				else {
-					delete this[key];
-				}
+			Object.keys(siftedYs).forEach((key) => {
+				this[key] = siftedYs[key];
 			});
 		}
 

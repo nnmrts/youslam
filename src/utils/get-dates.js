@@ -33,8 +33,6 @@ const getDates = (
 
 			return dateArray;
 		}
-
-		throw new Error("[youslam[getDates]]: given slam has no dates");
 	}
 	else {
 		throw new Error("[youslam[getDates]]: invalid timespan, \"from\" is after \"to\"");

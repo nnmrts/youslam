@@ -55,6 +55,17 @@ test("filter", (t) => {
 	t.falsy(ysAT5.AT["007"]);
 	t.falsy(ysAT5.AT["009"]);
 
+	const ysAT5and9 = new YS([
+		"AT-5",
+		"AT009"
+	]);
+
+	t.falsy(ysAT5and9.AT["001"]);
+	t.falsy(ysAT5and9.AT["003"]);
+	t.truthy(ysAT5and9.AT["005"]);
+	t.falsy(ysAT5and9.AT["007"]);
+	t.truthy(ysAT5and9.AT["009"]);
+
 	const ysAT95 = new YS("AT009005");
 
 	t.falsy(ysAT95.AT["009"]["001"]);

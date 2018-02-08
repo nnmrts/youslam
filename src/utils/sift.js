@@ -1,29 +1,34 @@
+import flatten from "lodash/flatten";
 import pick from "lodash/pick";
 
 import countries from "../countries.js";
 import utils from "../utils.js";
 
-const sift = function(path) {
-	const unzippedPath = this.unzipPath(path);
+const sift = function(filter) {
+	const dottedPaths = [];
 
-	let dottedPath = unzippedPath.country;
+	flatten([
+		filter
+	]).forEach((path) => {
+		const unzippedPath = this.unzipPath(path);
 
-	if (unzippedPath.level1) {
-		dottedPath += `.${unzippedPath.level1}`;
-		if (unzippedPath.level2) {
-			dottedPath += `.${unzippedPath.level2}`;
+		let dottedPath = "";
 
-			if (unzippedPath.level3) {
-				dottedPath += `.${unzippedPath.level3}`;
-
-				if (unzippedPath.slam) {
-					dottedPath += `.${unzippedPath.slam}`;
-				}
+		Object.keys(unzippedPath).sort().forEach((level) => {
+			if (level === "country") {
+				dottedPath = unzippedPath.country;
 			}
-		}
-	}
+			else {
+				dottedPaths.push(`${dottedPath}.name`);
 
-	const siftedObject = pick(countries, dottedPath);
+				dottedPath += `.${unzippedPath[level]}`;
+			}
+		});
+
+		dottedPaths.push(dottedPath);
+	});
+
+	const siftedObject = pick(countries, dottedPaths);
 
 	Object.keys(utils).forEach((util) => {
 		siftedObject[util] = utils[util];

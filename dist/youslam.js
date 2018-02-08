@@ -2369,10 +2369,6 @@ const getSlams = function(idsOrNames = []) {
 	return compact(foundSlams);
 };
 
-getSlams();
-
-var getSlams$1 = getSlams();
-
 /**
  * @name getUpcoming
  *
@@ -2603,7 +2599,7 @@ const utils = {
 
 	getDates,
 	getSlam,
-	getSlams: getSlams$1,
+	getSlams,
 	getUpcoming,
 
 	isId,

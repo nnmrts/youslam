@@ -136,14 +136,8 @@ gulp.task("minify:js", () =>
 		}))
 		.pipe(gulp.dest(pkg.browser.replace("/youslam.js", ""))));
 
-gulp.task("test", () =>
-	gulp.src("./tests/test.js")
-		.pipe(ava({
-			verbose: true
-		})));
-
-gulp.task("build:js", gulp.series(gulp.parallel(gulp.series("rollup:browser", "babel", "minify:js"), "rollup:main"), "test"));
-gulp.task("dev:build:js", gulp.series(gulp.parallel(gulp.series("rollup:browser", "babel"), "rollup:main"), "test"));
+gulp.task("build:js", gulp.parallel(gulp.series("rollup:browser", "babel", "minify:js"), "rollup:main"));
+gulp.task("dev:build:js", gulp.series("rollup:browser", "babel"));
 
 gulp.task("sass", () => gulp.src(`${paths.src}/main.scss`)
 	.pipe(sourcemaps.init({
@@ -262,7 +256,13 @@ gulp.task("server", () => {
 
 gulp.task("dev", gulp.series("dev:build", gulp.parallel("watch", "server")));
 
-gulp.task("default", gulp.series("build"));
+gulp.task("test", () =>
+	gulp.src("./tests/test.js")
+		.pipe(ava({
+			verbose: true
+		})));
+
+gulp.task("default", gulp.series("build", "test"));
 
 // --------------------------------------------------------------
 // --------------------------------------------------------------

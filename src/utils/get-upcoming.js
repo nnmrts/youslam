@@ -1,5 +1,6 @@
 import moment from "moment";
 import flatten from "lodash/flatten";
+import slice from "lodash/slice";
 
 /**
  * @name getUpcoming
@@ -35,7 +36,7 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 
 	slamsToSearch.forEach((slam) => {
 		upcoming.push({
-			date: this.getDates(slam, amount, from, to),
+			date: this.getDates(slam, -1, from, to),
 			slam
 		});
 	});
@@ -52,7 +53,7 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 	});
 
 
-	return upcoming;
+	return slice(upcoming, 0, amount);
 };
 
 export default getUpcoming;

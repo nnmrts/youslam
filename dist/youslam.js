@@ -8,6 +8,7 @@ var padStart = _interopDefault(require('lodash/padStart'));
 var sample = _interopDefault(require('lodash/sample'));
 var compact = _interopDefault(require('lodash/compact'));
 var flatten = _interopDefault(require('lodash/flatten'));
+var slice = _interopDefault(require('lodash/slice'));
 var pick = _interopDefault(require('lodash/pick'));
 var split = _interopDefault(require('lodash/split'));
 
@@ -2401,7 +2402,7 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 
 	slamsToSearch.forEach((slam) => {
 		upcoming.push({
-			date: this.getDates(slam, amount, from, to),
+			date: this.getDates(slam, -1, from, to),
 			slam
 		});
 	});
@@ -2418,7 +2419,7 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 	});
 
 
-	return upcoming;
+	return slice(upcoming, 0, amount);
 };
 
 /**

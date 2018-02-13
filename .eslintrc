@@ -24,7 +24,34 @@
 		],
 		"comma-dangle": "off",
 		"linebreak-style": "off",
-		"import/extensions": "off",
+		"import/extensions": "ignorePackages",
+		"import/newline-after-import": "error",
+		"import/order": [
+			"error",
+			{
+				"groups": [
+					"builtin",
+					"external",
+					"parent",
+					"sibling",
+					"index"
+				],
+				"newlines-between": "always"
+			}
+		],
+		"import/max-dependencies": [
+			"error",
+			{
+				"max": 20
+			}
+		],
+		"import/named": "error",
+		"max-statements-per-line": [
+			"error",
+			{
+				"max": 1
+			}
+		],
 		"space-before-function-paren": [
 			"error",
 			"never"
@@ -171,6 +198,15 @@
 			"error",
 			{
 				"minItems": 1
+			}
+		],
+		"no-loop-func": "off",
+		"no-multiple-empty-lines": [
+			"error",
+			{
+				"max": 1,
+				"maxEOF": 0,
+				"maxBOF": 0
 			}
 		]
 	}

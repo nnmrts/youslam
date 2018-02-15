@@ -1,7 +1,9 @@
 /* eslint-env node */
+const path = require("path");
+const fs = require("fs");
+const childProcess = require("child_process");
 
 const gulp = require("gulp");
-
 const taskTime = require("gulp-total-task-time");
 const del = require("del");
 const eslint = require("gulp-eslint");
@@ -22,18 +24,15 @@ const nodeCleanup = require("node-cleanup");
 const gutil = require("gulp-util");
 const liveServer = require("live-server");
 const yargs = require("yargs");
-const path = require("path");
-const fs = require("fs");
 const git = require("gulp-git");
 const jsdoc = require("gulp-jsdoc3");
-const jsdocConfig = require("./.jsdoc.json");
 const semver = require("semver");
-const _ = require("lodash");
+const map = require("lodash/map");
 const jeditor = require("gulp-json-editor");
-const childProcess = require("child_process");
 const GitHub = require("github-api");
 const ava = require("gulp-ava");
 
+const jsdocConfig = require("./.jsdoc.json");
 const pkg = require("./package.json");
 // const bower = require("./bower.json");
 // const jsdocConfig = require("./.jsdoc.json");
@@ -356,7 +355,7 @@ gulp.task("bump", (cb) => {
 		cwd: rootDir
 	});
 
-	const versionsToBump = _.map([
+	const versionsToBump = map([
 		"package.json",
 		"bower.json"
 	], fileName => rootDir + fileName);
@@ -462,7 +461,6 @@ gulp.task("github", (cb) => {
 gulp.task("release", gulp.series(
 	"build", "commit:build", "bump", "tag", "push", "npm-publish"
 ));
-
 
 let cleanSignal;
 

@@ -3,6 +3,8 @@
  *
  * @param {function} [iterator=()=>{}]
  * iterator to call on every slam
+ * @returns {array}
+ * array of all slams
  */
 const allSlams = function(iterator = () => {}) {
 	const allSlamsToReturn = [];

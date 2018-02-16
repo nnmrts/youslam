@@ -3,6 +3,8 @@
  *
  * @param {function} [iterator=()=>{}]
  * iterator to call on every level1
+ * @returns {array}
+ * array of all level1s
  */
 const allLevel1s = function(iterator = () => { }) {
 	const allLevel1sToReturn = [];

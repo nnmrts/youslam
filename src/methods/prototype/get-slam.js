@@ -17,7 +17,13 @@ const getSlam = function(idOrName) {
 		if (this.isId(idOrName) || this.isShortId(idOrName)) {
 			const unzippedId = this.unzipId(idOrName);
 
-			foundSlam = this[unzippedId.country][unzippedId.level1][unzippedId.level2][unzippedId.level3][unzippedId.slam];
+			const countryLabel = unzippedId.country;
+			const level1Label = unzippedId.level1;
+			const level2Label = unzippedId.level2;
+			const level3Label = unzippedId.level3;
+			const slamLabel = unzippedId.slam;
+
+			foundSlam = this[countryLabel][level1Label][level2Label][level3Label][slamLabel];
 		}
 		else {
 			this.allSlams().forEach((slam) => {

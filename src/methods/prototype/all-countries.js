@@ -4,7 +4,7 @@
  * @param {function} [iterator=()=>{}]
  * iterator to call on every country
  * @returns {array}
- * array of all country objects
+ * array of all countries
  */
 const allCountries = function(iterator = () => { }) {
 	const allCountriesToReturn = [];

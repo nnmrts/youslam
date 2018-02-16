@@ -1,8 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import DEA from "./007/dea.js";
 
-const $3_007 = {
-	DEA,
-	name: "Bregenz"
-};
-
-export default $3_007;
+export default (label, name, zip) => ({
+	DEA: new Slam(DEA, label),
+	label,
+	name,
+	zip
+})("007", "Bregenz");

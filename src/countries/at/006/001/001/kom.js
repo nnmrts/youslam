@@ -1,4 +1,4 @@
-const KOM = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "voluntary",
@@ -14,5 +14,3 @@ const KOM = {
 	city: "Graz",
 	first: "2011-01-01"
 };
-
-export default KOM;

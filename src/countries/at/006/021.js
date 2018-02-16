@@ -1,8 +1,9 @@
-import $3_079 from "./021/079.js";
+import Level3 from "../../../classes/level3.js";
 
-const $2_021 = {
-	"079": $3_079,
-	name: "Murtal"
-};
+import $079 from "./021/079.js";
 
-export default $2_021;
+export default (label, name) => ({
+	"079": new Level3($079, label),
+	label,
+	name
+})("021", "Murtal");

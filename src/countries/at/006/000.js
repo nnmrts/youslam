@@ -1,7 +1,9 @@
-import $3_000 from "./000/000.js";
+import Level3 from "../../../classes/level3.js";
 
-const $2_000 = {
-	"000": $3_000
-};
+import $000 from "./000/000.js";
 
-export default $2_000;
+export default (label, name) => ({
+	"000": new Level3($000, label),
+	label,
+	name
+})("000", "Steiermark");

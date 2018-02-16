@@ -1,4 +1,4 @@
-const ARG = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "10 €",
@@ -14,5 +14,3 @@ const ARG = {
 	city: "Salzburg",
 	first: "2009-02-01"
 };
-
-export default ARG;

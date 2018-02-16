@@ -1,4 +1,4 @@
-const BOC = {
+export default {
 	accessible: true,
 	accommodation: "private",
 	admission: "10 €",
@@ -14,5 +14,3 @@ const BOC = {
 	city: "Wien",
 	first: "2012-10-01"
 };
-
-export default BOC;

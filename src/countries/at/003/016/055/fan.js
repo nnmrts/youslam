@@ -1,4 +1,4 @@
-const FAN = {
+export default {
 	dates: {
 		2017: {
 			11: {
@@ -10,5 +10,3 @@ const FAN = {
 	},
 	name: "fan of slam"
 };
-
-export default FAN;

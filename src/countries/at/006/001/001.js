@@ -1,3 +1,5 @@
+import Slam from "../../../../classes/slam.js";
+
 import AFF from "./001/aff.js";
 import ANT from "./001/ant.js";
 import BAT from "./001/bat.js";
@@ -12,21 +14,21 @@ import HOE from "./001/hoe.js";
 import KLO from "./001/klo.js";
 import KOM from "./001/kom.js";
 
-const $3_001 = {
-	AFF,
-	ANT,
-	BAT,
-	BRU,
-	DIA,
-	DUC,
-	EIN,
-	GEW,
-	GRI,
-	GRU,
-	HOE,
-	KLO,
-	KOM,
-	name: "Graz"
-};
-
-export default $3_001;
+export default (label, name, zip) => ({
+	AFF: new Slam(AFF, label),
+	ANT: new Slam(ANT, label),
+	BAT: new Slam(BAT, label),
+	BRU: new Slam(BRU, label),
+	DIA: new Slam(DIA, label),
+	DUC: new Slam(DUC, label),
+	EIN: new Slam(EIN, label),
+	GEW: new Slam(GEW, label),
+	GRI: new Slam(GRI, label),
+	GRU: new Slam(GRU, label),
+	HOE: new Slam(HOE, label),
+	KLO: new Slam(KLO, label),
+	KOM: new Slam(KOM, label),
+	label,
+	name,
+	zip
+})("001", "Graz");

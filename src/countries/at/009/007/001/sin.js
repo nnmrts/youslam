@@ -1,4 +1,4 @@
-const SIN = {
+export default {
 	dates: {
 		2017: {
 			11: {
@@ -55,5 +55,3 @@ const SIN = {
 		ntry: "sinnundseife"
 	}
 };
-
-export default SIN;

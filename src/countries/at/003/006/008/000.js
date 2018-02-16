@@ -5,7 +5,9 @@ const $000 = {
 	fee: "80 €",
 	name: "Poetry Slam Lindabrunn",
 	tour: false,
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "challenging",
 	travel: false,
 	city: "Lindabrunn",

@@ -1,4 +1,4 @@
-const TEX = {
+export default {
 	dates: {
 		2017: {
 			11: {
@@ -10,5 +10,3 @@ const TEX = {
 	},
 	name: "textstrom Poetry Slam"
 };
-
-export default TEX;

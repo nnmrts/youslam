@@ -1,4 +1,4 @@
-const FRE = {
+export default {
 	accessible: true,
 	accommodation: false,
 	admission: "6 €",
@@ -14,5 +14,3 @@ const FRE = {
 	city: "Taiskirchen im Innkreis",
 	first: "2012-07-01"
 };
-
-export default FRE;

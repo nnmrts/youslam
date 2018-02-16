@@ -1,4 +1,4 @@
-const WOR = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "8 €",
@@ -6,11 +6,11 @@ const WOR = {
 	fee: "30 €",
 	name: "Wortfluss Poetry Slam",
 	tour: "b",
-	masters: ["Ko Bylanzky"],
+	masters: [
+		"Ko Bylanzky"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Kufstein",
 	first: "2014-09-01"
 };
-
-export default WOR;

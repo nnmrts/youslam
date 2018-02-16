@@ -1,8 +1,9 @@
-import $2_001 from "./001/001.js";
+import Level2 from "../../classes/level2.js";
 
-const $1_001 = {
-	"001": $2_001,
-	name: "Trentino-Südtirol"
-};
+import $001 from "./001/001.js";
 
-export default $1_001;
+export default (label, name) => ({
+	"001": new Level2($001, label),
+	label,
+	name
+})("001", "Trentino-Südtirol");

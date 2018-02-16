@@ -1,8 +1,8 @@
 import flatten from "lodash/flatten";
 import pick from "lodash/pick";
 
-import countries from "../countries.js";
-import utils from "../utils.js";
+import countries from "../../countries.js";
+import methods from "../../methods.js";
 
 const sift = function(filter) {
 	const dottedPaths = [];
@@ -30,8 +30,8 @@ const sift = function(filter) {
 
 	const siftedObject = pick(countries, dottedPaths);
 
-	Object.keys(utils).forEach((util) => {
-		siftedObject[util] = utils[util];
+	Object.keys(methods).forEach((method) => {
+		siftedObject[method] = methods[method];
 	});
 
 	return siftedObject;

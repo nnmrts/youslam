@@ -1,10 +1,11 @@
-import $3_068 from "./023/068.js";
-import $3_079 from "./023/079.js";
+import Level3 from "../../../classes/level3.js";
 
-const $2_023 = {
-	"068": $3_068,
-	"079": $3_079,
-	name: "Südoststeiermark"
-};
+import $068 from "./023/068.js";
+import $079 from "./023/079.js";
 
-export default $2_023;
+export default (label, name) => ({
+	"068": new Level3($068, label),
+	"079": new Level3($079, label),
+	label,
+	name
+})("023", "Südoststeiermark");

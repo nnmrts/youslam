@@ -1,4 +1,4 @@
-const FRE = {
+export default {
 	dates: {
 		2017: {
 			11: {
@@ -55,5 +55,3 @@ const FRE = {
 		ntry: "poetryslam"
 	}
 };
-
-export default FRE;

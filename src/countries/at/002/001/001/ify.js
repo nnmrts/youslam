@@ -1,4 +1,4 @@
-const IFY = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -6,11 +6,11 @@ const IFY = {
 	fee: "65 €",
 	name: "Slam if you can! (kurz: SlamIYC)",
 	tour: false,
-	masters: ["Carmen Kassekert"],
+	masters: [
+		"Carmen Kassekert"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Klagenfurt am Wörthersee",
 	first: "2010-03-01"
 };
-
-export default IFY;

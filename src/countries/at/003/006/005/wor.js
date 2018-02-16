@@ -1,4 +1,4 @@
-const WOR = {
+export default {
 	dates: {
 		2017: {
 			12: {
@@ -28,5 +28,3 @@ const WOR = {
 	},
 	admission: "voluntary"
 };
-
-export default WOR;

@@ -1,4 +1,4 @@
-const KUL = {
+export default {
 	accessible: true,
 	accommodation: "private",
 	admission: "5 €",
@@ -14,5 +14,3 @@ const KUL = {
 	city: "Wien",
 	first: "2016-09-01"
 };
-
-export default KUL;

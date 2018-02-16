@@ -1,4 +1,4 @@
-const ROT = {
+export default {
 	dates: {
 		2017: {
 			11: {
@@ -25,5 +25,3 @@ const ROT = {
 	city: "Wien",
 	first: "2012-02-01"
 };
-
-export default ROT;

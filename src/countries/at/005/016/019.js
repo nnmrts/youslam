@@ -1,8 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import WOR from "./019/wor.js";
 
-const $3_019 = {
-	WOR,
-	name: "Saalfelden am Steinernen Meer"
-};
-
-export default $3_019;
+export default (label, name, zip) => ({
+	WOR: new Slam(WOR, label),
+	label,
+	name,
+	zip
+})("019", "Saalfelden am Steinernen Meer");

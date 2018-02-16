@@ -1,5 +1,3 @@
-const WOS = {
+export default {
 	name: "Wos host gsogt? Poetry Slam"
 };
-
-export default WOS;

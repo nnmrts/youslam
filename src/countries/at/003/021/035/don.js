@@ -1,4 +1,4 @@
-const DON = {
+export default {
 	dates: {
 		2017: {
 			12: {
@@ -18,5 +18,3 @@ const DON = {
 		start: "20:00:00"
 	}
 };
-
-export default DON;

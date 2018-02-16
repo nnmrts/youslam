@@ -1,8 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import IFY from "./001/ify.js";
 
-const $3_001 = {
-	IFY,
-	name: "Villach"
-};
-
-export default $3_001;
+export default (label, name, zip) => ({
+	IFY: new Slam(IFY, label),
+	label,
+	name,
+	zip
+})("001", "Villach");

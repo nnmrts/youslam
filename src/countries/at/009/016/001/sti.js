@@ -1,5 +1,3 @@
-const STI = {
+export default {
 	name: "Stille Post Slam"
 };
-
-export default STI;

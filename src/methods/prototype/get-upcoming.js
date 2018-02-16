@@ -35,10 +35,12 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 	const upcoming = [];
 
 	slamsToSearch.forEach((slam) => {
-		upcoming.push({
-			date: this.getDates(slam, -1, from, to),
-			slam
-		});
+		if (slam.dates) {
+			upcoming.push({
+				date: this.getDates(slam, -1, from, to),
+				slam
+			});
+		}
 	});
 
 	flatten(upcoming).sort((dateA, dateB) => {
@@ -51,7 +53,6 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 
 		return 0;
 	});
-
 
 	return slice(upcoming, 0, amount);
 };

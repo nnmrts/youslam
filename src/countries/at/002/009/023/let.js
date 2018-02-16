@@ -1,4 +1,4 @@
-const LET = {
+export default {
 	accommodation: "hotel",
 	admission: "5 €",
 	audience: "70",
@@ -14,5 +14,3 @@ const LET = {
 	city: "Wolfsberg",
 	first: "2017-05-01"
 };
-
-export default LET;

@@ -1,9 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import WOS from "./001/wos.js";
 
-const $3_001 = {
-	WOS,
-	name: "Rudolfsheim-Fünfhaus",
-	zip: 1150
-};
-
-export default $3_001;
+export default (label, name, zip) => ({
+	WOS: new Slam(WOS, label),
+	label,
+	name,
+	zip
+})("001", "Rudolfsheim-Fünfhaus", "1150");

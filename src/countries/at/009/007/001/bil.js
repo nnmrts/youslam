@@ -1,4 +1,4 @@
-const BIL = {
+export default {
 	name: "Bilder_Bücher_Bühne",
 	description: "Österreichs einzige Lese-Mal-Bühne samt Poetry, Prosa und Pinselei. Sowas gibt's? Sure, it does.\n\nFOMP lädt drei Autorinnen und Autoren ein, die eigene Texte lesen, begleitet von einer bildenden Künstlerin.Die enstandenden Bilder werden in einer \"Auktion auf Speed\" an die Meistbietenden versteigert.\n\nWahn, Wonne und Wortkunst für Sammler und Jägerinnen besonderer Schätze.",
 	location: {
@@ -23,5 +23,3 @@ const BIL = {
 		}
 	}
 };
-
-export default BIL;

@@ -6,7 +6,9 @@ const $000 = {
 	fee: "80 €",
 	name: "Emser Slam",
 	tour: false,
-	masters: ["Tom Astleitner"],
+	masters: [
+		"Tom Astleitner"
+	],
 	type: "closed",
 	travel: "full",
 	city: "Hohenems",

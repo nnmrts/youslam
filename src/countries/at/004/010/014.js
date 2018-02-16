@@ -1,8 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import $000 from "./014/000.js";
 
-const $3_014 = {
-	"000": $000,
-	name: "Neuhofen an der Krems"
-};
-
-export default $3_014;
+export default (label, name, zip) => ({
+	"000": new Slam($000, label),
+	label,
+	name,
+	zip
+})("014", "Neuhofen an der Krems");

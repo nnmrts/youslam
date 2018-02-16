@@ -1,11 +1,12 @@
+import Slam from "../../../../classes/slam.js";
+
 import BIS from "./001/bis.js";
 import SPR from "./001/spr.js";
 
-const $3_001 = {
-	BIS,
-	SPR,
-	name: "Josefstadt",
-	zip: 1080
-};
-
-export default $3_001;
+export default (label, name, zip) => ({
+	BIS: new Slam(BIS, label),
+	SPR: new Slam(SPR, label),
+	label,
+	name,
+	zip
+})("001", "Josefstadt", "1080");

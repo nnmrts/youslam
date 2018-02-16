@@ -1,8 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import FAN from "./055/fan.js";
 
-const $3_055 = {
-	FAN,
-	name: "Wolkersdorf im Weinviertel"
-};
-
-export default $3_055;
+export default (label, name, zip) => ({
+	FAN: new Slam(FAN, label),
+	label,
+	name,
+	zip
+})("055", "Wolkersdorf im Weinviertel");

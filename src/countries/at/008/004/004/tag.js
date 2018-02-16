@@ -1,4 +1,4 @@
-const TAG = {
+export default {
 	accessible: true,
 	accommodation: false,
 	admission: "12 €",
@@ -14,5 +14,3 @@ const TAG = {
 	city: "Feldkirch",
 	first: "2015-07-01"
 };
-
-export default TAG;

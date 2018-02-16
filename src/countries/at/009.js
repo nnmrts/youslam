@@ -1,28 +1,29 @@
-import $2_001 from "./009/001.js";
-import $2_004 from "./009/004.js";
-import $2_005 from "./009/005.js";
-import $2_006 from "./009/006.js";
-import $2_007 from "./009/007.js";
-import $2_008 from "./009/008.js";
-import $2_009 from "./009/009.js";
-import $2_015 from "./009/015.js";
-import $2_016 from "./009/016.js";
-import $2_021 from "./009/021.js";
-import $2_022 from "./009/022.js";
+import Level2 from "../../classes/level2.js";
 
-const $1_009 = {
-	"001": $2_001,
-	"004": $2_004,
-	"005": $2_005,
-	"006": $2_006,
-	"007": $2_007,
-	"008": $2_008,
-	"009": $2_009,
-	"015": $2_015,
-	"016": $2_016,
-	"021": $2_021,
-	"022": $2_022,
-	name: "Wien"
-};
+import $001 from "./009/001.js";
+import $004 from "./009/004.js";
+import $005 from "./009/005.js";
+import $006 from "./009/006.js";
+import $007 from "./009/007.js";
+import $008 from "./009/008.js";
+import $009 from "./009/009.js";
+import $015 from "./009/015.js";
+import $016 from "./009/016.js";
+import $021 from "./009/021.js";
+import $022 from "./009/022.js";
 
-export default $1_009;
+export default (label, name) => ({
+	"001": new Level2($001, label),
+	"004": new Level2($004, label),
+	"005": new Level2($005, label),
+	"006": new Level2($006, label),
+	"007": new Level2($007, label),
+	"008": new Level2($008, label),
+	"009": new Level2($009, label),
+	"015": new Level2($015, label),
+	"016": new Level2($016, label),
+	"021": new Level2($021, label),
+	"022": new Level2($022, label),
+	label,
+	name
+})("009", "Wien");

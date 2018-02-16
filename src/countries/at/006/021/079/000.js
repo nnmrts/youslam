@@ -5,7 +5,9 @@ const $000 = {
 	fee: "0 €",
 	name: "PSK - Poetry Slam Knittelfeld",
 	tour: false,
-	masters: ["Daniela Knafl"],
+	masters: [
+		"Daniela Knafl"
+	],
 	type: "challenging",
 	travel: false,
 	city: "Knittelfeld",

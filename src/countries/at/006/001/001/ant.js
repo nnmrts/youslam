@@ -1,4 +1,4 @@
-const ANT = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "voluntary",
@@ -6,11 +6,11 @@ const ANT = {
 	fee: "100 €",
 	name: "Antivalentinstagslesung",
 	tour: false,
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "closed",
 	travel: "full",
 	city: "Graz",
 	first: "2016-01-01"
 };
-
-export default ANT;

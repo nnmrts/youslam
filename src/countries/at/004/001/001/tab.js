@@ -1,4 +1,4 @@
-const TAB = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -14,5 +14,3 @@ const TAB = {
 	city: "Linz",
 	first: "2014-08-01"
 };
-
-export default TAB;

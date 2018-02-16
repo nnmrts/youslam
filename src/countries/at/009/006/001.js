@@ -1,9 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import TAG from "./001/tag.js";
 
-const $3_001 = {
-	TAG,
-	name: "Mariahilf",
-	zip: 1060
-};
-
-export default $3_001;
+export default (label, name, zip) => ({
+	TAG: new Slam(TAG, label),
+	label,
+	name,
+	zip
+})("001", "Mariahilf", "1060");

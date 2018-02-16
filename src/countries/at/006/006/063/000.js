@@ -6,7 +6,9 @@ const $000 = {
 	fee: "50 €",
 	name: "Poetry Slam",
 	tour: false,
-	masters: ["Klaus Lederwasch"],
+	masters: [
+		"Klaus Lederwasch"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Frohnleiten",

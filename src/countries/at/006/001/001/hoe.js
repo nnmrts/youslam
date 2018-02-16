@@ -1,4 +1,4 @@
-const HOE = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -6,11 +6,11 @@ const HOE = {
 	fee: "100 €",
 	name: "Hörsaal Slam Graz",
 	tour: "a",
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Graz",
 	first: "2014-10-01"
 };
-
-export default HOE;

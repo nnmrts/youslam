@@ -1,4 +1,4 @@
-const MOR = {
+export default {
 	accessible: true,
 	accommodation: "redundant",
 	admission: false,
@@ -15,5 +15,3 @@ const MOR = {
 	city: "verschiedene",
 	first: "2010-01-01"
 };
-
-export default MOR;

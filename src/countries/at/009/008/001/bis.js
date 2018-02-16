@@ -1,4 +1,4 @@
-const BIS = {
+export default {
 	name: "Bis einer reimt",
 	accommodation: "private",
 	admission: "voluntary",
@@ -13,5 +13,3 @@ const BIS = {
 	city: "Wien",
 	first: "2016-09-01"
 };
-
-export default BIS;

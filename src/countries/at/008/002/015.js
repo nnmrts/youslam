@@ -1,8 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import SPI from "./015/spi.js";
 
-const $3_015 = {
-	SPI,
-	name: "Hard"
-};
-
-export default $3_015;
+export default (label, name, zip) => ({
+	SPI: new Slam(SPI, label),
+	label,
+	name,
+	zip
+})("015", "Hard");

@@ -1,4 +1,4 @@
-const IFY = {
+export default {
 	accommodation: "hotel",
 	admission: "5 €",
 	audience: "80",
@@ -13,5 +13,3 @@ const IFY = {
 	city: "Villach",
 	first: "2015-04-01"
 };
-
-export default IFY;

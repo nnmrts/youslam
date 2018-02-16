@@ -1,4 +1,4 @@
-const STU = {
+export default {
 	dates: {
 		2017: {
 			11: {
@@ -10,5 +10,3 @@ const STU = {
 	},
 	name: "STUMMGABEL Comedy Slam"
 };
-
-export default STU;

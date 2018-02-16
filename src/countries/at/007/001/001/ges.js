@@ -1,4 +1,4 @@
-const GES = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "0 €",
@@ -6,11 +6,11 @@ const GES = {
 	fee: "1 €",
 	name: "Gestaltwandler-Slam",
 	tour: false,
-	masters: ["Stefan Abermann"],
+	masters: [
+		"Stefan Abermann"
+	],
 	type: "open",
 	travel: "full",
 	city: "Innsbruck",
 	first: "2014-04-01"
 };
-
-export default GES;

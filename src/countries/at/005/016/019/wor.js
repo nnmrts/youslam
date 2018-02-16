@@ -1,4 +1,4 @@
-const WOR = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "8 €",
@@ -14,5 +14,3 @@ const WOR = {
 	city: "Saalfelden am Steinernen Meer",
 	first: "2016-10-01"
 };
-
-export default WOR;

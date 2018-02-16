@@ -1,4 +1,4 @@
-const TAG = {
+export default {
 	dates: {
 		2017: {
 			11: {
@@ -37,5 +37,3 @@ const TAG = {
 	},
 	name: "TAGebuch Slam"
 };
-
-export default TAG;

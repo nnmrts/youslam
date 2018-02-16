@@ -1,4 +1,4 @@
-const SIN = {
+export default {
 	dates: {
 		2017: {
 			12: {
@@ -10,5 +10,3 @@ const SIN = {
 	},
 	name: "Sing, Song & Sound-Slam"
 };
-
-export default SIN;

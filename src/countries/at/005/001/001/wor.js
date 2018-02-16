@@ -1,4 +1,4 @@
-const WOR = {
+export default {
 	accommodation: false,
 	admission: false,
 	audience: "170",
@@ -13,5 +13,3 @@ const WOR = {
 	city: "Salzburg",
 	first: "2014-06-01"
 };
-
-export default WOR;

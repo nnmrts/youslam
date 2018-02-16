@@ -1,4 +1,4 @@
-const SCH = {
+export default {
 	accessible: true,
 	accommodation: "private",
 	admission: "voluntary",
@@ -15,5 +15,3 @@ const SCH = {
 	city: "Sankt Ulrich in Greith",
 	first: "2012-04-01"
 };
-
-export default SCH;

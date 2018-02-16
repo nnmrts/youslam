@@ -1,4 +1,4 @@
-const GRU = {
+export default {
 	accessible: true,
 	accommodation: "private",
 	admission: "voluntary",
@@ -6,11 +6,12 @@ const GRU = {
 	fee: "0 €",
 	name: "Grünschnabel Poetry Slam",
 	tour: false,
-	masters: ["Yannick Steinkellner", "Anna-Lena Obermoser"],
+	masters: [
+		"Yannick Steinkellner",
+		"Anna-Lena Obermoser"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Graz",
 	first: "2014-05-01"
 };
-
-export default GRU;

@@ -1,4 +1,4 @@
-const STU = {
+export default {
 	dates: {
 		2017: {
 			11: {
@@ -29,5 +29,3 @@ const STU = {
 	city: "Vienna",
 	first: "2015-06-01"
 };
-
-export default STU;

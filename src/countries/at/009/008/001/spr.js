@@ -1,4 +1,4 @@
-const SPR = {
+export default {
 	name: "SprichWORT! Slam",
 	accommodation: "private",
 	admission: "5 €",
@@ -13,5 +13,3 @@ const SPR = {
 	city: "Wien",
 	first: "2016-09-01"
 };
-
-export default SPR;

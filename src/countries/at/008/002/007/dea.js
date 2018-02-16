@@ -1,4 +1,4 @@
-const DEA = {
+export default {
 	accessible: true,
 	accommodation: false,
 	admission: "10 €",
@@ -14,5 +14,3 @@ const DEA = {
 	city: "Bregenz",
 	first: "2015-09-01"
 };
-
-export default DEA;

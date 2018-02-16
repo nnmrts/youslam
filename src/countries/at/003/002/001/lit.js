@@ -1,4 +1,4 @@
-const LIT = {
+export default {
 	name: "LitGes Poetry Slam",
 	accessible: true,
 	accommodation: "redundant",
@@ -15,5 +15,3 @@ const LIT = {
 	city: "St. Pölten",
 	first: "2003-11-01"
 };
-
-export default LIT;

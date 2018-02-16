@@ -1,14 +1,16 @@
+import Slam from "../../../../classes/slam.js";
+
 import JAM from "./001/jam.js";
 import KAM from "./001/kam.js";
-import WOR from "./001/wor.js";
 import U20 from "./001/u20.js";
+import WOR from "./001/wor.js";
 
-const $3_001 = {
-	JAM,
-	KAM,
-	WOR,
-	U20,
-	name: "Dornbirn"
-};
-
-export default $3_001;
+export default (label, name, zip) => ({
+	JAM: new Slam(JAM, label),
+	KAM: new Slam(KAM, label),
+	U20: new Slam(U20, label),
+	WOR: new Slam(WOR, label),
+	label,
+	name,
+	zip
+})("001", "Dornbirn");

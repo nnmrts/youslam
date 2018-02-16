@@ -1,4 +1,4 @@
-const LIB = {
+export default {
 	accessible: true,
 	accommodation: "private",
 	admission: false,
@@ -14,5 +14,3 @@ const LIB = {
 	city: "Wien",
 	first: "2014-04-01"
 };
-
-export default LIB;

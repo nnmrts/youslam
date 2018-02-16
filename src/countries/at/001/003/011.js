@@ -1,8 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import MUE from "./011/mue.js";
 
-const $3_011 = {
-	MUE,
-	name: "Oslip"
-};
-
-export default $3_011;
+export default (label, name, zip) => ({
+	MUE: new Slam(MUE, label),
+	label,
+	name,
+	zip
+})("011", "Oslip");

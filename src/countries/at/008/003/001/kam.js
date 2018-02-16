@@ -1,4 +1,4 @@
-const KAM = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "9 €",
@@ -14,5 +14,3 @@ const KAM = {
 	city: "Dornbirn",
 	first: "2004-04-01"
 };
-
-export default KAM;

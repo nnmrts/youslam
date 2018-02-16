@@ -1,4 +1,4 @@
-const RAU = {
+export default {
 	accessible: true,
 	accommodation: false,
 	admission: "voluntary",
@@ -14,5 +14,3 @@ const RAU = {
 	city: "Feldkirch",
 	first: "2017-04-01"
 };
-
-export default RAU;

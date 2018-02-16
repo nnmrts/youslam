@@ -1,7 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import U20 from "./000/u20.js";
 
-const $3_000 = {
-	U20
-};
-
-export default $3_000;
+export default (label, name, zip) => ({
+	U20: new Slam(U20, label),
+	label,
+	name,
+	zip
+})("000", "Steiermark");

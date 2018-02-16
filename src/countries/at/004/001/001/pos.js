@@ -1,4 +1,4 @@
-const POS = {
+export default {
 	accessible: true,
 	accommodation: "private",
 	admission: "voluntary",
@@ -14,5 +14,3 @@ const POS = {
 	city: "Linz",
 	first: "2005-03-01"
 };
-
-export default POS;

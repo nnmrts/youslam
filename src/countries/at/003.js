@@ -1,14 +1,15 @@
-import $2_002 from "./003/002.js";
-import $2_006 from "./003/006.js";
-import $2_016 from "./003/016.js";
-import $2_021 from "./003/021.js";
+import Level2 from "../../classes/level2.js";
 
-const $1_003 = {
-	"002": $2_002,
-	"006": $2_006,
-	"016": $2_016,
-	"021": $2_021,
-	name: "Niederösterreich"
-};
+import $002 from "./003/002.js";
+import $006 from "./003/006.js";
+import $016 from "./003/016.js";
+import $021 from "./003/021.js";
 
-export default $1_003;
+export default (label, name) => ({
+	"002": new Level2($002, label),
+	"006": new Level2($006, label),
+	"016": new Level2($016, label),
+	"022": new Level2($021, label),
+	label,
+	name
+})("003", "Niederösterreich");

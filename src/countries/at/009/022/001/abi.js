@@ -1,4 +1,4 @@
-const ABI = {
+export default {
 	accessible: true,
 	accommodation: "private",
 	admission: "3 €",
@@ -14,5 +14,3 @@ const ABI = {
 	city: "Wien",
 	first: "2015-06-01"
 };
-
-export default ABI;

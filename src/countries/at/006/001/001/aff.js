@@ -1,4 +1,4 @@
-const AFF = {
+export default {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "voluntary",
@@ -6,11 +6,11 @@ const AFF = {
 	fee: "80 €",
 	name: "Slamily affairs",
 	tour: "a",
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "closed",
 	travel: "full",
 	city: "Graz",
 	first: "2017-01-01"
 };
-
-export default AFF;

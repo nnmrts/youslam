@@ -1,5 +1,3 @@
-const FLA = {
+export default {
 	name: "Flawless Poetry Slam"
 };
-
-export default FLA;

@@ -1,11 +1,8 @@
+import Country from "./classes/country.js";
 import AT from "./countries/at.js";
-import DE from "./countries/de.js";
 import IT from "./countries/it.js";
 
-const countries = {
-	AT,
-	DE,
-	IT
-};
-
-export default countries;
+export default () => ({
+	AT: new Country(AT),
+	IT: new Country(IT)
+});

@@ -1,4 +1,4 @@
-const POW = {
+export default {
 	dates: {
 		2017: {
 			12: {
@@ -55,5 +55,3 @@ const POW = {
 		ntry: "powerpointkaraoke"
 	}
 };
-
-export default POW;

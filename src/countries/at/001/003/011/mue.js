@@ -1,4 +1,4 @@
-const MUE = {
+export default {
 	dates: {
 		2017: {
 			12: {
@@ -22,5 +22,3 @@ const MUE = {
 	city: "Oslip",
 	first: "2014-08-01"
 };
-
-export default MUE;

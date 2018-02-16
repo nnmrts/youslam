@@ -1,8 +1,9 @@
+import Level3 from "../../../classes/level3.js";
+
 import $000 from "./001/000.js";
 
-const $2_001 = {
-	"000": $000,
-	name: "Autonome Provinz Bozen – Südtirol"
-};
-
-export default $2_001;
+export default (label, name) => ({
+	"000": new Level3($000, label),
+	label,
+	name
+})("001", "Autonome Provinz Bozen – Südtirol");

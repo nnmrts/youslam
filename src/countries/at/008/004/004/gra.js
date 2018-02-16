@@ -1,4 +1,4 @@
-const GRA = {
+export default {
 	accessible: true,
 	accommodation: false,
 	admission: "voluntary",
@@ -14,5 +14,3 @@ const GRA = {
 	city: "Feldkirch",
 	first: "2016-08-01"
 };
-
-export default GRA;

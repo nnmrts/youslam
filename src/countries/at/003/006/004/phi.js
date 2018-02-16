@@ -1,4 +1,4 @@
-const PHI = {
+export default {
 	dates: {
 		2018: {
 			2: {
@@ -24,5 +24,3 @@ const PHI = {
 	city: "Baden",
 	first: "2016-03-01"
 };
-
-export default PHI;

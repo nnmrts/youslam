@@ -1,9 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import ABI from "./001/abi.js";
 
-const $3_001 = {
-	ABI,
-	name: "Donaustadt",
-	zip: 1220
-};
-
-export default $3_001;
+export default (label, name, zip) => ({
+	ABI: new Slam(ABI, label),
+	label,
+	name,
+	zip
+})("001", "Donaustadt", "1220");

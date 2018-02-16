@@ -1,4 +1,4 @@
-const CUP = {
+export default {
 	name: "Poetry Slam Cup",
 	accommodation: "hotel",
 	admission: "9 €",
@@ -13,5 +13,3 @@ const CUP = {
 	city: "Wien",
 	first: "2007-08-01"
 };
-
-export default CUP;

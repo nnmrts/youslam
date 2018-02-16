@@ -1,5 +1,3 @@
-const IMW = {
+export default {
 	name: "Slam im Wasserglas",
 };
-
-export default IMW;

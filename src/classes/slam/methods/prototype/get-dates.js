@@ -1,25 +1,24 @@
 import moment from "moment";
 import padStart from "lodash/padStart";
+import slice from "lodash/slice";
+import flatten from "lodash/flatten";
 
 /**
  * @name getDates
  *
- * @param {youslam.slam} slam youslam slam object
  * @param {number} [amount=3] maximum amount of dates
  * @param {moment} [from=moment()] moment
  * @param {moment} [to=moment().add(100, "y")] moment
  * @returns {array} array of date strings
  */
-const getDates = (
-	slam, amount = -1, from = moment(), to = moment().add(100, "y")
-) => {
+const getDates = (amount = -1, from = moment(), to = moment().add(100, "y")) => {
 	if (from.isSameOrBefore(to)) {
-		if (slam.dates) {
+		if (this.dates) {
 			const dateArray = [];
 
-			Object.keys(slam.dates).forEach((year) => {
-				Object.keys(slam.dates[year]).forEach((month) => {
-					Object.keys(slam.dates[year][month]).forEach((day) => {
+			Object.keys(this.dates).forEach((year) => {
+				Object.keys(this.dates[year]).forEach((month) => {
+					Object.keys(this.dates[year][month]).forEach((day) => {
 						const date = moment(`${year}-${padStart(month, 2, 0)}-${padStart(day, 2, 0)}`);
 
 						if (date.isSameOrAfter(from) && date.isBefore(to)) {
@@ -29,9 +28,18 @@ const getDates = (
 				});
 			});
 
-			dateArray.splice(amount);
+			if (dateArray.length > 0) {
+				return slice(flatten(dateArray).sort((dateA, dateB) => {
+					if (moment(dateA).isBefore(moment(dateB))) {
+						return -1;
+					}
+					if (moment(dateA).isAfter(moment(dateB))) {
+						return 1;
+					}
 
-			return dateArray;
+					return 0;
+				}), 0, amount);
+			}
 		}
 	}
 	else {

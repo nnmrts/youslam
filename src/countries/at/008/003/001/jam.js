@@ -1,4 +1,4 @@
-const JAM = {
+export default {
 	accessible: true,
 	accommodation: false,
 	admission: "voluntary",
@@ -14,5 +14,3 @@ const JAM = {
 	city: "Dornbirn",
 	first: "2008-01-01"
 };
-
-export default JAM;

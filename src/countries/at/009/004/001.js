@@ -1,9 +1,10 @@
+import Slam from "../../../../classes/slam.js";
+
 import STU from "./001/stu.js";
 
-const $3_001 = {
-	STU,
-	name: "Wieden",
-	zip: 1040
-};
-
-export default $3_001;
+export default (label, name, zip) => ({
+	STU: new Slam(STU, label),
+	label,
+	name,
+	zip
+})("001", "Wieden", "1040");

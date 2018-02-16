@@ -261,7 +261,9 @@ gulp.task("test", () =>
 			verbose: true
 		})));
 
-gulp.task("default", gulp.series("build", "test"));
+gulp.task("check", gulp.series("build", "test"));
+
+gulp.task("default", gulp.series("build"));
 
 // --------------------------------------------------------------
 // --------------------------------------------------------------
@@ -459,7 +461,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"build", "commit:build", "bump", "tag", "push", "npm-publish"
+	"check", "commit:build", "bump", "tag", "push", "npm-publish"
 ));
 
 let cleanSignal;

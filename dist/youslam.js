@@ -5,14 +5,205 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var assign = _interopDefault(require('lodash/assign'));
 var moment = _interopDefault(require('moment'));
 var padStart = _interopDefault(require('lodash/padStart'));
+var slice = _interopDefault(require('lodash/slice'));
+var flatten = _interopDefault(require('lodash/flatten'));
 var sample = _interopDefault(require('lodash/sample'));
 var compact = _interopDefault(require('lodash/compact'));
-var flatten = _interopDefault(require('lodash/flatten'));
-var slice = _interopDefault(require('lodash/slice'));
 var pick = _interopDefault(require('lodash/pick'));
 var split = _interopDefault(require('lodash/split'));
 
-const MUE = {
+/**
+ *
+ *
+ * @class Country
+ */
+class Country {
+	/**
+	 * Creates an instance of Country.
+	 * @param {object} country
+	 * country object
+	 * @memberof Country
+	 */
+	constructor(country) {
+		Object.keys(country).forEach((key) => {
+			this[key] = country[key];
+		});
+
+		this.type = "country";
+	}
+}
+
+/**
+ *
+ *
+ * @class Level1
+ */
+class Level1 {
+	/**
+	 * Creates an instance of Level1.
+	 * @param {object} level1
+	 * level1 object
+	 * @param {string} parent
+	 * parent label
+	 * @memberof Level1
+	 */
+	constructor(level1, parent) {
+		Object.keys(level1).forEach((key) => {
+			this[key] = level1[key];
+		});
+
+		this.parent = parent;
+
+		this.type = "level1";
+	}
+}
+
+/**
+ *
+ *
+ * @class Level2
+ */
+class Level2 {
+	/**
+	 * Creates an instance of Level2.
+	 * @param {object} level2
+	 * level2 object
+	 * @param {string} parent
+	 * parent label
+	 * @memberof Level2
+	 */
+	constructor(level2, parent) {
+		Object.keys(level2).forEach((key) => {
+			this[key] = level2[key];
+		});
+
+		this.parent = parent;
+
+		this.type = "level2";
+	}
+}
+
+/**
+ *
+ *
+ * @class Level3
+ */
+class Level3 {
+	/**
+	 * Creates an instance of Level3.
+	 * @param {object} level3
+	 * level3 object
+	 * @param {string} parent
+	 * parent label
+	 * @memberof Level3
+	 */
+	constructor(level3, parent) {
+		Object.keys(level3).forEach((key) => {
+			this[key] = level3[key];
+		});
+
+		this.parent = parent;
+
+		this.type = "level3";
+	}
+}
+
+/**
+ * @name methodAdder
+ *
+ * @param {class} theClass
+ * the class you want to add methods to
+ * @param {object} methods
+ * the methods you want add to the class
+ */
+const methodAdder = (theClass, methods = {}) => {
+	Object.keys(methods).forEach((method) => {
+		if (method === "prototype") {
+			Object.keys(methods[method]).forEach((prototypeMethod) => {
+				theClass.prototype[prototypeMethod] = methods[method][prototypeMethod];
+			});
+		}
+		else {
+			theClass[method] = methods[method];
+		}
+	});
+};
+
+const utils = {
+	methodAdder
+};
+
+/**
+ * @name getDates
+ * @memberof Slam
+ * @param {number} [amount=3] maximum amount of dates
+ * @param {moment} [from=moment()] moment
+ * @param {moment} [to=moment().add(100, "y")] moment
+ * @returns {array} array of date strings
+ */
+const getDates = function(amount = -1, from = moment(), to = moment().add(100, "y")) {
+	const dateArray = [];
+
+	Object.keys(this.dates).forEach((year) => {
+		Object.keys(this.dates[year]).forEach((month) => {
+			Object.keys(this.dates[year][month]).forEach((day) => {
+				const date = moment(`${year}-${padStart(month, 2, 0)}-${padStart(day, 2, 0)}`);
+
+				if (date.isSameOrAfter(from) && date.isBefore(to)) {
+					dateArray.push(date.format("YYYY-MM-DD"));
+				}
+			});
+		});
+	});
+
+	return slice(flatten(dateArray).sort((dateA, dateB) => {
+		if (moment(dateA).isBefore(moment(dateB))) {
+			return -1;
+		}
+		if (moment(dateA).isAfter(moment(dateB))) {
+			return 1;
+		}
+
+		return 0;
+	}), 0, amount);
+};
+
+var prototype = {
+	getDates
+};
+
+var methods = {
+	prototype
+};
+
+/**
+ *
+ *
+ * @class Slam
+ */
+class Slam {
+	/**
+	 * Creates an instance of Slam.
+	 * @param {object} slam
+	 * slam object
+	 * @param {string} parent
+	 * parent label
+	 * @memberof Slam
+	 */
+	constructor(slam, parent) {
+		Object.keys(slam).forEach((key) => {
+			this[key] = slam[key];
+		});
+
+		this.parent = parent;
+
+		this.type = "slam";
+	}
+}
+
+utils.methodAdder(Slam, methods);
+
+var MUE = {
 	dates: {
 		2017: {
 			12: {
@@ -37,22 +228,26 @@ const MUE = {
 	first: "2014-08-01"
 };
 
-const $3_011 = {
-	MUE,
-	name: "Oslip"
-};
+var $011 = ((label, name, zip) => ({
+	MUE: new Slam(MUE, label),
+	label,
+	name,
+	zip
+}))("011", "Oslip");
 
-const $2_003 = {
-	"011": $3_011,
-	name: "Eisenstadt-Umgebung"
-};
+var $003 = ((label, name) => ({
+	"011": new Level3($011, label),
+	label,
+	name
+}))("003", "Eisenstadt-Umgebung");
 
-const $1_001 = {
-	"003": $2_003,
-	name: "Burgenland"
-};
+var $001 = ((label, name) => ({
+	"003": new Level2($003, label),
+	label,
+	name
+}))("001", "Burgenland");
 
-const IFY = {
+var IFY = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -60,24 +255,29 @@ const IFY = {
 	fee: "65 €",
 	name: "Slam if you can! (kurz: SlamIYC)",
 	tour: false,
-	masters: ["Carmen Kassekert"],
+	masters: [
+		"Carmen Kassekert"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Klagenfurt am Wörthersee",
 	first: "2010-03-01"
 };
 
-const $3_001 = {
-	IFY,
-	name: "Klagenfurt"
-};
+var $001$2 = ((label, name, zip) => ({
+	IFY: new Slam(IFY, label),
+	label,
+	name,
+	zip
+}))("001", "Klagenfurt");
 
-const $2_001 = {
-	"001": $3_001,
-	name: "Klagenfurt"
-};
+var $001$1 = ((label, name) => ({
+	"001": new Level3($001$2, label),
+	label,
+	name
+}))("001", "Klagenfurt");
 
-const IFY$2 = {
+var IFY$1 = {
 	accommodation: "hotel",
 	admission: "5 €",
 	audience: "80",
@@ -93,17 +293,20 @@ const IFY$2 = {
 	first: "2015-04-01"
 };
 
-const $3_001$2 = {
-	IFY: IFY$2,
-	name: "Villach"
-};
+var $001$3 = ((label, name, zip) => ({
+	IFY: new Slam(IFY$1, label),
+	label,
+	name,
+	zip
+}))("001", "Villach");
 
-const $2_002 = {
-	"001": $3_001$2,
-	name: "Villach"
-};
+var $002$1 = ((label, name) => ({
+	"001": new Level3($001$3, label),
+	label,
+	name
+}))("002", "Villach");
 
-const IFY$4 = {
+var IFY$2 = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -121,17 +324,20 @@ const IFY$4 = {
 	first: "2016-02-01"
 };
 
-const $3_035 = {
-	IFY: IFY$4,
-	name: "Spittal an der Drau"
-};
+var $035 = ((label, name, zip) => ({
+	IFY: new Slam(IFY$2, label),
+	label,
+	name,
+	zip
+}))("035", "Spittal an der Drau");
 
-const $2_006 = {
-	"035": $3_035,
-	name: "Spittal an der Drau"
-};
+var $006 = ((label, name) => ({
+	"035": new Level3($035, label),
+	label,
+	name
+}))("006", "Spittal an der Drau");
 
-const LET = {
+var LET = {
 	accommodation: "hotel",
 	admission: "5 €",
 	audience: "70",
@@ -148,17 +354,20 @@ const LET = {
 	first: "2017-05-01"
 };
 
-const $3_023 = {
-	LET,
-	name: "Wolfsberg"
-};
+var $023 = ((label, name, zip) => ({
+	LET: new Slam(LET, label),
+	label,
+	name,
+	zip
+}))("023", "Wolfsberg");
 
-const $2_009 = {
-	"023": $3_023,
-	name: "Wolfsberg"
-};
+var $009 = ((label, name) => ({
+	"023": new Level3($023, label),
+	label,
+	name
+}))("009", "Wolfsberg");
 
-const WOR = {
+var WOR = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -166,33 +375,41 @@ const WOR = {
 	fee: "30 €",
 	name: "WortKunst Feldkirchen",
 	tour: false,
-	masters: ["Carmen Kassekert", "Doris Rottermanner", "Lisa Fian"],
+	masters: [
+		"Carmen Kassekert",
+		"Doris Rottermanner",
+		"Lisa Fian"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Feldkirchen in Kärnten",
 	first: "2017-01-01"
 };
 
-const $3_002 = {
-	WOR,
-	name: "Feldkirchen in Kärnten"
-};
+var $002$2 = ((label, name, zip) => ({
+	WOR: new Slam(WOR, label),
+	label,
+	name,
+	zip
+}))("002", "Feldkirchen in Kärnten");
 
-const $2_010 = {
-	"002": $3_002,
-	name: "Feldkirchen"
-};
+var $010 = ((label, name) => ({
+	"002": new Level3($002$2, label),
+	label,
+	name
+}))("010", "Feldkirchen");
 
-const $1_002 = {
-	"001": $2_001,
-	"002": $2_002,
-	"006": $2_006,
-	"009": $2_009,
-	"010": $2_010,
-	name: "Kärnten"
-};
+var $002 = ((label, name) => ({
+	"001": new Level2($001$1, label),
+	"002": new Level2($002$1, label),
+	"006": new Level2($006, label),
+	"009": new Level2($009, label),
+	"010": new Level2($010, label),
+	label,
+	name
+}))("002", "Kärnten");
 
-const LIT = {
+var LIT = {
 	name: "LitGes Poetry Slam",
 	accessible: true,
 	accommodation: "redundant",
@@ -210,7 +427,7 @@ const LIT = {
 	first: "2003-11-01"
 };
 
-const TAG = {
+var TAG = {
 	dates: {
 		2018: {
 			1: {
@@ -223,18 +440,21 @@ const TAG = {
 	name: "Tagebuch Slam"
 };
 
-const $3_001$4 = {
-	LIT,
-	TAG,
-	name: "St. Pölten"
-};
+var $001$4 = ((label, name, zip) => ({
+	LIT: new Slam(LIT, label),
+	TAG: new Slam(TAG, label),
+	label,
+	name,
+	zip
+}))("001", "St. Pölten");
 
-const $2_002$2 = {
-	"001": $3_001$4,
-	name: "St. Pölten"
-};
+var $002$3 = ((label, name) => ({
+	"001": new Level3($001$4, label),
+	label,
+	name
+}))("002", "St. Pölten");
 
-const BES = {
+var BES = {
 	name: "Best of Poetry Slam Baden",
 	shortName: "Best of Poetry Slam",
 	description: "Poetry Slam - das ist Wettspringen mit dem eigenen Puls im Takt der Freude. Das ist moderne Literatur auf Bühnen beschworen, Texte zum Greifen und Staunen, das Lächeln im Anschlag, der Blick entzückt.\n\nIm Cinema Paradiso Baden begrüßen wir vier der besten Sprachkünstlerinnen und - künstler des Landes.\n\nHier dichten, rappen, lesen, performen die Vier um die Gunst und den Applaus des Publikums.\n\nEin Abend zum Lachen, Staunen, Jubeln - im Sinne des Genusses.",
@@ -248,7 +468,7 @@ const BES = {
 	}
 };
 
-const PHI = {
+var PHI = {
 	dates: {
 		2018: {
 			2: {
@@ -275,7 +495,7 @@ const PHI = {
 	first: "2016-03-01"
 };
 
-const TAG$2 = {
+var TAG$1 = {
 	dates: {
 		2018: {
 			1: {
@@ -288,15 +508,16 @@ const TAG$2 = {
 	name: "Tagebuch Slam"
 };
 
-const $3_004 = {
-	BES,
-	PHI,
-	TAG: TAG$2,
-	name: "Baden",
-	zip: 2500
-};
+var $004 = ((label, name, zip) => ({
+	BES: new Slam(BES, label),
+	PHI: new Slam(PHI, label),
+	TAG: new Slam(TAG$1, label),
+	label,
+	name,
+	zip
+}))("004", "Baden", "2500");
 
-const WOR$2 = {
+var WOR$1 = {
 	dates: {
 		2017: {
 			12: {
@@ -327,11 +548,12 @@ const WOR$2 = {
 	admission: "voluntary"
 };
 
-const $3_005 = {
-	WOR: WOR$2,
-	name: "Berndorf",
-	zip: 2560
-};
+var $005 = ((label, name, zip) => ({
+	WOR: new Slam(WOR$1, label),
+	label,
+	name,
+	zip
+}))("005", "Berndorf", "2560");
 
 const $000 = {
 	accommodation: "private",
@@ -340,26 +562,31 @@ const $000 = {
 	fee: "80 €",
 	name: "Poetry Slam Lindabrunn",
 	tour: false,
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "challenging",
 	travel: false,
 	city: "Lindabrunn",
 	first: "2015-07-01"
 };
 
-const $3_008 = {
-	"000": $000,
-	name: "Enzesfeld-Lindabrunn"
-};
+var $008 = ((label, name, zip) => ({
+	"000": new Slam($000, label),
+	label,
+	name,
+	zip
+}))("008", "Enzesfeld-Lindabrunn");
 
-const $2_006$2 = {
-	"004": $3_004,
-	"005": $3_005,
-	"008": $3_008,
-	name: "Baden"
-};
+var $006$1 = ((label, name) => ({
+	"004": new Level3($004, label),
+	"005": new Level3($005, label),
+	"008": new Level3($008, label),
+	label,
+	name
+}))("006", "Baden");
 
-const FAN = {
+var FAN = {
 	dates: {
 		2017: {
 			11: {
@@ -372,17 +599,20 @@ const FAN = {
 	name: "fan of slam"
 };
 
-const $3_055 = {
-	FAN,
-	name: "Wolkersdorf im Weinviertel"
-};
+var $055 = ((label, name, zip) => ({
+	FAN: new Slam(FAN, label),
+	label,
+	name,
+	zip
+}))("055", "Wolkersdorf im Weinviertel");
 
-const $2_016 = {
-	"055": $3_055,
-	name: "Mistelbach"
-};
+var $016 = ((label, name) => ({
+	"055": new Level3($055, label),
+	label,
+	name
+}))("016", "Mistelbach");
 
-const DON = {
+var DON = {
 	dates: {
 		2017: {
 			12: {
@@ -403,26 +633,29 @@ const DON = {
 	}
 };
 
-const $3_035$2 = {
-	DON,
-	name: "Tulln an der Donau",
-	zip: 3430
-};
+var $035$1 = ((label, name, zip) => ({
+	DON: new Slam(DON, label),
+	label,
+	name,
+	zip
+}))("035", "Tulln an der Donau", "3430");
 
-const $2_021 = {
-	"035": $3_035$2,
-	name: "Tulln"
-};
+var $021 = ((label, name) => ({
+	"035": new Level3($035$1, label),
+	label,
+	name
+}))("021", "Tulln");
 
-const $1_003 = {
-	"002": $2_002$2,
-	"006": $2_006$2,
-	"016": $2_016,
-	"021": $2_021,
-	name: "Niederösterreich"
-};
+var $003$1 = ((label, name) => ({
+	"002": new Level2($002$3, label),
+	"006": new Level2($006$1, label),
+	"016": new Level2($016, label),
+	"022": new Level2($021, label),
+	label,
+	name
+}))("003", "Niederösterreich");
 
-const POS = {
+var POS = {
 	accessible: true,
 	accommodation: "private",
 	admission: "voluntary",
@@ -439,7 +672,7 @@ const POS = {
 	first: "2005-03-01"
 };
 
-const TAB = {
+var TAB = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -456,16 +689,19 @@ const TAB = {
 	first: "2014-08-01"
 };
 
-const $3_001$6 = {
-	POS,
-	TAB,
-	name: "Linz"
-};
+var $001$6 = ((label, name, zip) => ({
+	POS: new Slam(POS, label),
+	TAB: new Slam(TAB, label),
+	label,
+	name,
+	zip
+}))("001", "Linz");
 
-const $2_001$2 = {
-	"001": $3_001$6,
-	name: "Linz"
-};
+var $001$5 = ((label, name) => ({
+	"001": new Level3($001$6, label),
+	label,
+	name
+}))("001", "Linz");
 
 const $000$2 = {
 	accessible: true,
@@ -484,15 +720,18 @@ const $000$2 = {
 	first: "2015-02-01"
 };
 
-const $3_001$8 = {
-	"000": $000$2,
-	name: "Wels"
-};
+var $001$7 = ((label, name, zip) => ({
+	"000": new Slam($000$2, label),
+	label,
+	name,
+	zip
+}))("001", "Wels");
 
-const $2_003$2 = {
-	"001": $3_001$8,
-	name: "Wels"
-};
+var $003$2 = ((label, name) => ({
+	"001": new Level3($001$7, label),
+	label,
+	name
+}))("003", "Wels");
 
 const $000$4 = {
 	accessible: true,
@@ -511,17 +750,20 @@ const $000$4 = {
 	first: "2016-09-01"
 };
 
-const $3_014 = {
-	"000": $000$4,
-	name: "Neuhofen an der Krems"
-};
+var $014 = ((label, name, zip) => ({
+	"000": new Slam($000$4, label),
+	label,
+	name,
+	zip
+}))("014", "Neuhofen an der Krems");
 
-const $2_010$2 = {
-	"014": $3_014,
-	name: "Linz-Land"
-};
+var $010$1 = ((label, name) => ({
+	"014": new Level3($014, label),
+	label,
+	name
+}))("010", "Linz-Land");
 
-const FRE = {
+var FRE = {
 	accessible: true,
 	accommodation: false,
 	admission: "6 €",
@@ -538,15 +780,18 @@ const FRE = {
 	first: "2012-07-01"
 };
 
-const $3_031 = {
-	FRE,
-	name: "Taiskirchen im Innkreis"
-};
+var $031 = ((label, name, zip) => ({
+	FRE: new Slam(FRE, label),
+	label,
+	name,
+	zip
+}))("031", "Taiskirchen im Innkreis");
 
-const $2_012 = {
-	"031": $3_031,
-	name: "Ried im Innkreis"
-};
+var $012 = ((label, name) => ({
+	"031": new Level3($031, label),
+	label,
+	name
+}))("012", "Ried im Innkreis");
 
 const $000$6 = {
 	accessible: true,
@@ -565,26 +810,30 @@ const $000$6 = {
 	first: "2015-02-01"
 };
 
-const $3_006 = {
-	$000: $000$6,
-	name: "Feldkirchen an der Donau"
-};
+var $006$2 = ((label, name, zip) => ({
+	"000": new Slam($000$6, label),
+	label,
+	name,
+	zip
+}))("006", "Feldkirchen an der Donau");
 
-const $2_016$2 = {
-	"006": $3_006,
-	name: "Urfahr-Umgebung"
-};
+var $016$1 = ((label, name) => ({
+	"006": new Level3($006$2, label),
+	label,
+	name
+}))("016", "Urfahr-Umgebung");
 
-const $1_004 = {
-	"001": $2_001$2,
-	"003": $2_003$2,
-	"010": $2_010$2,
-	"012": $2_012,
-	"016": $2_016$2,
-	name: "Oberösterreich"
-};
+var $004$1 = ((label, name) => ({
+	"001": new Level2($001$5, label),
+	"003": new Level2($003$2, label),
+	"010": new Level2($010$1, label),
+	"012": new Level2($012, label),
+	"016": new Level2($016$1, label),
+	label,
+	name
+}))("004", "Oberösterreich");
 
-const ARG = {
+var ARG = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "10 €",
@@ -601,7 +850,7 @@ const ARG = {
 	first: "2009-02-01"
 };
 
-const WOR$4 = {
+var WOR$2 = {
 	accommodation: false,
 	admission: false,
 	audience: "170",
@@ -617,18 +866,21 @@ const WOR$4 = {
 	first: "2014-06-01"
 };
 
-const $3_001$10 = {
-	ARG,
-	WOR: WOR$4,
-	name: "Salzburg"
-};
+var $001$9 = ((label, name, zip) => ({
+	ARG: new Slam(ARG, label),
+	WOR: new Slam(WOR$2, label),
+	label,
+	name,
+	zip
+}))("001", "Salzburg");
 
-const $2_001$4 = {
-	"001": $3_001$10,
-	name: "Salzburg"
-};
+var $001$8 = ((label, name) => ({
+	"001": new Level3($001$9, label),
+	label,
+	name
+}))("001", "Salzburg");
 
-const WOR$6 = {
+var WOR$3 = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "8 €",
@@ -645,21 +897,25 @@ const WOR$6 = {
 	first: "2016-10-01"
 };
 
-const $3_019 = {
-	WOR: WOR$6,
-	name: "Saalfelden am Steinernen Meer"
-};
+var $019 = ((label, name, zip) => ({
+	WOR: new Slam(WOR$3, label),
+	label,
+	name,
+	zip
+}))("019", "Saalfelden am Steinernen Meer");
 
-const $2_016$4 = {
-	"019": $3_019,
-	name: "Zell am See"
-};
+var $016$2 = ((label, name) => ({
+	"019": new Level3($019, label),
+	label,
+	name
+}))("016", "Zell am See");
 
-const $1_005 = {
-	"001": $2_001$4,
-	"016": $2_016$4,
-	name: "Salzburg"
-};
+var $005$1 = ((label, name) => ({
+	"001": new Level2($001$8, label),
+	"016": new Level2($016$2, label),
+	label,
+	name
+}))("005", "Salzburg");
 
 const U20 = {
 	accessible: true,
@@ -678,15 +934,20 @@ const U20 = {
 	first: "2013-04-01"
 };
 
-const $3_000 = {
-	U20
-};
+var $000$9 = ((label, name, zip) => ({
+	U20: new Slam(U20, label),
+	label,
+	name,
+	zip
+}))("000", "Steiermark");
 
-const $2_000 = {
-	"000": $3_000
-};
+var $000$8 = ((label, name) => ({
+	"000": new Level3($000$9, label),
+	label,
+	name
+}))("000", "Steiermark");
 
-const AFF = {
+var AFF = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "voluntary",
@@ -694,14 +955,16 @@ const AFF = {
 	fee: "80 €",
 	name: "Slamily affairs",
 	tour: "a",
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "closed",
 	travel: "full",
 	city: "Graz",
 	first: "2017-01-01"
 };
 
-const ANT = {
+var ANT = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "voluntary",
@@ -709,14 +972,16 @@ const ANT = {
 	fee: "100 €",
 	name: "Antivalentinstagslesung",
 	tour: false,
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "closed",
 	travel: "full",
 	city: "Graz",
 	first: "2016-01-01"
 };
 
-const BAT = {
+var BAT = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -724,14 +989,16 @@ const BAT = {
 	fee: "50 €",
 	name: "Slam Battles",
 	tour: false,
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "closed",
 	travel: "full",
 	city: "Graz",
 	first: "2015-02-01"
 };
 
-const BRU = {
+var BRU = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "11 €",
@@ -739,14 +1006,16 @@ const BRU = {
 	fee: "100 €",
 	name: "Brückenslam",
 	tour: false,
-	masters: ["Klaus Lederwasch"],
+	masters: [
+		"Klaus Lederwasch"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Graz",
 	first: "2014-06-01"
 };
 
-const DIA = {
+var DIA = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "voluntary",
@@ -754,14 +1023,17 @@ const DIA = {
 	fee: "80 €",
 	name: "Dialekt Slam",
 	tour: false,
-	masters: ["Tschif", "Klaus Lederwasch"],
+	masters: [
+		"Tschif",
+		"Klaus Lederwasch"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Graz",
 	first: "2017-02-01"
 };
 
-const DUC = {
+var DUC = {
 	accessible: true,
 	accommodation: "private",
 	admission: false,
@@ -769,14 +1041,16 @@ const DUC = {
 	fee: "50 €",
 	name: "Ducks Poetry Slam",
 	tour: false,
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Graz",
 	first: "2015-10-01"
 };
 
-const EIN = {
+var EIN = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -784,14 +1058,16 @@ const EIN = {
 	fee: "100 €",
 	name: "einmal latte & kulturprogramm, bitte!",
 	tour: false,
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "closed",
 	travel: "full",
 	city: "Graz",
 	first: "2016-10-01"
 };
 
-const GEW = {
+var GEW = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "voluntary",
@@ -799,14 +1075,16 @@ const GEW = {
 	fee: "100 €",
 	name: "1. Grazer Lesebühne: Gewalt ist keine Lesung",
 	tour: false,
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "closed",
 	travel: "full",
 	city: "Graz",
 	first: "2013-01-01"
 };
 
-const GRI = {
+var GRI = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "voluntary",
@@ -814,14 +1092,16 @@ const GRI = {
 	fee: "50 €",
 	name: "Gries Slam",
 	tour: false,
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "GRAZ",
 	first: "2016-05-01"
 };
 
-const GRU = {
+var GRU = {
 	accessible: true,
 	accommodation: "private",
 	admission: "voluntary",
@@ -829,14 +1109,17 @@ const GRU = {
 	fee: "0 €",
 	name: "Grünschnabel Poetry Slam",
 	tour: false,
-	masters: ["Yannick Steinkellner", "Anna-Lena Obermoser"],
+	masters: [
+		"Yannick Steinkellner",
+		"Anna-Lena Obermoser"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Graz",
 	first: "2014-05-01"
 };
 
-const HOE = {
+var HOE = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "5 €",
@@ -844,28 +1127,32 @@ const HOE = {
 	fee: "100 €",
 	name: "Hörsaal Slam Graz",
 	tour: "a",
-	masters: ["Mario Tomic"],
+	masters: [
+		"Mario Tomic"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Graz",
 	first: "2014-10-01"
 };
 
-const KLO = {
+var KLO = {
 	accommodation: "hotel",
 	admission: "5 €",
 	audience: "60",
 	fee: "50 €",
 	name: "Klosterslam",
 	tour: false,
-	masters: ["Klaus Lederwasch"],
+	masters: [
+		"Klaus Lederwasch"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Graz",
 	first: "2016-05-01"
 };
 
-const KOM = {
+var KOM = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "voluntary",
@@ -882,29 +1169,32 @@ const KOM = {
 	first: "2011-01-01"
 };
 
-const $3_001$12 = {
-	AFF,
-	ANT,
-	BAT,
-	BRU,
-	DIA,
-	DUC,
-	EIN,
-	GEW,
-	GRI,
-	GRU,
-	HOE,
-	KLO,
-	KOM,
-	name: "Graz"
-};
+var $001$11 = ((label, name, zip) => ({
+	AFF: new Slam(AFF, label),
+	ANT: new Slam(ANT, label),
+	BAT: new Slam(BAT, label),
+	BRU: new Slam(BRU, label),
+	DIA: new Slam(DIA, label),
+	DUC: new Slam(DUC, label),
+	EIN: new Slam(EIN, label),
+	GEW: new Slam(GEW, label),
+	GRI: new Slam(GRI, label),
+	GRU: new Slam(GRU, label),
+	HOE: new Slam(HOE, label),
+	KLO: new Slam(KLO, label),
+	KOM: new Slam(KOM, label),
+	label,
+	name,
+	zip
+}))("001", "Graz");
 
-const $2_001$6 = {
-	"001": $3_001$12,
-	name: "Graz"
-};
+var $001$10 = ((label, name) => ({
+	"001": new Level3($001$11, label),
+	label,
+	name
+}))("001", "Graz");
 
-const SCH = {
+var SCH = {
 	accessible: true,
 	accommodation: "private",
 	admission: "voluntary",
@@ -922,40 +1212,18 @@ const SCH = {
 	first: "2012-04-01"
 };
 
-const $3_047 = {
-	SCH,
-	name: "Sankt Martin im Sulmtal"
-};
+var $047 = ((label, name, zip) => ({
+	SCH: new Slam(SCH, label),
+	label,
+	name,
+	zip
+}))("047", "Sankt Martin im Sulmtal");
 
-const $2_003$4 = {
-	"047": $3_047,
-	name: "Deutschlandsberg"
-};
-
-const $000$8 = {
-	accessible: true,
-	accommodation: "private",
-	admission: "voluntary",
-	audience: "30",
-	fee: "50 €",
-	name: "Poetry Slam",
-	tour: false,
-	masters: ["Klaus Lederwasch"],
-	type: "challenging",
-	travel: "full",
-	city: "Frohnleiten",
-	first: "2014-09-01"
-};
-
-const $3_063 = {
-	"000": $000$8,
-	name: "Frohnleiten"
-};
-
-const $2_006$4 = {
-	"063": $3_063,
-	name: "Graz-Umgebung"
-};
+var $006$4 = ((label, name) => ({
+	"047": new Level3($047, label),
+	label,
+	name
+}))("003", "Deutschlandsberg");
 
 const $000$10 = {
 	accommodation: "redundant",
@@ -964,22 +1232,27 @@ const $000$10 = {
 	fee: "0 €",
 	name: "PSK - Poetry Slam Knittelfeld",
 	tour: false,
-	masters: ["Daniela Knafl"],
+	masters: [
+		"Daniela Knafl"
+	],
 	type: "challenging",
 	travel: false,
 	city: "Knittelfeld",
 	first: "2016-09-01"
 };
 
-const $3_079 = {
-	"000": $000$10,
-	name: "Knittelfeld"
-};
+var $079 = ((label, name, zip) => ({
+	"000": new Slam($000$10, label),
+	label,
+	name,
+	zip
+}))("079", "Knittelfeld");
 
-const $2_021$2 = {
-	"079": $3_079,
-	name: "Murtal"
-};
+var $021$1 = ((label, name) => ({
+	"079": new Level3($079, label),
+	label,
+	name
+}))("021", "Murtal");
 
 const $000$12 = {
 	accessible: true,
@@ -998,10 +1271,12 @@ const $000$12 = {
 	first: "2014-06-01"
 };
 
-const $3_068 = {
-	"000": $000$12,
-	name: "Tieschen"
-};
+var $068 = ((label, name, zip) => ({
+	"000": new Slam($000$12, label),
+	label,
+	name,
+	zip
+}))("068", "Tieschen");
 
 const $000$14 = {
 	accessible: true,
@@ -1020,28 +1295,31 @@ const $000$14 = {
 	first: "2016-07-01"
 };
 
-const $3_079$2 = {
-	"000": $000$14,
-	name: "Feldbach"
-};
+var $079$1 = ((label, name, zip) => ({
+	"000": new Slam($000$14, label),
+	label,
+	name,
+	zip
+}))("079", "Feldbach");
 
-const $2_023 = {
-	"068": $3_068,
-	"079": $3_079$2,
-	name: "Südoststeiermark"
-};
+var $023$1 = ((label, name) => ({
+	"068": new Level3($068, label),
+	"079": new Level3($079$1, label),
+	label,
+	name
+}))("023", "Südoststeiermark");
 
-const $1_006 = {
-	"000": $2_000,
-	"001": $2_001$6,
-	"003": $2_003$4,
-	"006": $2_006$4,
-	"021": $2_021$2,
-	"023": $2_023,
-	name: "Steiermark"
-};
+var $006$3 = ((label, name) => ({
+	"000": new Level2($000$8, label),
+	"001": new Level2($001$10, label),
+	"006": new Level2($006$4, label),
+	"021": new Level2($021$1, label),
+	"023": new Level2($023$1, label),
+	label,
+	name
+}))("006", "Steiermark");
 
-const GES = {
+var GES = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "0 €",
@@ -1049,24 +1327,29 @@ const GES = {
 	fee: "1 €",
 	name: "Gestaltwandler-Slam",
 	tour: false,
-	masters: ["Stefan Abermann"],
+	masters: [
+		"Stefan Abermann"
+	],
 	type: "open",
 	travel: "full",
 	city: "Innsbruck",
 	first: "2014-04-01"
 };
 
-const $3_001$14 = {
-	GES,
-	name: "Innsbruck"
-};
+var $001$13 = ((label, name, zip) => ({
+	GES: new Slam(GES, label),
+	label,
+	name,
+	zip
+}))("001", "Innsbruck");
 
-const $2_001$8 = {
-	"001": $3_001$14,
-	name: "Innsbruck"
-};
+var $001$12 = ((label, name) => ({
+	"001": new Level3($001$13, label),
+	label,
+	name
+}))("001", "Innsbruck");
 
-const WOR$8 = {
+var WOR$4 = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "8 €",
@@ -1074,30 +1357,36 @@ const WOR$8 = {
 	fee: "30 €",
 	name: "Wortfluss Poetry Slam",
 	tour: "b",
-	masters: ["Ko Bylanzky"],
+	masters: [
+		"Ko Bylanzky"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Kufstein",
 	first: "2014-09-01"
 };
 
-const $3_013 = {
-	WOR: WOR$8,
-	name: "Kufstein"
-};
+var $013 = ((label, name, zip) => ({
+	WOR: new Slam(WOR$4, label),
+	label,
+	name,
+	zip
+}))("013", "Kufstein");
 
-const $2_005 = {
-	"013": $3_013,
-	name: "Kufstein"
-};
+var $005$2 = ((label, name) => ({
+	"013": new Level3($013, label),
+	label,
+	name
+}))("005", "Kufstein");
 
-const $1_007 = {
-	"001": $2_001$8,
-	"005": $2_005,
-	name: "Tirol"
-};
+var $007 = ((label, name) => ({
+	"001": new Level2($001$12, label),
+	"005": new Level2($005$2, label),
+	label,
+	name
+}))("007", "Tirol");
 
-const DEA = {
+var DEA = {
 	accessible: true,
 	accommodation: false,
 	admission: "10 €",
@@ -1114,12 +1403,14 @@ const DEA = {
 	first: "2015-09-01"
 };
 
-const $3_007 = {
-	DEA,
-	name: "Bregenz"
-};
+var $007$1 = ((label, name, zip) => ({
+	DEA: new Slam(DEA, label),
+	label,
+	name,
+	zip
+}))("007", "Bregenz");
 
-const SPI = {
+var SPI = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "8 €",
@@ -1127,45 +1418,54 @@ const SPI = {
 	fee: "40 €",
 	name: "Spinnerei",
 	tour: false,
-	masters: ["Sara Bonetti"],
+	masters: [
+		"Sara Bonetti"
+	],
 	type: "challenging",
 	travel: "full",
 	city: "Hard",
 	first: "2017-08-01"
 };
 
-const $3_015 = {
-	SPI,
-	name: "Hard"
-};
+var $015 = ((label, name, zip) => ({
+	SPI: new Slam(SPI, label),
+	label,
+	name,
+	zip
+}))("015", "Hard");
 
-const WOR$10 = {
+var WOR$5 = {
 	accommodation: "hotel",
 	admission: "8 €",
 	audience: "80",
 	fee: "30 €",
 	name: "Wort drauf",
 	tour: false,
-	masters: ["Steffen Brinkmann"],
+	masters: [
+		"Steffen Brinkmann"
+	],
 	type: "challenging",
 	travel: "grant",
 	city: "Höchst",
 	first: "2012-11-01"
 };
 
-const $3_017 = {
-	WOR: WOR$10,
-	name: "Höchst"
-};
+var $017 = ((label, name, zip) => ({
+	WOR: new Slam(WOR$5, label),
+	label,
+	name,
+	zip
+}))("017", "Höchst");
 
-const $2_002$4 = {
-	"007": $3_007,
-	"015": $3_015,
-	"017": $3_017,
-	name: "Bregenz"
-};
+var $002$4 = ((label, name) => ({
+	"007": new Level3($007$1, label),
+	"015": new Level3($015, label),
+	"017": new Level3($017, label),
+	label,
+	name
+}))("002", "Bregenz");
 
-const JAM = {
+var JAM = {
 	accessible: true,
 	accommodation: false,
 	admission: "voluntary",
@@ -1182,7 +1482,7 @@ const JAM = {
 	first: "2008-01-01"
 };
 
-const KAM = {
+var KAM = {
 	accessible: true,
 	accommodation: "hotel",
 	admission: "9 €",
@@ -1197,22 +1497,6 @@ const KAM = {
 	travel: "full",
 	city: "Dornbirn",
 	first: "2004-04-01"
-};
-
-const WOR$12 = {
-	accommodation: "hotel",
-	admission: "8 €",
-	audience: "80",
-	fee: "30 €",
-	name: "Wort Drauf Slam",
-	tour: false,
-	masters: [
-		"Steffen Brinkmann"
-	],
-	type: "challenging",
-	travel: "grant",
-	city: "Dornbirn",
-	first: "2012-11-01"
 };
 
 const U20$2 = {
@@ -1232,13 +1516,31 @@ const U20$2 = {
 	first: "2017-03-01"
 };
 
-const $3_001$16 = {
-	JAM,
-	KAM,
-	WOR: WOR$12,
-	U20: U20$2,
-	name: "Dornbirn"
+var WOR$6 = {
+	accommodation: "hotel",
+	admission: "8 €",
+	audience: "80",
+	fee: "30 €",
+	name: "Wort Drauf Slam",
+	tour: false,
+	masters: [
+		"Steffen Brinkmann"
+	],
+	type: "challenging",
+	travel: "grant",
+	city: "Dornbirn",
+	first: "2012-11-01"
 };
+
+var $001$14 = ((label, name, zip) => ({
+	JAM: new Slam(JAM, label),
+	KAM: new Slam(KAM, label),
+	U20: new Slam(U20$2, label),
+	WOR: new Slam(WOR$6, label),
+	label,
+	name,
+	zip
+}))("001", "Dornbirn");
 
 const $000$16 = {
 	accessible: true,
@@ -1248,25 +1550,30 @@ const $000$16 = {
 	fee: "80 €",
 	name: "Emser Slam",
 	tour: false,
-	masters: ["Tom Astleitner"],
+	masters: [
+		"Tom Astleitner"
+	],
 	type: "closed",
 	travel: "full",
 	city: "Hohenems",
 	first: "2017-06-01"
 };
 
-const $3_002$2 = {
-	"000": $000$16,
-	name: "Hohenems"
-};
+var $002$5 = ((label, name, zip) => ({
+	"000": new Slam($000$16, label),
+	label,
+	name,
+	zip
+}))("002", "Hohenems");
 
-const $2_003$6 = {
-	"001": $3_001$16,
-	"002": $3_002$2,
-	name: "Dornbirn"
-};
+var $003$3 = ((label, name) => ({
+	"001": new Level3($001$14, label),
+	"002": new Level3($002$5, label),
+	label,
+	name
+}))("003", "Dornbirn");
 
-const GRA = {
+var GRA = {
 	accessible: true,
 	accommodation: false,
 	admission: "voluntary",
@@ -1283,7 +1590,7 @@ const GRA = {
 	first: "2016-08-01"
 };
 
-const RAU = {
+var RAU = {
 	accessible: true,
 	accommodation: false,
 	admission: "voluntary",
@@ -1300,7 +1607,7 @@ const RAU = {
 	first: "2017-04-01"
 };
 
-const TAG$4 = {
+var TAG$2 = {
 	accessible: true,
 	accommodation: false,
 	admission: "12 €",
@@ -1317,26 +1624,30 @@ const TAG$4 = {
 	first: "2015-07-01"
 };
 
-const $3_004$2 = {
-	GRA,
-	RAU,
-	TAG: TAG$4,
-	name: "Feldkirch"
-};
+var $004$3 = ((label, name, zip) => ({
+	GRA: new Slam(GRA, label),
+	RAU: new Slam(RAU, label),
+	TAG: new Slam(TAG$2, label),
+	label,
+	name,
+	zip
+}))("004", "Feldkirch");
 
-const $2_004 = {
-	"004": $3_004$2,
-	name: "Feldkirch"
-};
+var $004$2 = ((label, name) => ({
+	"004": new Level3($004$3, label),
+	label,
+	name
+}))("004", "Feldkirch");
 
-const $1_008 = {
-	"002": $2_002$4,
-	"003": $2_003$6,
-	"004": $2_004,
-	name: "Vorarlberg"
-};
+var $008$1 = ((label, name) => ({
+	"002": new Level2($002$4, label),
+	"003": new Level2($003$3, label),
+	"004": new Level2($004$2, label),
+	label,
+	name
+}))("008", "Vorarlberg");
 
-const CUP = {
+var CUP = {
 	name: "Poetry Slam Cup",
 	accommodation: "hotel",
 	admission: "9 €",
@@ -1352,11 +1663,11 @@ const CUP = {
 	first: "2007-08-01"
 };
 
-const IMW = {
+var IMW = {
 	name: "Slam im Wasserglas",
 };
 
-const LIB = {
+var LIB = {
 	accessible: true,
 	accommodation: "private",
 	admission: false,
@@ -1373,20 +1684,20 @@ const LIB = {
 	first: "2014-04-01"
 };
 
-const $3_001$18 = {
-	CUP,
-	IMW,
-	LIB,
-	name: "Innere Stadt",
-	zip: 1010
-};
+var $001$16 = ((label, name) => ({
+	CUP: new Slam(CUP, label),
+	IMW: new Slam(IMW, label),
+	LIB: new Slam(LIB, label),
+	name
+}))("001", "Innere Stadt", "1010");
 
-const $2_001$10 = {
-	"001": $3_001$18,
-	name: "Innere Stadt"
-};
+var $001$15 = ((label, name) => ({
+	"001": new Level3($001$16, label),
+	label,
+	name
+}))("001", "Innere Stadt");
 
-const STU = {
+var STU = {
 	dates: {
 		2017: {
 			11: {
@@ -1418,18 +1729,20 @@ const STU = {
 	first: "2015-06-01"
 };
 
-const $3_001$20 = {
-	STU,
-	name: "Wieden",
-	zip: 1040
-};
+var $001$17 = ((label, name, zip) => ({
+	STU: new Slam(STU, label),
+	label,
+	name,
+	zip
+}))("001", "Wieden", "1040");
 
-const $2_004$2 = {
-	"001": $3_001$20,
-	name: "Wieden"
-};
+var $004$4 = ((label, name) => ({
+	"001": new Level3($001$17, label),
+	label,
+	name
+}))("004", "Wieden");
 
-const FRE$2 = {
+var FRE$1 = {
 	dates: {
 		2017: {
 			11: {
@@ -1487,7 +1800,7 @@ const FRE$2 = {
 	}
 };
 
-const POW = {
+var POW = {
 	dates: {
 		2017: {
 			12: {
@@ -1545,7 +1858,7 @@ const POW = {
 	}
 };
 
-const ROT = {
+var ROT = {
 	dates: {
 		2017: {
 			11: {
@@ -1573,20 +1886,22 @@ const ROT = {
 	first: "2012-02-01"
 };
 
-const $3_001$22 = {
-	FRE: FRE$2,
-	POW,
-	ROT,
-	name: "Margareten",
-	zip: 1050
-};
+var $001$18 = ((label, name, zip) => ({
+	FRE: new Slam(FRE$1, label),
+	POW: new Slam(POW, label),
+	ROT: new Slam(ROT, label),
+	label,
+	name,
+	zip
+}))("001", "Margareten", "1050");
 
-const $2_005$2 = {
-	"001": $3_001$22,
-	name: "Margareten"
-};
+var $005$3 = ((label, name) => ({
+	"001": new Level3($001$18, label),
+	label,
+	name
+}))("005", "Margareten");
 
-const TAG$6 = {
+var TAG$3 = {
 	dates: {
 		2017: {
 			11: {
@@ -1626,16 +1941,18 @@ const TAG$6 = {
 	name: "TAGebuch Slam"
 };
 
-const $3_001$24 = {
-	TAG: TAG$6,
-	name: "Mariahilf",
-	zip: 1060
-};
+var $001$19 = ((label, name, zip) => ({
+	TAG: new Slam(TAG$3, label),
+	label,
+	name,
+	zip
+}))("001", "Mariahilf", "1060");
 
-const $2_006$6 = {
-	"001": $3_001$24,
-	name: "Mariahilf"
-};
+var $006$5 = ((label, name) => ({
+	"001": new Level3($001$19, label),
+	label,
+	name
+}))("006", "Mariahilf");
 
 const B00 = {
 	dates: {
@@ -1695,7 +2012,7 @@ const B00 = {
 	first: "2009-08-01"
 };
 
-const BIL = {
+var BIL = {
 	name: "Bilder_Bücher_Bühne",
 	description: "Österreichs einzige Lese-Mal-Bühne samt Poetry, Prosa und Pinselei. Sowas gibt's? Sure, it does.\n\nFOMP lädt drei Autorinnen und Autoren ein, die eigene Texte lesen, begleitet von einer bildenden Künstlerin.Die enstandenden Bilder werden in einer \"Auktion auf Speed\" an die Meistbietenden versteigert.\n\nWahn, Wonne und Wortkunst für Sammler und Jägerinnen besonderer Schätze.",
 	location: {
@@ -1721,7 +2038,7 @@ const BIL = {
 	}
 };
 
-const BOC = {
+var BOC = {
 	accessible: true,
 	accommodation: "private",
 	admission: "10 €",
@@ -1738,7 +2055,7 @@ const BOC = {
 	first: "2012-10-01"
 };
 
-const POP = {
+var POP = {
 	name: "Pop Up Poetry",
 	shortName: "Pop Up Poetry",
 	description: "In der Reihe „Pop up Poetry“ präsentiert FOMP einzigartige Künstlerinnen und Künstler, die aus dem Poetry Slam-Umfeld kommen und durch beeindruckende Soloperformances hervorstechen. Konzerte. Lesungen. Stand-Up. Slam. Performance.\n\nDestilliert und verfeinert, immer frisch auf immer neuen Bühnen dieser schönen Stadt. Über alle Events dieser Serie erfahrt ihr auf unserer Facebook-Seite.",
@@ -1759,7 +2076,7 @@ const POP = {
 	}
 };
 
-const SIN = {
+var SIN = {
 	dates: {
 		2017: {
 			11: {
@@ -1817,22 +2134,24 @@ const SIN = {
 	}
 };
 
-const $3_001$26 = {
-	B00,
-	BIL,
-	BOC,
-	POP,
-	SIN,
-	name: "Neubau",
-	zip: 1070
-};
+var $001$20 = ((label, name, zip) => ({
+	B00: new Slam(B00, label),
+	BIL: new Slam(BIL, label),
+	BOC: new Slam(BOC, label),
+	POP: new Slam(POP, label),
+	SIN: new Slam(SIN, label),
+	label,
+	name,
+	zip
+}))("001", "Neubau", "1070");
 
-const $2_007 = {
-	"001": $3_001$26,
-	name: "Neubau"
-};
+var $007$2 = ((label, name) => ({
+	"001": new Level3($001$20, label),
+	label,
+	name
+}))("007", "Neubau");
 
-const BIS = {
+var BIS = {
 	name: "Bis einer reimt",
 	accommodation: "private",
 	admission: "voluntary",
@@ -1848,7 +2167,7 @@ const BIS = {
 	first: "2016-09-01"
 };
 
-const SPR = {
+var SPR = {
 	name: "SprichWORT! Slam",
 	accommodation: "private",
 	admission: "5 €",
@@ -1864,19 +2183,21 @@ const SPR = {
 	first: "2016-09-01"
 };
 
-const $3_001$28 = {
-	BIS,
-	SPR,
-	name: "Josefstadt",
-	zip: 1080
-};
+var $001$21 = ((label, name, zip) => ({
+	BIS: new Slam(BIS, label),
+	SPR: new Slam(SPR, label),
+	label,
+	name,
+	zip
+}))("001", "Josefstadt", "1080");
 
-const $2_008 = {
-	"001": $3_001$28,
-	name: "Josefstadt"
-};
+var $008$2 = ((label, name) => ({
+	"001": new Level3($001$21, label),
+	label,
+	name
+}))("008", "Josefstadt");
 
-const SIN$2 = {
+var SIN$1 = {
 	dates: {
 		2017: {
 			12: {
@@ -1889,7 +2210,7 @@ const SIN$2 = {
 	name: "Sing, Song & Sound-Slam"
 };
 
-const STU$2 = {
+var STU$1 = {
 	dates: {
 		2017: {
 			11: {
@@ -1902,34 +2223,38 @@ const STU$2 = {
 	name: "STUMMGABEL Comedy Slam"
 };
 
-const $3_001$30 = {
-	SIN: SIN$2,
-	STU: STU$2,
-	name: "Alsergrund",
-	zip: 1090
-};
+var $001$22 = ((label, name, zip) => ({
+	SIN: new Slam(SIN$1, label),
+	STU: new Slam(STU$1, label),
+	label,
+	name,
+	zip
+}))("001", "Alsergrund", "1090");
 
-const $2_009$2 = {
-	"001": $3_001$30,
-	name: "Alsergrund"
-};
+var $009$2 = ((label, name) => ({
+	"001": new Level3($001$22, label),
+	label,
+	name
+}))("009", "Alsergrund");
 
-const WOS = {
+var WOS = {
 	name: "Wos host gsogt? Poetry Slam"
 };
 
-const $3_001$32 = {
-	WOS,
-	name: "Rudolfsheim-Fünfhaus",
-	zip: 1150
-};
+var $001$23 = ((label, name, zip) => ({
+	WOS: new Slam(WOS, label),
+	label,
+	name,
+	zip
+}))("001", "Rudolfsheim-Fünfhaus", "1150");
 
-const $2_015 = {
-	"001": $3_001$32,
-	name: "Rudolfsheim-Fünfhaus"
-};
+var $015$1 = ((label, name) => ({
+	"001": new Level3($001$23, label),
+	label,
+	name
+}))("015", "Rudolfsheim-Fünfhaus");
 
-const BLI = {
+var BLI = {
 	name: "Blitzdichtgewitter Poetry Jazz Slam",
 	description: "Poetry Slam und Jazz. Zwei Kunstformen kunstvoll vereint\n\nDie beste Melange für Liebende von Sprache und Musik: Ein Jazztrio untermalt die Texte vier geladener Künstlerinnen und Künstler.Zwischen Tagträumen und Nachtleben, Sprachbildern und Lautmalerei entsteht eine neue Begegnung mit Slam, wie sie allein Musik erzeugen kann.\n\nModeration: Yasmo\n\nBauer Schläger Wurf Berger:\n(Ralph Mothwurf – Gitarre, Andreas Lindenbauer – Bassklarinette / Altsaxophon, Reinhard Hörschläger – Percussion)",
 	location: {
@@ -1965,15 +2290,15 @@ const BLI = {
 	}
 };
 
-const FLA = {
+var FLA = {
 	name: "Flawless Poetry Slam"
 };
 
-const STI = {
+var STI = {
 	name: "Stille Post Slam"
 };
 
-const TEX = {
+var TEX = {
 	dates: {
 		2017: {
 			11: {
@@ -2003,22 +2328,24 @@ const U20$4 = {
 	name: "U20 Poetry Slam"
 };
 
-const $3_001$34 = {
-	BLI,
-	FLA,
-	STI,
-	TEX,
+var $001$24 = ((label, name, zip) => ({
+	BLI: new Slam(BLI, label),
+	FLA: new Slam(FLA, label),
+	STI: new Slam(STI, label),
+	TEX: new Slam(TEX, label),
 	U20: U20$4,
-	name: "Ottakring",
-	zip: 1160
-};
+	label,
+	name,
+	zip
+}))("001", "Ottakring", "1160");
 
-const $2_016$6 = {
-	"001": $3_001$34,
-	name: "Ottakring"
-};
+var $016$3 = ((label, name) => ({
+	"001": new Level3($001$24, label),
+	label,
+	name
+}))("016", "Ottakring");
 
-const KUL = {
+var KUL = {
 	accessible: true,
 	accommodation: "private",
 	admission: "5 €",
@@ -2035,18 +2362,20 @@ const KUL = {
 	first: "2016-09-01"
 };
 
-const $3_001$36 = {
-	KUL,
-	name: "Floridsdorf",
-	zip: 1210
-};
+var $001$25 = ((label, name, zip) => ({
+	KUL: new Slam(KUL, label),
+	label,
+	name,
+	zip
+}))("001", "Floridsdorf", "1210");
 
-const $2_021$4 = {
-	"001": $3_001$36,
-	name: "Floridsdorf"
-};
+var $021$2 = ((label, name) => ({
+	"001": new Level3($001$25, label),
+	label,
+	name
+}))("021", "Floridsdorf");
 
-const ABI = {
+var ABI = {
 	accessible: true,
 	accommodation: "private",
 	admission: "3 €",
@@ -2063,50 +2392,50 @@ const ABI = {
 	first: "2015-06-01"
 };
 
-const $3_001$38 = {
-	ABI,
-	name: "Donaustadt",
-	zip: 1220
-};
+var $001$26 = ((label, name, zip) => ({
+	ABI: new Slam(ABI, label),
+	label,
+	name,
+	zip
+}))("001", "Donaustadt", "1220");
 
-const $2_022 = {
-	"001": $3_001$38,
-	name: "Donaustadt"
-};
+var $022 = ((label, name) => ({
+	"001": new Level3($001$26, label),
+	label,
+	name
+}))("022", "Donaustadt");
 
-const $1_009 = {
-	"001": $2_001$10,
-	"004": $2_004$2,
-	"005": $2_005$2,
-	"006": $2_006$6,
-	"007": $2_007,
-	"008": $2_008,
-	"009": $2_009$2,
-	"015": $2_015,
-	"016": $2_016$6,
-	"021": $2_021$4,
-	"022": $2_022,
-	name: "Wien"
-};
+var $009$1 = ((label, name) => ({
+	"001": new Level2($001$15, label),
+	"004": new Level2($004$4, label),
+	"005": new Level2($005$3, label),
+	"006": new Level2($006$5, label),
+	"007": new Level2($007$2, label),
+	"008": new Level2($008$2, label),
+	"009": new Level2($009$2, label),
+	"015": new Level2($015$1, label),
+	"016": new Level2($016$3, label),
+	"021": new Level2($021$2, label),
+	"022": new Level2($022, label),
+	label,
+	name
+}))("009", "Wien");
 
-const AT = {
-	"001": $1_001,
-	"002": $1_002,
-	"003": $1_003,
-	"004": $1_004,
-	"005": $1_005,
-	"006": $1_006,
-	"007": $1_007,
-	"008": $1_008,
-	"009": $1_009,
-	name: "Österreich"
-};
+var AT = ((label, name) => ({
+	"001": new Level1($001, label),
+	"002": new Level1($002, label),
+	"003": new Level1($003$1, label),
+	"004": new Level1($004$1, label),
+	"005": new Level1($005$1, label),
+	"006": new Level1($006$3, label),
+	"007": new Level1($007, label),
+	"008": new Level1($008$1, label),
+	"009": new Level1($009$1, label),
+	label,
+	name
+}))("AT", "Österreich");
 
-const DE = {
-	name: "Deutschland"
-};
-
-const MOR = {
+var MOR = {
 	accessible: true,
 	accommodation: "redundant",
 	admission: false,
@@ -2124,29 +2453,35 @@ const MOR = {
 	first: "2010-01-01"
 };
 
-const $000$18 = {
-	MOR
-};
+var $000$18 = ((label, name, zip) => ({
+	MOR: new Slam(MOR, label),
+	label,
+	name,
+	zip
+}))("000", "Autonome Provinz Bozen – Südtirol");
 
-const $2_001$12 = {
-	"000": $000$18,
-	name: "Autonome Provinz Bozen – Südtirol"
-};
+var $001$28 = ((label, name) => ({
+	"000": new Level3($000$18, label),
+	label,
+	name
+}))("001", "Autonome Provinz Bozen – Südtirol");
 
-const $1_001$2 = {
-	"001": $2_001$12,
-	name: "Trentino-Südtirol"
-};
+var $001$27 = ((label, name) => ({
+	"001": new Level2($001$28, label),
+	label,
+	name
+}))("001", "Trentino-Südtirol");
 
-const IT = {
-	"001": $1_001$2
-};
+var IT = ((label, name) => ({
+	"001": new Level1($001$27, label),
+	label,
+	name
+}))("IT", "Italien");
 
-const countries = {
-	AT,
-	DE,
-	IT
-};
+var countries = (() => ({
+	AT: new Country(AT),
+	IT: new Country(IT)
+}))();
 
 /**
  * @name allCountries
@@ -2154,7 +2489,7 @@ const countries = {
  * @param {function} [iterator=()=>{}]
  * iterator to call on every country
  * @returns {array}
- * array of all country objects
+ * array of all countries
  */
 const allCountries = function(iterator = () => { }) {
 	const allCountriesToReturn = [];
@@ -2175,6 +2510,8 @@ const allCountries = function(iterator = () => { }) {
  *
  * @param {function} [iterator=()=>{}]
  * iterator to call on every level1
+ * @returns {array}
+ * array of all level1s
  */
 const allLevel1s = function(iterator = () => { }) {
 	const allLevel1sToReturn = [];
@@ -2197,6 +2534,8 @@ const allLevel1s = function(iterator = () => { }) {
  *
  * @param {function} [iterator=()=>{}]
  * iterator to call on every level2
+ * @returns {array}
+ * array of all level2s
  */
 const allLevel2s = function(iterator = () => {}) {
 	const allLevel2sToReturn = [];
@@ -2221,6 +2560,8 @@ const allLevel2s = function(iterator = () => {}) {
  *
  * @param {function} [iterator=()=>{}]
  * iterator to call on every level3
+ * @returns {array}
+ * array of all level3s
  */
 const allLevel3s = function(iterator = () => {}) {
 	const allLevel3sToReturn = [];
@@ -2247,6 +2588,8 @@ const allLevel3s = function(iterator = () => {}) {
  *
  * @param {function} [iterator=()=>{}]
  * iterator to call on every slam
+ * @returns {array}
+ * array of all slams
  */
 const allSlams = function(iterator = () => {}) {
 	const allSlamsToReturn = [];
@@ -2279,44 +2622,6 @@ const allIds = function() {
 };
 
 /**
- * @name getDates
- *
- * @param {youslam.slam} slam youslam slam object
- * @param {number} [amount=3] maximum amount of dates
- * @param {moment} [from=moment()] moment
- * @param {moment} [to=moment().add(100, "y")] moment
- * @returns {array} array of date strings
- */
-const getDates = (
-	slam, amount = -1, from = moment(), to = moment().add(100, "y")
-) => {
-	if (from.isSameOrBefore(to)) {
-		if (slam.dates) {
-			const dateArray = [];
-
-			Object.keys(slam.dates).forEach((year) => {
-				Object.keys(slam.dates[year]).forEach((month) => {
-					Object.keys(slam.dates[year][month]).forEach((day) => {
-						const date = moment(`${year}-${padStart(month, 2, 0)}-${padStart(day, 2, 0)}`);
-
-						if (date.isSameOrAfter(from) && date.isBefore(to)) {
-							dateArray.push(date.format("YYYY-MM-DD"));
-						}
-					});
-				});
-			});
-
-			dateArray.splice(amount);
-
-			return dateArray;
-		}
-	}
-	else {
-		throw new Error("[youslam[getDates]]: invalid timespan, \"from\" is after \"to\"");
-	}
-};
-
-/**
  * @name getSlam
  *
  * @param {string} [idOrName]
@@ -2330,10 +2635,16 @@ const getSlam = function(idOrName) {
 	let foundSlam = {};
 
 	if (typeof idOrName === "string") {
-		if (this.isId(idOrName) || this.isShortId(idOrName)) {
-			const unzippedId = this.unzipId(idOrName);
+		if (this.constructor.isId(idOrName) || this.constructor.isShortId(idOrName)) {
+			const unzippedId = this.constructor.unzipId(idOrName);
 
-			foundSlam = this[unzippedId.country][unzippedId.level1][unzippedId.level2][unzippedId.level3][unzippedId.slam];
+			const countryLabel = unzippedId.country;
+			const level1Label = unzippedId.level1;
+			const level2Label = unzippedId.level2;
+			const level3Label = unzippedId.level3;
+			const slamLabel = unzippedId.slam;
+
+			foundSlam = this[countryLabel][level1Label][level2Label][level3Label][slamLabel];
 		}
 		else {
 			this.allSlams().forEach((slam) => {
@@ -2388,10 +2699,10 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 	flatten([
 		filter
 	]).forEach((path) => {
-		if (this.isId(path) || this.isShortId(path)) {
+		if (this.constructor.isId(path) || this.constructor.isShortId(path)) {
 			slamsToSearch.push(this.getSlam(path));
 		}
-		else if (this.isPath(path) || this.isShortPath(path)) {
+		else if (this.constructor.isPath(path) || this.constructor.isShortPath(path)) {
 			this.sift(path).allSlams().forEach((slam) => {
 				slamsToSearch.push(slam);
 			});
@@ -2400,11 +2711,13 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 
 	const upcoming = [];
 
-	slamsToSearch.forEach((slam) => {
-		upcoming.push({
-			date: this.getDates(slam, -1, from, to),
-			slam
-		});
+	slamsToSearch.forEach((slam) => {	
+		if (slam.dates) {
+			upcoming.push({
+				date: slam.getDates(-1, from, to),
+				slam
+			});
+		}
 	});
 
 	flatten(upcoming).sort((dateA, dateB) => {
@@ -2418,8 +2731,55 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 		return 0;
 	});
 
-
 	return slice(upcoming, 0, amount);
+};
+
+const sift = function(filter) {
+	const dottedPaths = [];
+
+	flatten([
+		filter
+	]).forEach((path) => {
+		const unzippedPath = this.constructor.unzipPath(path);
+
+		let dottedPath = "";
+
+		Object.keys(unzippedPath).sort().forEach((level) => {
+			if (level === "country") {
+				dottedPath = unzippedPath.country;
+			}
+			else {
+				dottedPaths.push(`${dottedPath}.name`);
+				dottedPaths.push(`${dottedPath}.label`);
+				dottedPaths.push(`${dottedPath}.type`);
+
+				dottedPath += `.${unzippedPath[level]}`;
+			}
+		});
+
+		dottedPaths.push(dottedPath);
+	});
+
+	const siftedObject = pick(countries, dottedPaths);
+
+	Object.keys(methods$1.prototype).forEach((method) => {
+		siftedObject[method] = methods$1.prototype[method];
+	});
+
+	return siftedObject;
+};
+
+const prototype$1 = {
+	allCountries,
+	allLevel1s,
+	allLevel2s,
+	allLevel3s,
+	allSlams,
+	allIds,
+	getSlam,
+	getSlams,
+	getUpcoming,
+	sift
 };
 
 /**
@@ -2450,7 +2810,7 @@ const isShortId = string => (/^[A-Z]{2}-\d{1,3}-\d{1,3}-\d{1,3}-[A-Z\d]{3}$/).te
  * @returns {boolean}
  * true if string is id
  */
-const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}([A-Z]{3})?$/).test(string);
+const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}([A-Z\d]{3})?$/).test(string);
 
 /**
  * @name isShortPath
@@ -2460,40 +2820,7 @@ const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}([A-Z]{3})?$/).test(string);
  * @returns {boolean}
  * true if string is short id
  */
-const isShortPath = string => (/^[A-Z]{2}(-\d{1,3}){0,3}(-[A-Z]{3})?$/).test(string);
-
-const sift = function(filter) {
-	const dottedPaths = [];
-
-	flatten([
-		filter
-	]).forEach((path) => {
-		const unzippedPath = this.unzipPath(path);
-
-		let dottedPath = "";
-
-		Object.keys(unzippedPath).sort().forEach((level) => {
-			if (level === "country") {
-				dottedPath = unzippedPath.country;
-			}
-			else {
-				dottedPaths.push(`${dottedPath}.name`);
-
-				dottedPath += `.${unzippedPath[level]}`;
-			}
-		});
-
-		dottedPaths.push(dottedPath);
-	});
-
-	const siftedObject = pick(countries, dottedPaths);
-
-	Object.keys(utils).forEach((util) => {
-		siftedObject[util] = utils[util];
-	});
-
-	return siftedObject;
-};
+const isShortPath = string => (/^[A-Z]{2}(-\d{1,3}){0,3}(-[A-Z\d]{3})?$/).test(string);
 
 const unzipId = function(id) {
 	let country;
@@ -2587,27 +2914,12 @@ const unzipPath = function(path) {
 	return unzippedPath;
 };
 
-const utils = {
-	allCountries,
-	allLevel1s,
-	allLevel2s,
-	allLevel3s,
-	allSlams,
-
-	allIds,
-
-	getDates,
-	getSlam,
-	getSlams,
-	getUpcoming,
-
+var methods$1 = {
+	prototype: prototype$1,
 	isId,
 	isShortId,
 	isPath,
 	isShortPath,
-
-	sift,
-
 	unzipId,
 	unzipPath
 };
@@ -2641,7 +2953,7 @@ const YS = class {
 		this.allSlams((
 			country, level1, level2, level3, slam, actualSlam
 		) => {
-			actualSlam.id = country + level1 + level2 + level3 + slam;
+			actualSlam.id = `${country}${level1}${level2}${level3}${slam}`;
 			actualSlam.shortId = `${country}-${parseInt(level1, 10)}-${parseInt(level2, 10)}-${parseInt(level3, 10)}-${slam}`;
 
 			actualSlam.location = assign(actualSlam.location, {
@@ -2657,8 +2969,6 @@ const YS = class {
 	}
 };
 
-Object.keys(utils).forEach((util) => {
-	YS.prototype[util] = utils[util];
-});
+utils.methodAdder(YS, methods$1);
 
 module.exports = YS;

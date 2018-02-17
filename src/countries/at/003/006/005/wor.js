@@ -10,6 +10,15 @@ export default {
 				3: {
 					fbEvent: 2018855465025112
 				}
+			},
+			5: {
+				5: "default"
+			},
+			6: {
+				9: "default"
+			},
+			7: {
+				7: "default"
 			}
 		}
 	},

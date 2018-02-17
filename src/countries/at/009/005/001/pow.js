@@ -30,7 +30,7 @@ export default {
 				18: "default"
 			},
 			5: {
-				16: "default"
+				8: "default"
 			},
 			6: {
 				20: "default"

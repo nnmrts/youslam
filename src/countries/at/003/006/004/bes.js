@@ -9,5 +9,12 @@ export default {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	dates: {
+		2018: {
+			3: {
+				22: "default"
+			}
+		}
 	}
 };

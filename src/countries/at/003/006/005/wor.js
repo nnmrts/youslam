@@ -2,9 +2,7 @@ export default {
 	dates: {
 		2017: {
 			12: {
-				9: {
-					time: "19:30:00"
-				}
+				9: "default"
 			}
 		},
 		2018: {

@@ -255,11 +255,8 @@ gulp.task("server", () => {
 
 gulp.task("dev", gulp.series("dev:build", gulp.parallel("watch", "server")));
 
-gulp.task("test", () =>
-	gulp.src("./tests/test.js")
-		.pipe(ava({
-			verbose: true
-		})));
+gulp.task("test", () => gulp.src(pkg.ava.files)
+	.pipe(ava()));
 
 gulp.task("check", gulp.series("build", "test"));
 
@@ -419,7 +416,7 @@ gulp.task("push", (cb) => {
 	);
 });
 
-gulp.task("npm-publish", done => childProcess.spawn("npm", [
+gulp.task("yarn-publish", done => childProcess.spawn("yarn", [
 	"publish"
 ], {
 	stdio: "inherit"
@@ -461,7 +458,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"check", "commit:build", "bump", "tag", "push", "npm-publish"
+	"check", "commit:build", "bump", "tag", "push", "yarn-publish"
 ));
 
 let cleanSignal;

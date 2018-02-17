@@ -5,7 +5,7 @@ import KAM from "./001/kam.js";
 import U20 from "./001/u20.js";
 import WOR from "./001/wor.js";
 
-export default (label, name, zip) => ({
+export default ((label, name, zip) => ({
 	JAM: new Slam(JAM, label),
 	KAM: new Slam(KAM, label),
 	U20: new Slam(U20, label),
@@ -13,4 +13,4 @@ export default (label, name, zip) => ({
 	label,
 	name,
 	zip
-})("001", "Dornbirn");
+}))("001", "Dornbirn");

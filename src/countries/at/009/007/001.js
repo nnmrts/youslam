@@ -6,8 +6,8 @@ import BOC from "./001/boc.js";
 import POP from "./001/pop.js";
 import SIN from "./001/sin.js";
 
-export default (label, name, zip) => ({
-	B00,
+export default ((label, name, zip) => ({
+	B00: new Slam(B00, label),
 	BIL: new Slam(BIL, label),
 	BOC: new Slam(BOC, label),
 	POP: new Slam(POP, label),
@@ -15,4 +15,4 @@ export default (label, name, zip) => ({
 	label,
 	name,
 	zip
-})("001", "Neubau", "1070");
+}))("001", "Neubau", "1070");

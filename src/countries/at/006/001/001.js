@@ -14,7 +14,7 @@ import HOE from "./001/hoe.js";
 import KLO from "./001/klo.js";
 import KOM from "./001/kom.js";
 
-export default (label, name, zip) => ({
+export default ((label, name, zip) => ({
 	AFF: new Slam(AFF, label),
 	ANT: new Slam(ANT, label),
 	BAT: new Slam(BAT, label),
@@ -31,4 +31,4 @@ export default (label, name, zip) => ({
 	label,
 	name,
 	zip
-})("001", "Graz");
+}))("001", "Graz");

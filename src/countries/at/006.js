@@ -6,7 +6,7 @@ import $006 from "./006/003.js";
 import $021 from "./006/021.js";
 import $023 from "./006/023.js";
 
-export default (label, name) => ({
+export default ((label, name) => ({
 	"000": new Level2($000, label),
 	"001": new Level2($001, label),
 	"006": new Level2($006, label),
@@ -14,4 +14,4 @@ export default (label, name) => ({
 	"023": new Level2($023, label),
 	label,
 	name
-})("006", "Steiermark");
+}))("006", "Steiermark");

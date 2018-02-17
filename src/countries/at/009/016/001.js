@@ -6,7 +6,7 @@ import STI from "./001/sti.js";
 import TEX from "./001/tex.js";
 import U20 from "./001/u20.js";
 
-export default (label, name, zip) => ({
+export default ((label, name, zip) => ({
 	BLI: new Slam(BLI, label),
 	FLA: new Slam(FLA, label),
 	STI: new Slam(STI, label),
@@ -15,4 +15,4 @@ export default (label, name, zip) => ({
 	label,
 	name,
 	zip
-})("001", "Ottakring", "1160");
+}))("001", "Ottakring", "1160");

@@ -10,7 +10,7 @@ import $007 from "./at/007.js";
 import $008 from "./at/008.js";
 import $009 from "./at/009.js";
 
-export default (label, name) => ({
+export default ((label, name) => ({
 	"001": new Level1($001, label),
 	"002": new Level1($002, label),
 	"003": new Level1($003, label),
@@ -22,4 +22,4 @@ export default (label, name) => ({
 	"009": new Level1($009, label),
 	label,
 	name
-})("AT", "Österreich");
+}))("AT", "Österreich");

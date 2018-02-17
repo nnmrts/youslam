@@ -136,12 +136,12 @@ const utils = {
 /**
  * @name getDates
  * @memberof Slam
- * @param {number} [amount=3] maximum amount of dates
+ * @param {number} amount maximum amount of dates
  * @param {moment} [from=moment()] moment
  * @param {moment} [to=moment().add(100, "y")] moment
  * @returns {array} array of date strings
  */
-const getDates = function(amount = -1, from = moment(), to = moment().add(100, "y")) {
+const getDates = function(amount, from = moment(), to = moment().add(100, "y")) {
 	const dateArray = [];
 
 	Object.keys(this.dates).forEach((year) => {
@@ -521,9 +521,7 @@ var WOR$1 = {
 	dates: {
 		2017: {
 			12: {
-				9: {
-					time: "19:30:00"
-				}
+				9: "default"
 			}
 		},
 		2018: {
@@ -2684,7 +2682,7 @@ const getSlams = function(idsOrNames = []) {
  *
  * @param {array|string} [filter=this.allIds()]
  * array of ids or paths or string
- * @param {number} [amount=3]
+ * @param {number} amount
  * maximum amount of dates
  * @param {moment} [from=moment()]
  * moment
@@ -2693,7 +2691,7 @@ const getSlams = function(idsOrNames = []) {
  * @returns {array}
  * array of date-slam objects
  */
-const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(), to = moment().add(100, "y")) {
+const getUpcoming = function(filter = this.allIds(), amount, from = moment(), to = moment().add(100, "y")) {
 	const slamsToSearch = [];
 
 	flatten([
@@ -2713,7 +2711,7 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 
 	slamsToSearch.forEach((slam) => {
 		if (slam.dates) {
-			slam.getDates(-1, from, to).forEach((date) => {
+			slam.getDates(undefined, from, to).forEach((date) => {
 				upcoming.push({
 					date,
 					slam

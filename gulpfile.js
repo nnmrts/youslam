@@ -416,7 +416,7 @@ gulp.task("push", (cb) => {
 	);
 });
 
-gulp.task("yarn-publish", done => childProcess.spawn("yarn", [
+gulp.task("npm-publish", done => childProcess.spawn("npm", [
 	"publish"
 ], {
 	stdio: "inherit"
@@ -458,7 +458,7 @@ gulp.task("github", (cb) => {
 });
 
 gulp.task("release", gulp.series(
-	"check", "commit:build", "bump", "tag", "push", "yarn-publish"
+	"check", "commit:build", "bump", "tag", "push", "npm-publish"
 ));
 
 let cleanSignal;

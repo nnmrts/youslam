@@ -6,12 +6,12 @@ import flatten from "lodash/flatten";
 /**
  * @name getDates
  * @memberof Slam
- * @param {number} [amount=3] maximum amount of dates
+ * @param {number} amount maximum amount of dates
  * @param {moment} [from=moment()] moment
  * @param {moment} [to=moment().add(100, "y")] moment
  * @returns {array} array of date strings
  */
-const getDates = function(amount = -1, from = moment(), to = moment().add(100, "y")) {
+const getDates = function(amount, from = moment(), to = moment().add(100, "y")) {
 	const dateArray = [];
 
 	Object.keys(this.dates).forEach((year) => {

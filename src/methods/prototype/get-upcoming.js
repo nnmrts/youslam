@@ -22,10 +22,10 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 	flatten([
 		filter
 	]).forEach((path) => {
-		if (this.isId(path) || this.isShortId(path)) {
+		if (this.constructor.isId(path) || this.constructor.isShortId(path)) {
 			slamsToSearch.push(this.getSlam(path));
 		}
-		else if (this.isPath(path) || this.isShortPath(path)) {
+		else if (this.constructor.isPath(path) || this.constructor.isShortPath(path)) {
 			this.sift(path).allSlams().forEach((slam) => {
 				slamsToSearch.push(slam);
 			});
@@ -34,10 +34,10 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 
 	const upcoming = [];
 
-	slamsToSearch.forEach((slam) => {
+	slamsToSearch.forEach((slam) => {	
 		if (slam.dates) {
 			upcoming.push({
-				date: this.getDates(slam, -1, from, to),
+				date: slam.getDates(-1, from, to),
 				slam
 			});
 		}

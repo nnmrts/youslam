@@ -10,7 +10,7 @@ const sift = function(filter) {
 	flatten([
 		filter
 	]).forEach((path) => {
-		const unzippedPath = this.unzipPath(path);
+		const unzippedPath = this.constructor.unzipPath(path);
 
 		let dottedPath = "";
 
@@ -20,6 +20,8 @@ const sift = function(filter) {
 			}
 			else {
 				dottedPaths.push(`${dottedPath}.name`);
+				dottedPaths.push(`${dottedPath}.label`);
+				dottedPaths.push(`${dottedPath}.type`);
 
 				dottedPath += `.${unzippedPath[level]}`;
 			}
@@ -30,8 +32,8 @@ const sift = function(filter) {
 
 	const siftedObject = pick(countries, dottedPaths);
 
-	Object.keys(methods).forEach((method) => {
-		siftedObject[method] = methods[method];
+	Object.keys(methods.prototype).forEach((method) => {
+		siftedObject[method] = methods.prototype[method];
 	});
 
 	return siftedObject;

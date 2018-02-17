@@ -14,8 +14,8 @@ const getSlam = function(idOrName) {
 	let foundSlam = {};
 
 	if (typeof idOrName === "string") {
-		if (this.isId(idOrName) || this.isShortId(idOrName)) {
-			const unzippedId = this.unzipId(idOrName);
+		if (this.constructor.isId(idOrName) || this.constructor.isShortId(idOrName)) {
+			const unzippedId = this.constructor.unzipId(idOrName);
 
 			const countryLabel = unzippedId.country;
 			const level1Label = unzippedId.level1;

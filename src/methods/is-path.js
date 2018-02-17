@@ -6,6 +6,6 @@
  * @returns {boolean}
  * true if string is id
  */
-const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}([A-Z]{3})?$/).test(string);
+const isPath = string => (/^[A-Z]{2}(\d{3}){0,3}([A-Z\d]{3})?$/).test(string);
 
 export default isPath;

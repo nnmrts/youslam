@@ -68,7 +68,7 @@
 		"yargs": "^10.1.2"
 	},
 	"scripts": {
-		"test": "ava --verbose"
+		"test": "ava"
 	},
 	"ava": {
 		"files": [

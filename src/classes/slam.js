@@ -1,4 +1,4 @@
-import merge from "lodash/merge";
+import utils from "../utils.js";
 
 import methods from "./slam/methods.js";
 
@@ -27,6 +27,6 @@ class Slam {
 	}
 }
 
-merge(Slam, methods);
+utils.methodAdder(Slam, methods);
 
 export default Slam;

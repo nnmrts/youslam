@@ -2711,20 +2711,22 @@ const getUpcoming = function(filter = this.allIds(), amount = -1, from = moment(
 
 	const upcoming = [];
 
-	slamsToSearch.forEach((slam) => {	
+	slamsToSearch.forEach((slam) => {
 		if (slam.dates) {
-			upcoming.push({
-				date: slam.getDates(-1, from, to),
-				slam
+			slam.getDates(-1, from, to).forEach((date) => {
+				upcoming.push({
+					date,
+					slam
+				});
 			});
 		}
 	});
 
-	flatten(upcoming).sort((dateA, dateB) => {
-		if (moment(dateA.date).isBefore(moment(dateB.date))) {
+	upcoming.sort((objectA, objectB) => {
+		if (moment(objectA.date).isBefore(moment(objectB.date))) {
 			return -1;
 		}
-		if (moment(dateA.date).isAfter(moment(dateB.date))) {
+		if (moment(objectA.date).isAfter(moment(objectB.date))) {
 			return 1;
 		}
 

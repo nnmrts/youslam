@@ -650,7 +650,7 @@ var $003$1 = ((label, name) => ({
 	"002": new Level2($002$3, label),
 	"006": new Level2($006$1, label),
 	"016": new Level2($016, label),
-	"022": new Level2($021, label),
+	"021": new Level2($021, label),
 	label,
 	name
 }))("003", "Niederösterreich");

@@ -5,18 +5,18 @@ import slice from "lodash/slice";
 /**
  * @name getUpcoming
  *
- * @param {array|string} [filter=this.allIds()]
- * array of ids or paths or string
- * @param {number} amount
- * maximum amount of dates
  * @param {moment|string} [from=moment()]
  * moment
  * @param {moment|string} [to=moment().add(100, "y")]
  * moment
+ * @param {number} [amount=undefined]
+ * maximum amount of dates
+ * @param {array|string} [filter=this.allIds()]
+ * array of ids or paths or string
  * @returns {array}
- * array of date-slam objects
+ * array of objects with the properties slamDate, dateString and moment
  */
-const getUpcoming = function(filter = this.allIds(), amount, from = moment(), to = moment().add(100, "y")) {
+const getUpcoming = function(from = moment(), to = moment().add(100, "y"), amount = undefined, filter = this.allIds()) {
 	const slamsToSearch = [];
 
 	flatten([
@@ -36,27 +36,22 @@ const getUpcoming = function(filter = this.allIds(), amount, from = moment(), to
 
 	slamsToSearch.forEach((slam) => {
 		if (slam.dates) {
-			slam.getDates(undefined, from, to).forEach((date) => {
-				upcoming.push({
-					date,
-					slam
-				});
+			slam.getDates(from, to).forEach((date) => {
+				upcoming.push(date);
 			});
 		}
 	});
 
-	upcoming.sort((objectA, objectB) => {
-		if (moment(objectA.date).isBefore(moment(objectB.date))) {
+	return slice(upcoming.sort((dateA, dateB) => {
+		if (dateA.moment.isBefore(dateB.moment)) {
 			return -1;
 		}
-		if (moment(objectA.date).isAfter(moment(objectB.date))) {
+		if (dateA.moment.isAfter(dateB.moment)) {
 			return 1;
 		}
 
 		return 0;
-	});
-
-	return slice(upcoming, 0, amount);
+	}), 0, amount);
 };
 
 export default getUpcoming;

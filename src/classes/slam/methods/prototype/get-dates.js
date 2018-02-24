@@ -1,7 +1,6 @@
 import moment from "moment";
 import padStart from "lodash/padStart";
 import slice from "lodash/slice";
-import flatten from "lodash/flatten";
 import split from "lodash/split";
 
 import loopDeep from "../../../../utils/loop-deep.js";
@@ -10,16 +9,16 @@ import SlamDate from "../../../slam-date.js";
 /**
  * @name getDates
  * @memberof Slam
- * @param {number} amount
- * maximum amount of dates
  * @param {moment|string} [from=moment()]
  * moment
  * @param {moment|string} [to=moment().add(100, "y")]
  * moment
+ * @param {number} amount
+ * maximum amount of dates
  * @returns {array}
  * array of objects with the properties slamDate, dateString and moment
  */
-const getDates = function(amount, from = moment(), to = moment().add(100, "y")) {
+const getDates = function(from = moment(), to = moment().add(100, "y"), amount = undefined) {
 	const dateArray = [];
 
 	loopDeep(this.dates, 3, (value, key, path) => {
@@ -42,7 +41,7 @@ const getDates = function(amount, from = moment(), to = moment().add(100, "y")) 
 		}
 	});
 
-	return slice(flatten(dateArray).sort((dateA, dateB) => {
+	return slice(dateArray.sort((dateA, dateB) => {
 		if (dateA.moment.isBefore(dateB.moment)) {
 			return -1;
 		}

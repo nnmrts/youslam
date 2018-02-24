@@ -1,3 +1,5 @@
+import merge from "lodash/merge";
+
 /**
  *
  *
@@ -6,14 +8,12 @@
 class Country {
 	/**
 	 * Creates an instance of Country.
-	 * @param {object} country
+	 * @param {object} countryObject
 	 * country object
 	 * @memberof Country
 	 */
-	constructor(country) {
-		Object.keys(country).forEach((key) => {
-			this[key] = country[key];
-		});
+	constructor(countryObject) {
+		merge(this, countryObject);
 
 		this.type = "country";
 	}

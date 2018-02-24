@@ -1,3 +1,5 @@
+import merge from "lodash/merge";
+
 /**
  *
  *
@@ -6,16 +8,14 @@
 class Level1 {
 	/**
 	 * Creates an instance of Level1.
-	 * @param {object} level1
+	 * @param {object} level1Object
 	 * level1 object
 	 * @param {string} parent
 	 * parent label
 	 * @memberof Level1
 	 */
-	constructor(level1, parent) {
-		Object.keys(level1).forEach((key) => {
-			this[key] = level1[key];
-		});
+	constructor(level1Object, parent) {
+		merge(this, level1Object);
 
 		this.parent = parent;
 

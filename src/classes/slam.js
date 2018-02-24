@@ -1,3 +1,5 @@
+import merge from "lodash/merge";
+
 import utils from "../utils.js";
 
 import methods from "./slam/methods.js";
@@ -10,16 +12,14 @@ import methods from "./slam/methods.js";
 class Slam {
 	/**
 	 * Creates an instance of Slam.
-	 * @param {object} slam
+	 * @param {object} slamObject
 	 * slam object
 	 * @param {string} parent
 	 * parent label
 	 * @memberof Slam
 	 */
-	constructor(slam, parent) {
-		Object.keys(slam).forEach((key) => {
-			this[key] = slam[key];
-		});
+	constructor(slamObject, parent) {
+		merge(this, slamObject);
 
 		this.parent = parent;
 

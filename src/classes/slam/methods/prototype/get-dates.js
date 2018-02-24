@@ -7,8 +7,8 @@ import flatten from "lodash/flatten";
  * @name getDates
  * @memberof Slam
  * @param {number} amount maximum amount of dates
- * @param {moment} [from=moment()] moment
- * @param {moment} [to=moment().add(100, "y")] moment
+ * @param {moment|string} [from=moment()] moment
+ * @param {moment|string} [to=moment().add(100, "y")] moment
  * @returns {array} array of date strings
  */
 const getDates = function(amount, from = moment(), to = moment().add(100, "y")) {
@@ -19,8 +19,8 @@ const getDates = function(amount, from = moment(), to = moment().add(100, "y")) 
 			Object.keys(this.dates[year][month]).forEach((day) => {
 				const date = moment(`${year}-${padStart(month, 2, 0)}-${padStart(day, 2, 0)}`);
 
-				if (date.isSameOrAfter(from) && date.isBefore(to)) {
-					dateArray.push(date.format("YYYY-MM-DD"));
+				if (date.isSameOrAfter(moment(from)) && date.isBefore(moment(to))) {
+					dateArray.push(date);
 				}
 			});
 		});

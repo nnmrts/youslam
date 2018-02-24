@@ -9,9 +9,9 @@ import slice from "lodash/slice";
  * array of ids or paths or string
  * @param {number} amount
  * maximum amount of dates
- * @param {moment} [from=moment()]
+ * @param {moment|string} [from=moment()]
  * moment
- * @param {moment} [to=moment().add(100, "y")]
+ * @param {moment|string} [to=moment().add(100, "y")]
  * moment
  * @returns {array}
  * array of date-slam objects

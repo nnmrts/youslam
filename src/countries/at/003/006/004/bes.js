@@ -13,7 +13,12 @@ export default {
 	dates: {
 		2018: {
 			3: {
-				22: "default"
+				22: {
+					fbEvent: 209022079676186,
+					tickets: {
+						cinemaParadiso: "filmdb/2.-best-of-poetry-slam-baden/"
+					}
+				}
 			}
 		}
 	}

@@ -1,4 +1,6 @@
+import isPlainObject from "lodash/isPlainObject";
 import merge from "lodash/merge";
+import fpMerge from "lodash/fp/merge";
 
 /**
  *
@@ -8,14 +10,20 @@ import merge from "lodash/merge";
 class SlamDate {
 	/**
 	 * Creates an instance of SlamDate.
-	 * @param {object} dateObject
-	 * date object
+	 * @param {object|string} overrideData
+	 * date object or string "default"
 	 * @param {slam} slam
 	 * slam
 	 * @memberof SlamDate
 	 */
-	constructor(dateObject, slam) {
-		merge(this, merge(slam, dateObject));
+	constructor(overrideData, slam) {
+		let slamToOverride = slam;
+
+		if (isPlainObject(overrideData)) {
+			slamToOverride = fpMerge(slam, overrideData);
+		}
+
+		merge(this, slamToOverride);
 
 		delete this.dates;
 	}

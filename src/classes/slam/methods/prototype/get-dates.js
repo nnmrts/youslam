@@ -2,35 +2,51 @@ import moment from "moment";
 import padStart from "lodash/padStart";
 import slice from "lodash/slice";
 import flatten from "lodash/flatten";
+import split from "lodash/split";
+
+import loopDeep from "../../../../utils/loop-deep.js";
+import SlamDate from "../../../slam-date.js";
 
 /**
  * @name getDates
  * @memberof Slam
- * @param {number} amount maximum amount of dates
- * @param {moment|string} [from=moment()] moment
- * @param {moment|string} [to=moment().add(100, "y")] moment
- * @returns {array} array of date strings
+ * @param {number} amount
+ * maximum amount of dates
+ * @param {moment|string} [from=moment()]
+ * moment
+ * @param {moment|string} [to=moment().add(100, "y")]
+ * moment
+ * @returns {array}
+ * array of objects with the properties slamDate, dateString and moment
  */
 const getDates = function(amount, from = moment(), to = moment().add(100, "y")) {
 	const dateArray = [];
 
-	Object.keys(this.dates).forEach((year) => {
-		Object.keys(this.dates[year]).forEach((month) => {
-			Object.keys(this.dates[year][month]).forEach((day) => {
-				const date = moment(`${year}-${padStart(month, 2, 0)}-${padStart(day, 2, 0)}`);
+	loopDeep(this.dates, 3, (value, key, path) => {
+		const year = split(path, ".")[0];
+		const month = split(path, ".")[1];
+		const day = split(path, ".")[2];
 
-				if (date.isSameOrAfter(moment(from)) && date.isBefore(moment(to))) {
-					dateArray.push(date);
-				}
+		const slamDate = new SlamDate(value, this);
+
+		const dateString = `${year}-${padStart(month, 2, 0)}-${padStart(day, 2, 0)}`;
+
+		const dateMoment = moment(dateString);
+
+		if (dateMoment.isSameOrAfter(moment(from)) && dateMoment.isBefore(moment(to))) {
+			dateArray.push({
+				slamDate,
+				dateString,
+				moment: dateMoment,
 			});
-		});
+		}
 	});
 
 	return slice(flatten(dateArray).sort((dateA, dateB) => {
-		if (moment(dateA).isBefore(moment(dateB))) {
+		if (dateA.moment.isBefore(dateB.moment)) {
 			return -1;
 		}
-		if (moment(dateA).isAfter(moment(dateB))) {
+		if (dateA.moment.isAfter(dateB.moment)) {
 			return 1;
 		}
 

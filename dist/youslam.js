@@ -2264,27 +2264,6 @@ var BOC = {
 	first: "2012-10-01"
 };
 
-var POP = {
-	name: "Pop Up Poetry",
-	shortName: "Pop Up Poetry",
-	description: "In der Reihe „Pop up Poetry“ präsentiert FOMP einzigartige Künstlerinnen und Künstler, die aus dem Poetry Slam-Umfeld kommen und durch beeindruckende Soloperformances hervorstechen. Konzerte. Lesungen. Stand-Up. Slam. Performance.\n\nDestilliert und verfeinert, immer frisch auf immer neuen Bühnen dieser schönen Stadt. Über alle Events dieser Serie erfahrt ihr auf unserer Facebook-Seite.",
-	time: {
-		inlet: "19:30:00",
-		start: "20:00:00"
-	},
-	dates: {
-		2018: {
-			1: {
-				10: "default"
-			},
-			4: {
-				10: "default",
-				29: "default"
-			}
-		}
-	}
-};
-
 var SIN = {
 	dates: {
 		2017: {
@@ -2354,7 +2333,6 @@ var $001$20 = ((label, name, zip) => ({
 	B00: new Slam(B00, label),
 	BIL: new Slam(BIL, label),
 	BOC: new Slam(BOC, label),
-	POP: new Slam(POP, label),
 	SIN: new Slam(SIN, label),
 	label,
 	name,
@@ -3146,7 +3124,7 @@ const YS = class {
 	/**
 	 * Creates an instance of YS.
 	 * @memberof YS
-	 * @param {(string[]|string)} [filter=undefined]
+	 * @param {String[]|String} [filter=undefined]
 	 * array of ids or paths or string
 	 * @param {object} [data={countries}]
 	 * custom data, uses default data when omitted
@@ -3176,6 +3154,10 @@ const YS = class {
 				level3: this[country][level1][level2][level3].name,
 				zip: this[country][level1][level2][level3].zip
 			});
+
+			if (level3 === "000") {
+				actualSlam.location.name = "Wechselnde Spielorte";
+			}
 
 			this[country][level1][level2][level3][slam] = actualSlam;
 		});

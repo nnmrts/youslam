@@ -140,9 +140,9 @@
 				"preferType": {
 					"Boolean": "boolean",
 					"Number": "number",
-					"String": "string",
+					"String": "String",
 					"Object": "object",
-					"Array": "array",
+					"Array": "Array",
 					"Image": "image",
 					"Function": "func"
 				},

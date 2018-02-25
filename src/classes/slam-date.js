@@ -4,7 +4,7 @@ import fpMerge from "lodash/fp/merge";
 
 import utils from "../utils.js";
 
-import methods from "./slam/methods.js";
+import methods from "./slam-date/methods.js";
 
 /**
  *

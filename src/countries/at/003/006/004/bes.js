@@ -17,6 +17,11 @@ export default {
 					fbEvent: 209022079676186,
 					tickets: {
 						cinemaParadiso: "filmdb/2.-best-of-poetry-slam-baden/"
+					},
+					admission: {
+						advance: 8,
+						normal: 10,
+						currency: "euro"
 					}
 				}
 			}

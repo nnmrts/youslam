@@ -55,5 +55,9 @@ export default {
 	},
 	tickets: {
 		ntry: "powerpointkaraoke"
+	},
+	admission: {
+		normal: 7,
+		currency: "euro"
 	}
 };

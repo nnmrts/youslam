@@ -55,5 +55,10 @@ export default {
 	},
 	tickets: {
 		ntry: "sinnundseife"
+	},
+	admission: {
+		normal: 10,
+		reduced: 7,
+		currency: "euro"
 	}
 };

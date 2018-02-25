@@ -23,5 +23,9 @@ export default {
 				17: "default"
 			}
 		}
+	},
+	admission: {
+		normal: 8,
+		currency: "euro"
 	}
 };

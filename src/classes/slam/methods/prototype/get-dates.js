@@ -32,7 +32,7 @@ const getDates = function(from = moment(), to = moment().add(100, "y"), amount =
 
 		const dateMoment = moment(dateString);
 
-		if (dateMoment.isSameOrAfter(moment(from)) && dateMoment.isBefore(moment(to))) {
+		if (dateMoment.isSameOrAfter(moment(from)) && dateMoment.isSameOrBefore(moment(to))) {
 			dateArray.push({
 				slamDate,
 				dateString,

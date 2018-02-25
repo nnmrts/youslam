@@ -1837,6 +1837,38 @@ var $008$1 = ((label, name) => ({
 	name
 }))("008", "Vorarlberg");
 
+var POP = {
+	name: "Pop Up Poetry",
+	shortName: "Pop Up Poetry",
+	description: "In der Reihe „Pop up Poetry“ präsentiert FOMP einzigartige Künstlerinnen und Künstler, die aus dem Poetry Slam-Umfeld kommen und durch beeindruckende Soloperformances hervorstechen. Konzerte. Lesungen. Stand-Up. Slam. Performance.\n\nDestilliert und verfeinert, immer frisch auf immer neuen Bühnen dieser schönen Stadt. Über alle Events dieser Serie erfahrt ihr auf unserer Facebook-Seite.",
+	time: {
+		inlet: "19:30:00",
+		start: "20:00:00"
+	},
+	dates: {
+		2018: {
+			1: {
+				10: "default"
+			},
+			4: {
+				10: "default",
+				29: "default"
+			}
+		}
+	}
+};
+
+var $000$19 = ((label, name) => ({
+	POP: new Slam(POP, label),
+	name
+}))("000", "Wien");
+
+var $000$18 = ((label, name) => ({
+	"000": new Level3($000$19, label),
+	label,
+	name
+}))("000", "Wien");
+
 var CUP = {
 	name: "Poetry Slam Cup",
 	accommodation: "hotel",
@@ -2600,6 +2632,7 @@ var $022 = ((label, name) => ({
 }))("022", "Donaustadt");
 
 var $009$1 = ((label, name) => ({
+	"000": new Level2($000$18, label),
 	"001": new Level2($001$15, label),
 	"004": new Level2($004$4, label),
 	"005": new Level2($005$3, label),
@@ -2647,7 +2680,7 @@ var MOR = {
 	first: "2010-01-01"
 };
 
-var $000$18 = ((label, name, zip) => ({
+var $000$20 = ((label, name, zip) => ({
 	MOR: new Slam(MOR, label),
 	label,
 	name,
@@ -2655,7 +2688,7 @@ var $000$18 = ((label, name, zip) => ({
 }))("000", "Autonome Provinz Bozen – Südtirol");
 
 var $001$28 = ((label, name) => ({
-	"000": new Level3($000$18, label),
+	"000": new Level3($000$20, label),
 	label,
 	name
 }))("001", "Autonome Provinz Bozen – Südtirol");

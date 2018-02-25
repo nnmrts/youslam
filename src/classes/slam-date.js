@@ -2,6 +2,10 @@ import isPlainObject from "lodash/isPlainObject";
 import merge from "lodash/merge";
 import fpMerge from "lodash/fp/merge";
 
+import utils from "../utils.js";
+
+import methods from "./slam/methods.js";
+
 /**
  *
  *
@@ -28,5 +32,7 @@ class SlamDate {
 		delete this.dates;
 	}
 }
+
+utils.methodAdder(SlamDate, methods);
 
 export default SlamDate;

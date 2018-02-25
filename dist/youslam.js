@@ -3,14 +3,17 @@
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
 var assign = _interopDefault(require('lodash/assign'));
+var merge = _interopDefault(require('lodash/merge'));
+var isPlainObject = _interopDefault(require('lodash/isPlainObject'));
 var moment = _interopDefault(require('moment'));
 var padStart = _interopDefault(require('lodash/padStart'));
 var slice = _interopDefault(require('lodash/slice'));
-var flatten = _interopDefault(require('lodash/flatten'));
+var split = _interopDefault(require('lodash/split'));
+var fpMerge = _interopDefault(require('lodash/fp/merge'));
 var sample = _interopDefault(require('lodash/sample'));
 var compact = _interopDefault(require('lodash/compact'));
+var flatten = _interopDefault(require('lodash/flatten'));
 var pick = _interopDefault(require('lodash/pick'));
-var split = _interopDefault(require('lodash/split'));
 
 /**
  *
@@ -20,14 +23,12 @@ var split = _interopDefault(require('lodash/split'));
 class Country {
 	/**
 	 * Creates an instance of Country.
-	 * @param {object} country
+	 * @param {object} countryObject
 	 * country object
 	 * @memberof Country
 	 */
-	constructor(country) {
-		Object.keys(country).forEach((key) => {
-			this[key] = country[key];
-		});
+	constructor(countryObject) {
+		merge(this, countryObject);
 
 		this.type = "country";
 	}
@@ -41,16 +42,14 @@ class Country {
 class Level1 {
 	/**
 	 * Creates an instance of Level1.
-	 * @param {object} level1
+	 * @param {object} level1Object
 	 * level1 object
 	 * @param {string} parent
 	 * parent label
 	 * @memberof Level1
 	 */
-	constructor(level1, parent) {
-		Object.keys(level1).forEach((key) => {
-			this[key] = level1[key];
-		});
+	constructor(level1Object, parent) {
+		merge(this, level1Object);
 
 		this.parent = parent;
 
@@ -66,16 +65,14 @@ class Level1 {
 class Level2 {
 	/**
 	 * Creates an instance of Level2.
-	 * @param {object} level2
+	 * @param {object} level2Object
 	 * level2 object
 	 * @param {string} parent
 	 * parent label
 	 * @memberof Level2
 	 */
-	constructor(level2, parent) {
-		Object.keys(level2).forEach((key) => {
-			this[key] = level2[key];
-		});
+	constructor(level2Object, parent) {
+		merge(this, level2Object);
 
 		this.parent = parent;
 
@@ -91,22 +88,67 @@ class Level2 {
 class Level3 {
 	/**
 	 * Creates an instance of Level3.
-	 * @param {object} level3
+	 * @param {object} level3Object
 	 * level3 object
 	 * @param {string} parent
 	 * parent label
 	 * @memberof Level3
 	 */
-	constructor(level3, parent) {
-		Object.keys(level3).forEach((key) => {
-			this[key] = level3[key];
-		});
+	constructor(level3Object, parent) {
+		merge(this, level3Object);
 
 		this.parent = parent;
 
 		this.type = "level3";
 	}
 }
+
+/**
+ * @name loopDeep
+ *
+ * @param {object} object
+ * object to loop thorugh
+ * @param {number} depth
+ * depth
+ * @param {function} iterator
+ * function to call on every key on given depth
+ * @returns {array}
+ * array of all values found on given depth
+ */
+const loopDeep = (object = {}, depth = 1, iterator = () => {}) => {
+	let currentDepth = 1;
+	let currentSet = [
+		{
+			value: object,
+			path: ""
+		}
+	];
+
+	while (currentDepth <= depth) {
+		currentSet.forEach((item) => {
+			// on depth n
+			currentSet = [];
+
+			if (isPlainObject(item.value)) {
+				Object.keys(item.value).forEach((currentKey) => {
+					if (currentDepth === depth) {
+						iterator(item.value[currentKey], currentKey, `${item.path}${currentKey}`);
+					}
+					else {
+						currentSet.push({
+							value: item.value[currentKey],
+							path: `${item.path}${currentKey}.`
+						});
+					}
+				});
+			}
+		});
+
+		currentDepth += 1;
+	}
+
+	return currentSet;
+};
 
 /**
  * @name methodAdder
@@ -130,37 +172,77 @@ const methodAdder = (theClass, methods = {}) => {
 };
 
 const utils = {
+	loopDeep,
 	methodAdder
 };
 
 /**
+ *
+ *
+ * @class SlamDate
+ */
+class SlamDate {
+	/**
+	 * Creates an instance of SlamDate.
+	 * @param {object|string} overrideData
+	 * date object or string "default"
+	 * @param {slam} slam
+	 * slam
+	 * @memberof SlamDate
+	 */
+	constructor(overrideData, slam) {
+		let slamToOverride = slam;
+
+		if (isPlainObject(overrideData)) {
+			slamToOverride = fpMerge(slam, overrideData);
+		}
+
+		merge(this, slamToOverride);
+
+		delete this.dates;
+	}
+}
+
+/**
  * @name getDates
  * @memberof Slam
- * @param {number} amount maximum amount of dates
- * @param {moment} [from=moment()] moment
- * @param {moment} [to=moment().add(100, "y")] moment
- * @returns {array} array of date strings
+ * @param {moment|string} [from=moment()]
+ * moment
+ * @param {moment|string} [to=moment().add(100, "y")]
+ * moment
+ * @param {number} amount
+ * maximum amount of dates
+ * @returns {array}
+ * array of objects with the properties slamDate, dateString and moment
  */
-const getDates = function(amount, from = moment(), to = moment().add(100, "y")) {
+const getDates = function(from = moment(), to = moment().add(100, "y"), amount = undefined) {
 	const dateArray = [];
 
-	Object.keys(this.dates).forEach((year) => {
-		Object.keys(this.dates[year]).forEach((month) => {
-			Object.keys(this.dates[year][month]).forEach((day) => {
-				const date = moment(`${year}-${padStart(month, 2, 0)}-${padStart(day, 2, 0)}`);
+	loopDeep(this.dates, 3, (value, key, path) => {
+		const year = split(path, ".")[0];
+		const month = split(path, ".")[1];
+		const day = split(path, ".")[2];
 
-				if (date.isSameOrAfter(from) && date.isBefore(to)) {
-					dateArray.push(date.format("YYYY-MM-DD"));
-				}
+		const slamDate = new SlamDate(value, this);
+
+		const dateString = `${year}-${padStart(month, 2, 0)}-${padStart(day, 2, 0)}`;
+
+		const dateMoment = moment(dateString);
+
+		if (dateMoment.isSameOrAfter(moment(from)) && dateMoment.isSameOrBefore(moment(to))) {
+			dateArray.push({
+				slamDate,
+				dateString,
+				moment: dateMoment,
 			});
-		});
+		}
 	});
 
-	return slice(flatten(dateArray).sort((dateA, dateB) => {
-		if (moment(dateA).isBefore(moment(dateB))) {
+	return slice(dateArray.sort((dateA, dateB) => {
+		if (dateA.moment.isBefore(dateB.moment)) {
 			return -1;
 		}
-		if (moment(dateA).isAfter(moment(dateB))) {
+		if (dateA.moment.isAfter(dateB.moment)) {
 			return 1;
 		}
 
@@ -184,16 +266,14 @@ var methods = {
 class Slam {
 	/**
 	 * Creates an instance of Slam.
-	 * @param {object} slam
+	 * @param {object} slamObject
 	 * slam object
 	 * @param {string} parent
 	 * parent label
 	 * @memberof Slam
 	 */
-	constructor(slam, parent) {
-		Object.keys(slam).forEach((key) => {
-			this[key] = slam[key];
-		});
+	constructor(slamObject, parent) {
+		merge(this, slamObject);
 
 		this.parent = parent;
 
@@ -465,6 +545,18 @@ var BES = {
 	time: {
 		inlet: "19:30:00",
 		start: "20:00:00"
+	},
+	dates: {
+		2018: {
+			3: {
+				22: {
+					fbEvent: 209022079676186,
+					tickets: {
+						cinemaParadiso: "filmdb/2.-best-of-poetry-slam-baden/"
+					}
+				}
+			}
+		}
 	}
 };
 
@@ -529,12 +621,21 @@ var WOR$1 = {
 				3: {
 					fbEvent: 2018855465025112
 				}
+			},
+			5: {
+				5: "default"
+			},
+			6: {
+				9: "default"
+			},
+			7: {
+				7: "default"
 			}
 		}
 	},
 	name: "Wortschmiede Poetry Slam",
 	shortName: "Wortschmiede",
-	description: "Der Poetry Slam kommt an die Tristing.\n\nBeste Wortkunst von Stadt bis Land. Ob zum Lachen oder Träumen, zum Genießen oder Ausrasten. Fünf Minuten Bühnenzeit für selbst verfasste Texte. Alle Textsorten sind willkommen, der Art des Vortrags keine Grenzen gesetzt.Requisiten gibt’s keine.\n\nNeulinge sind auf dieser Bühne ausdrücklich willkommen. Die siegende Person qualifiziert sich automatisch für das große Jahresfinale. Anmeldungen bitte unter contact @fomp.eu\n\nDas Publikum ist die Jury. Der Kuchen ist köstlich.",
+	description: "Der Poetry Slam kommt an die Tristing.\n\nBeste Wortkunst von Stadt bis Land. Ob zum Lachen oder Träumen, zum Genießen oder Ausrasten. Fünf Minuten Bühnenzeit für selbst verfasste Texte. Alle Textsorten sind willkommen, der Art des Vortrags keine Grenzen gesetzt.Requisiten gibt’s keine.\n\nNeulinge sind auf dieser Bühne ausdrücklich willkommen. Die siegende Person qualifiziert sich automatisch für das große Jahresfinale. Anmeldungen bitte unter <a href=\"mailto:contact@fomp.eu\">contact@fomp.eu</a>.\n\nDas Publikum ist die Jury. Der Kuchen ist köstlich.",
 	location: {
 		street: "Leobersdorferstraße 58a",
 		name: "Café KunstWerk"
@@ -620,7 +721,7 @@ var DON = {
 	},
 	name: "Donaudichten Poetry Slam",
 	shortName: "Donaudichten",
-	description: "Donaudichten ist ein Poetry Slam mit geladenen Slammerinnen und Slammern aus dem gesamten deutschsprachigen Raum. Und gerne mit dir. Wenn du mit deinem Text an das Mikro willst, dann wollen wir das auch. Am Nachmittag des Veranstaltungstages bieten wir einen kostenlosen Workshop an. Zum kreativen Austausch, zum Schreiben, zum Feilen an Texten, zum Kennenlernen.\n\nAnmeldungen bitte unter contact@fomp.eu",
+	description: "Donaudichten ist ein Poetry Slam mit geladenen Slammerinnen und Slammern aus dem gesamten deutschsprachigen Raum. Und gerne mit dir. Wenn du mit deinem Text an das Mikro willst, dann wollen wir das auch. Am Nachmittag des Veranstaltungstages bieten wir einen kostenlosen Workshop an. Zum kreativen Austausch, zum Schreiben, zum Feilen an Texten, zum Kennenlernen.\n\nAnmeldungen bitte unter <a href=\"mailto:contact@fomp.eu\">contact@fomp.eu</a>.",
 	location: {
 		street: "Albrechtsgasse 18",
 		name: "Kunstwerkstatt"
@@ -1784,7 +1885,7 @@ var FRE$1 = {
 	},
 	name: "Freispruch Poetry Slam",
 	shortName: "Freispruch",
-	description: "Ein Dichterwettstreit um die Gunst ... der Geschworenen.\n\nFünf Minuten Vortragszeit für selbst verfasste Texte ist alles, was sechs Slam Poetinnen und Poeten bleibt, um über ihr \"Urteil\" zu verhandeln.\n\nLyrik, Prosa, Performance, Dada - solange das Textblatt das einzige Requisit bleibt, ist alles erlaubt. Welches \"Plädoyer\" gewinnt, entscheidet das Publikum.\n\nAlles unter der strengen Beobachtung eines betagten, zynischen Häfenwärters und dem Eifer übermotivierter Pflichtverteidiger. Ein Poetry Slam im Theatergewand.\n\nAnmeldungen bitte unter contact@fomp.eu",
+	description: "Ein Dichterwettstreit um die Gunst ... der Geschworenen.\n\nFünf Minuten Vortragszeit für selbst verfasste Texte ist alles, was sechs Slam Poetinnen und Poeten bleibt, um über ihr \"Urteil\" zu verhandeln.\n\nLyrik, Prosa, Performance, Dada - solange das Textblatt das einzige Requisit bleibt, ist alles erlaubt. Welches \"Plädoyer\" gewinnt, entscheidet das Publikum.\n\nAlles unter der strengen Beobachtung eines betagten, zynischen Häfenwärters und dem Eifer übermotivierter Pflichtverteidiger. Ein Poetry Slam im Theatergewand.\n\nAnmeldungen bitte unter <a href=\"mailto:contact@fomp.eu\">contact@fomp.eu</a>.",
 	location: {
 		street: "Hamburgerstraße 15",
 		name: "Spektakel"
@@ -1824,13 +1925,15 @@ var POW = {
 				}
 			},
 			3: {
-				21: "default"
+				21: {
+					fbEvent: 427625104335100
+				}
 			},
 			4: {
 				18: "default"
 			},
 			5: {
-				16: "default"
+				8: "default"
 			},
 			6: {
 				20: "default"
@@ -1842,7 +1945,7 @@ var POW = {
 	},
 	name: "PowerPoint-Karaoke Wien",
 	shortName: "PowerPoint-Karaoke",
-	description: "Hier wird nicht gesungen. Hier wird präsentiert: Von \"Paarungsverhalten des gemeinen Bonobos\" über \"Die Kunst des Panierens\" bis \"Der perfekte Neigungswinkel der Maroni - eine Annäherung\" - wir haben Präsentationen vorbereitet, die von acht völlig ahnungslosen Referentinnen und Referenten gehalten werden. Das Themenspektrum kennt keine Grenzen, bei PowerPoint-Karaoke ist alles möglich! Die Auftretenden kennen das Thema des Vortrags nicht, bis die erste Folie auf dem Beamer erscheint. Das Publikum bewertet diese Auftritte per Punktekarten. So wird bei PowerPoint-Karaoke aus langweiligen Unireferaten oder peinlichen Agenturpitches pure Unterhaltung!\n\nAnmeldungen bitte unter contact@fomp.eu",
+	description: "Hier wird nicht gesungen. Hier wird präsentiert: Von \"Paarungsverhalten des gemeinen Bonobos\" über \"Die Kunst des Panierens\" bis \"Der perfekte Neigungswinkel der Maroni - eine Annäherung\" - wir haben Präsentationen vorbereitet, die von acht völlig ahnungslosen Referentinnen und Referenten gehalten werden. Das Themenspektrum kennt keine Grenzen, bei PowerPoint-Karaoke ist alles möglich! Die Auftretenden kennen das Thema des Vortrags nicht, bis die erste Folie auf dem Beamer erscheint. Das Publikum bewertet diese Auftritte per Punktekarten. So wird bei PowerPoint-Karaoke aus langweiligen Unireferaten oder peinlichen Agenturpitches pure Unterhaltung!\n\nAnmeldungen bitte unter <a href=\"mailto:contact@fomp.eu\">contact@fomp.eu</a>.",
 	location: {
 		street: "Hamburgerstraße 15",
 		name: "Spektakel"
@@ -2680,18 +2783,18 @@ const getSlams = function(idsOrNames = []) {
 /**
  * @name getUpcoming
  *
+ * @param {moment|string} [from=moment()]
+ * moment
+ * @param {moment|string} [to=moment().add(100, "y")]
+ * moment
+ * @param {number} [amount=undefined]
+ * maximum amount of dates
  * @param {array|string} [filter=this.allIds()]
  * array of ids or paths or string
- * @param {number} amount
- * maximum amount of dates
- * @param {moment} [from=moment()]
- * moment
- * @param {moment} [to=moment().add(100, "y")]
- * moment
  * @returns {array}
- * array of date-slam objects
+ * array of objects with the properties slamDate, dateString and moment
  */
-const getUpcoming = function(filter = this.allIds(), amount, from = moment(), to = moment().add(100, "y")) {
+const getUpcoming = function(from = moment(), to = moment().add(100, "y"), amount = undefined, filter = this.allIds()) {
 	const slamsToSearch = [];
 
 	flatten([
@@ -2711,27 +2814,22 @@ const getUpcoming = function(filter = this.allIds(), amount, from = moment(), to
 
 	slamsToSearch.forEach((slam) => {
 		if (slam.dates) {
-			slam.getDates(undefined, from, to).forEach((date) => {
-				upcoming.push({
-					date,
-					slam
-				});
+			slam.getDates(from, to).forEach((date) => {
+				upcoming.push(date);
 			});
 		}
 	});
 
-	upcoming.sort((objectA, objectB) => {
-		if (moment(objectA.date).isBefore(moment(objectB.date))) {
+	return slice(upcoming.sort((dateA, dateB) => {
+		if (dateA.moment.isBefore(dateB.moment)) {
 			return -1;
 		}
-		if (moment(objectA.date).isAfter(moment(objectB.date))) {
+		if (dateA.moment.isAfter(dateB.moment)) {
 			return 1;
 		}
 
 		return 0;
-	});
-
-	return slice(upcoming, 0, amount);
+	}), 0, amount);
 };
 
 const sift = function(filter) {
@@ -2933,21 +3031,21 @@ const YS = class {
 	/**
 	 * Creates an instance of YS.
 	 * @memberof YS
-	 * @param {array|string} [filter=this.allIds()]
+	 * @param {(string[]|string)} [filter=undefined]
 	 * array of ids or paths or string
+	 * @param {object} [data={countries}]
+	 * custom data, uses default data when omitted
+	 * @param {object} [data.countries=countries]
+	 * custom countries object
 	 */
-	constructor(filter) {
+	constructor(filter = undefined, data = {
+		countries
+	}) {
 		if (typeof filter === "undefined") {
-			Object.keys(countries).forEach((country) => {
-				this[country] = countries[country];
-			});
+			merge(this, data.countries);
 		}
 		else {
-			const siftedYs = this.sift(filter);
-
-			Object.keys(siftedYs).forEach((key) => {
-				this[key] = siftedYs[key];
-			});
+			merge(this, this.sift(filter));
 		}
 
 		this.allSlams((

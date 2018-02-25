@@ -1,5 +1,6 @@
 import Level2 from "../../classes/level2.js";
 
+import $000 from "./009/000.js";
 import $001 from "./009/001.js";
 import $004 from "./009/004.js";
 import $005 from "./009/005.js";
@@ -13,6 +14,7 @@ import $021 from "./009/021.js";
 import $022 from "./009/022.js";
 
 export default ((label, name) => ({
+	"000": new Level2($000, label),
 	"001": new Level2($001, label),
 	"004": new Level2($004, label),
 	"005": new Level2($005, label),

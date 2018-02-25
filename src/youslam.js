@@ -14,7 +14,7 @@ const YS = class {
 	/**
 	 * Creates an instance of YS.
 	 * @memberof YS
-	 * @param {(string[]|string)} [filter=undefined]
+	 * @param {String[]|String} [filter=undefined]
 	 * array of ids or paths or string
 	 * @param {object} [data={countries}]
 	 * custom data, uses default data when omitted
@@ -44,6 +44,10 @@ const YS = class {
 				level3: this[country][level1][level2][level3].name,
 				zip: this[country][level1][level2][level3].zip
 			});
+
+			if (level3 === "000") {
+				actualSlam.location.name = "Wechselnde Spielorte";
+			}
 
 			this[country][level1][level2][level3][slam] = actualSlam;
 		});

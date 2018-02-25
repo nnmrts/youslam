@@ -1,4 +1,5 @@
 import assign from "lodash/assign";
+import merge from "lodash/merge";
 
 import countries from "./countries.js";
 import methods from "./methods.js";
@@ -13,21 +14,21 @@ const YS = class {
 	/**
 	 * Creates an instance of YS.
 	 * @memberof YS
-	 * @param {array|string} [filter=this.allIds()]
+	 * @param {(string[]|string)} [filter=undefined]
 	 * array of ids or paths or string
+	 * @param {object} [data={countries}]
+	 * custom data, uses default data when omitted
+	 * @param {object} [data.countries=countries]
+	 * custom countries object
 	 */
-	constructor(filter) {
+	constructor(filter = undefined, data = {
+		countries
+	}) {
 		if (typeof filter === "undefined") {
-			Object.keys(countries).forEach((country) => {
-				this[country] = countries[country];
-			});
+			merge(this, data.countries);
 		}
 		else {
-			const siftedYs = this.sift(filter);
-
-			Object.keys(siftedYs).forEach((key) => {
-				this[key] = siftedYs[key];
-			});
+			merge(this, this.sift(filter));
 		}
 
 		this.allSlams((

@@ -6,10 +6,11 @@ var assign = _interopDefault(require('lodash/assign'));
 var merge = _interopDefault(require('lodash/merge'));
 var isPlainObject = _interopDefault(require('lodash/isPlainObject'));
 var moment = _interopDefault(require('moment'));
-var padStart = _interopDefault(require('lodash/padStart'));
 var slice = _interopDefault(require('lodash/slice'));
+var padStart = _interopDefault(require('lodash/padStart'));
 var split = _interopDefault(require('lodash/split'));
 var fpMerge = _interopDefault(require('lodash/fp/merge'));
+var has = _interopDefault(require('lodash/has'));
 var sample = _interopDefault(require('lodash/sample'));
 var compact = _interopDefault(require('lodash/compact'));
 var flatten = _interopDefault(require('lodash/flatten'));
@@ -177,6 +178,88 @@ const utils = {
 };
 
 /**
+ * @name getAdmissions
+ * @memberof Slam
+ * @param {String} [delimiter="/"]
+ * delimiter
+ * @param {moment|String} [from=moment()]
+ * moment
+ * @param {moment|String} [to=moment().add(100, "y")]
+ * moment
+ * @param {number} amount
+ * maximum amount of dates
+ * @returns {String[]}
+ * array of admission strings
+ */
+const getAdmissions = function(delimiter = "/", from = moment(), to = moment().add(100, "y"), amount = undefined) {
+	const admissions = [];
+
+	this.getDates(from, to).forEach((date) => {
+		admissions.push({
+			date,
+			admission: date.slamDate.getAdmission(delimiter)
+		});
+	});
+
+	return slice(admissions.sort((admissionA, admissionB) => {
+		if (admissionA.date.moment.isBefore(admissionB.date.moment)) {
+			return -1;
+		}
+		if (admissionA.date.moment.isAfter(admissionB.date.moment)) {
+			return 1;
+		}
+
+		return 0;
+	}), 0, amount);
+};
+
+/**
+ * @name getAdmission
+ * @memberof SlamDate
+ * @param {string} [delimiter="/"]
+ * delimiter
+ * @returns {string}
+ * array of objects with the properties slamDate, dateString and moment
+ */
+const getAdmission = function(delimiter = "/") {
+	let admission = "";
+
+	let currencySymbol = "";
+
+	if (has(this, "admission.normal")) {
+		switch (this.admission.currency) {
+			case "euro":
+				currencySymbol = "€";
+				break;
+			case "dollar":
+				currencySymbol = "$";
+				break;
+			default:
+				break;
+		}
+		admission = `${this.admission.normal} ${currencySymbol}`;
+		if (has(this.admission, "reduced")) {
+			admission = `${this.admission} ${currencySymbol} ${delimiter} ${admission}`;
+		}
+		else if (has(this.admission, "advance")) {
+			admission = `${this.admission.advance} ${currencySymbol}`;
+		}
+
+		return admission;
+	}
+
+	return undefined;
+};
+
+var prototype$1 = {
+	getAdmission
+};
+
+var methods$1 = {
+	prototype: prototype$1
+};
+
+/**
  *
  *
  * @class SlamDate
@@ -202,6 +285,8 @@ class SlamDate {
 		delete this.dates;
 	}
 }
+
+utils.methodAdder(SlamDate, methods$1);
 
 /**
  * @name getDates
@@ -251,6 +336,7 @@ const getDates = function(from = moment(), to = moment().add(100, "y"), amount =
 };
 
 var prototype = {
+	getAdmissions,
 	getDates
 };
 
@@ -553,6 +639,11 @@ var BES = {
 					fbEvent: 209022079676186,
 					tickets: {
 						cinemaParadiso: "filmdb/2.-best-of-poetry-slam-baden/"
+					},
+					admission: {
+						advance: 8,
+						normal: 10,
+						currency: "euro"
 					}
 				}
 			}
@@ -1898,6 +1989,11 @@ var FRE$1 = {
 	},
 	tickets: {
 		ntry: "poetryslam"
+	},
+	admission: {
+		normal: 10,
+		reduced: 7,
+		currency: "euro"
 	}
 };
 
@@ -1958,6 +2054,10 @@ var POW = {
 	},
 	tickets: {
 		ntry: "powerpointkaraoke"
+	},
+	admission: {
+		normal: 7,
+		currency: "euro"
 	}
 };
 
@@ -2140,6 +2240,10 @@ var BIL = {
 				17: "default"
 			}
 		}
+	},
+	admission: {
+		normal: 8,
+		currency: "euro"
 	}
 };
 
@@ -2238,6 +2342,11 @@ var SIN = {
 	},
 	tickets: {
 		ntry: "sinnundseife"
+	},
+	admission: {
+		normal: 10,
+		reduced: 7,
+		currency: "euro"
 	}
 };
 
@@ -2866,14 +2975,14 @@ const sift = function(filter) {
 
 	const siftedObject = pick(countries, dottedPaths);
 
-	Object.keys(methods$1.prototype).forEach((method) => {
-		siftedObject[method] = methods$1.prototype[method];
+	Object.keys(methods$2.prototype).forEach((method) => {
+		siftedObject[method] = methods$2.prototype[method];
 	});
 
 	return siftedObject;
 };
 
-const prototype$1 = {
+const prototype$2 = {
 	allCountries,
 	allLevel1s,
 	allLevel2s,
@@ -3018,8 +3127,8 @@ const unzipPath = function(path) {
 	return unzippedPath;
 };
 
-var methods$1 = {
-	prototype: prototype$1,
+var methods$2 = {
+	prototype: prototype$2,
 	isId,
 	isShortId,
 	isPath,
@@ -3073,6 +3182,6 @@ const YS = class {
 	}
 };
 
-utils.methodAdder(YS, methods$1);
+utils.methodAdder(YS, methods$2);
 
 module.exports = YS;

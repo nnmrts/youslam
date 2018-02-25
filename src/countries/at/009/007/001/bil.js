@@ -15,7 +15,9 @@ export default {
 				18: "default"
 			},
 			3: {
-				23: "default"
+				23: {
+					fbEvent: 1914042062242540
+				}
 			},
 			5: {
 				17: "default"

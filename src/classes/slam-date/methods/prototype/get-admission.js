@@ -6,7 +6,7 @@ import has from "lodash/has";
  * @param {string} [delimiter="/"]
  * delimiter
  * @returns {string}
- * array of objects with the properties slamDate, dateString and moment
+ * formatted admission string
  */
 const getAdmission = function(delimiter = "/") {
 	let admission = "";
@@ -26,7 +26,7 @@ const getAdmission = function(delimiter = "/") {
 		}
 		admission = `${this.admission.normal} ${currencySymbol}`;
 		if (has(this.admission, "reduced")) {
-			admission = `${this.admission} ${currencySymbol} ${delimiter} ${admission}`;
+			admission = `${this.admission.reduced} ${currencySymbol} ${delimiter} ${admission}`;
 		}
 		else if (has(this.admission, "advance")) {
 			admission = `${this.admission.advance} ${currencySymbol}`;
@@ -35,7 +35,7 @@ const getAdmission = function(delimiter = "/") {
 		return admission;
 	}
 
-	return undefined;
+	return this.admission;
 };
 
 export default getAdmission;

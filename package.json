@@ -1,15 +1,12 @@
 {
 	"name": "youslam",
-	"version": "2.1.2",
+	"version": "2.1.10",
 	"description": "",
 	"main": "dist/youslam.js",
 	"browser": "dist/browser/youslam.js",
 	"jsnext:main": "src/youslam.js",
 	"module": "src/youslam.js",
-	"files": [
-		"dist/youslam.js",
-		"src/**/*.js"
-	],
+	"files": ["dist/youslam.js", "src/**/*.js"],
 	"directories": {
 		"doc": "docs"
 	},
@@ -65,14 +62,10 @@
 		"test": "ava"
 	},
 	"ava": {
-		"files": [
-			"./tests/**/*.js"
-		],
+		"files": ["./tests/**/*.js"],
 		"failFast": true,
 		"verbose": true,
-		"require": [
-			"@std/esm"
-		]
+		"require": ["@std/esm"]
 	},
 	"@std/esm": "js",
 	"repository": {

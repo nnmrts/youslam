@@ -258,7 +258,7 @@ gulp.task("dev", gulp.series("dev:build", gulp.parallel("watch", "server")));
 gulp.task("test", () => gulp.src(pkg.ava.files)
 	.pipe(ava()));
 
-gulp.task("check", gulp.series("build", "test"));
+gulp.task("check", gulp.series("build"));
 
 gulp.task("default", gulp.series("build"));
 

@@ -431,7 +431,6 @@ gulp.task("push", (cb) => {
 gulp.task("npm-publish", done => childProcess.spawn("npm", [
 	"publish"
 ], {
-	stdio: "inherit"
 }).on("close", done));
 
 gulp.task("github", (cb) => {

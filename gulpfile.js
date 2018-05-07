@@ -428,9 +428,10 @@ gulp.task("push", (cb) => {
 	);
 });
 
-gulp.task("npm-publish", done => childProcess.spawn("npm", [
+gulp.task("npm-publish", done => childProcess.spawn("npm.cmd", [
 	"publish"
 ], {
+	stdio: "inherit"
 }).on("close", done));
 
 gulp.task("github", (cb) => {

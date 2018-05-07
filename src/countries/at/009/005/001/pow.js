@@ -34,9 +34,6 @@ export default {
 			5: {
 				8: "default"
 			},
-			6: {
-				20: "default"
-			},
 			9: {
 				19: "default"
 			}

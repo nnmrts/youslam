@@ -42,16 +42,16 @@ const pkg = require("./package.json");
 taskTime.init();
 
 (function() {
-    var childProcess = require("child_process");
-    var oldSpawn = childProcess.spawn;
-    function mySpawn() {
-        console.log('spawn called');
-        console.log(arguments);
-        var result = oldSpawn.apply(this, arguments);
-        return result;
-    }
-    childProcess.spawn = mySpawn;
-})();
+	let childProcess = require("child_process");
+	let oldSpawn = childProcess.spawn;
+	function mySpawn() {
+		console.log("spawn called");
+		console.log(arguments);
+		let result = oldSpawn.apply(this, arguments);
+		return result;
+	}
+	childProcess.spawn = mySpawn;
+}());
 
 const paths = {
 	dist: "./dist",
@@ -428,7 +428,7 @@ gulp.task("push", (cb) => {
 	);
 });
 
-gulp.task("npm-publish", done => childProcess.spawn("npm.cmd", [
+gulp.task("npm-publish", done => childProcess.spawn(/^win/.test(process.platform) ? "npm.cmd" : "npm", [
 	"publish"
 ], {
 	stdio: "inherit"
